@@ -9,8 +9,7 @@ interface CustomButtonPros {
     textStyle?: TextStyle;
 }
 
-const CustomButton: React.FC<CustomButtonPros> = ({ title, onPress, style, textStyle }) => {
-
+export default function CustomButton({ title, onPress, style, textStyle }: CustomButtonPros){
     const { loaded } = useCustomFonts();
 
     if (!loaded) {
@@ -34,12 +33,16 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         borderRadius: 10,
         alignItems: "center",
-        width: "100%"
+        width: "100%",
+
+        shadowColor: Colors.black,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.7,
+        shadowRadius: 10,
+        elevation: 5,
     },
     text:{
         fontFamily: "Poppins_700Bold",
         color: Colors.white,
     },
 });
-
-export default CustomButton;

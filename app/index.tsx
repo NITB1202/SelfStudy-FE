@@ -1,7 +1,8 @@
-import { StyleSheet, Text, ImageBackground, TouchableOpacity, View, Alert } from "react-native";
+import { StyleSheet, Text, ImageBackground, View} from "react-native";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import { Colors } from "@/constants/Colors";
 import CustomButton from "@/components/CustomButton";
+import { router } from "expo-router";
 
 export default function Index() {
 
@@ -10,10 +11,6 @@ export default function Index() {
   if (!loaded) {
     return null;
   }
-
-  const handlePress = () => {
-    Alert.alert('Button Pressed!', 'You pressed the custom button.');
-  };
 
   return (
     <ImageBackground 
@@ -24,8 +21,8 @@ export default function Index() {
       <Text style={styles.slogan}>Learn anywhere, anytime</Text>
       
       <View style={styles.buttonContainer}>
-       <CustomButton title="Login" style={styles.loginButoon} onPress={handlePress}/>
-       <CustomButton title="Register" style={styles.registerButton} onPress={handlePress}></CustomButton>
+       <CustomButton title="Login" style={styles.loginButoon} onPress={() =>{router.push("/Intro/Login")}}/>
+       <CustomButton title="Register" style={styles.registerButton} onPress={() => {router.push("/Intro/Register")}}></CustomButton>
       </View>
 
     </ImageBackground>
@@ -42,7 +39,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
     fontSize: 36,
     color: Colors.black,
-    marginTop: 100,
+    marginTop: 200,
   },
   slogan:{
     fontFamily: "Poppins_700Bold",
