@@ -23,6 +23,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingVertical:5,
         paddingHorizontal:10,
-        width:"100%"
+        width:"100%",
     }
 });

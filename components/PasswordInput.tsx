@@ -5,15 +5,16 @@ import { FontAwesome } from '@expo/vector-icons';
 
 interface PasswordInputPros{
     style?: ViewStyle;
+    placeholder: string;
 }
 
-export default function PasswordInput({style}:PasswordInputPros){
+export default function PasswordInput({style, placeholder}:PasswordInputPros){
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     return (
         <View style={[styles.container,style]}>
             <TextInput
-                placeholder="Enter your password..."
+                placeholder={placeholder}
                 style={styles.input}
                 secureTextEntry={!isPasswordVisible}>
             </TextInput>

@@ -5,7 +5,8 @@ import LoginInput from "@/components/LoginInput";
 import CustomButton from "@/components/CustomButton";
 import PasswordInput from "@/components/PasswordInput";
 import { Link, router } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import BackButton from "@/components/BackButton";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function LoginScreen(){
     const { loaded } = useCustomFonts();
@@ -16,16 +17,23 @@ export default function LoginScreen(){
 
     return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={()=> router.back()}>
-        <Feather name="arrow-left-circle" size={30} color="black"></Feather>
-      </TouchableOpacity>
-      <View style={styles.inputContainer}>
-        <Text style={styles.title}>Login</Text>
-        <LoginInput placeholder="Enter your email..." style={styles.inputEmail}></LoginInput>
-        <PasswordInput></PasswordInput>
-        <Link style={styles.link} href="/Intro/ForgotPassword">Forgot password?</Link>
-        <CustomButton title="Login" onPress={()=> {}}></CustomButton>
-      </View>
+        <BackButton></BackButton>
+        <View style={styles.inputContainer}>
+            <Text style={styles.title}>Login</Text>
+            <LoginInput placeholder="Enter your email..." style={styles.inputEmail}></LoginInput>
+            <PasswordInput placeholder="Enter your password..."></PasswordInput>
+            <Link style={styles.link} href="/Intro/ForgotPassword">Forgot password?</Link>
+            <CustomButton title="Login" onPress={()=> {}}></CustomButton>
+            <View style={styles.divideContainer}>
+                <View style={styles.divideLine}></View>
+                <Text style={styles.option}>Or</Text>
+                <View style={styles.divideLine}></View>
+            </View>
+            <TouchableOpacity style={styles.googleButton}>
+                <FontAwesome name="google" size={22} color="black"></FontAwesome>
+                <Text style={styles.googleText}>Login with Google</Text>
+            </TouchableOpacity>
+        </View>
     </SafeAreaView>
     );
 };
@@ -40,7 +48,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: "Poppins_700Bold",
         fontSize: 36,
-        marginTop: 100,
+        marginTop: 80,
         marginBottom: 30,
     },
     inputContainer:{
@@ -56,7 +64,40 @@ const styles = StyleSheet.create({
         width: "100%",
         textAlign: "right",
         marginTop: 10,
-        marginBottom: 30,
+        marginBottom: 20,
         fontWeight:"500"
     },
+    divideLine:{
+        borderBottomWidth: 1,
+        width: "45%",
+        height: "50%",
+        borderBottomColor: "gray",
+    },
+    divideContainer:{
+        flexDirection: "row",
+        justifyContent:"center",
+        alignContent:"center",
+        padding: 10,
+        width: "100%",
+    },
+    option:{
+        marginHorizontal:5,
+        color: "gray"
+    },
+    googleButton:{
+        flexDirection: "row",
+        justifyContent:"center",
+        alignContent:"center",
+        backgroundColor: "white",
+        borderColor: "black",
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingVertical: 5,
+        width: "100%",
+        opacity: 0.8,
+    },
+    googleText:{
+        fontFamily: "Poppins_700Bold",
+        marginLeft: 5,
+    }
 });
