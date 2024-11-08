@@ -7,6 +7,7 @@ import PasswordInput from "@/components/PasswordInput";
 import { Link, router } from "expo-router";
 import BackButton from "@/components/BackButton";
 import { FontAwesome } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
 
 export default function LoginScreen(){
     const { loaded } = useCustomFonts();
@@ -30,7 +31,7 @@ export default function LoginScreen(){
                 <View style={styles.divideLine}></View>
             </View>
             <TouchableOpacity style={styles.googleButton}>
-                <FontAwesome name="google" size={22} color="black"></FontAwesome>
+                <FontAwesome name="google" size={20} color="black"></FontAwesome>
                 <Text style={styles.googleText}>Login with Google</Text>
             </TouchableOpacity>
         </View>
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "flex-start",
         padding: 10,
+        backgroundColor: "white",
     },
     title: {
         fontFamily: "Poppins_700Bold",
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        padding: 40,
+        paddingHorizontal: 40,
     },
     inputEmail:{
         marginBottom:20,
@@ -88,16 +90,20 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent:"center",
         alignContent:"center",
-        backgroundColor: "white",
-        borderColor: "black",
-        borderWidth: 1,
+        backgroundColor: Colors.white,
+        borderWidth: 2,
         borderRadius: 10,
         paddingVertical: 5,
         width: "100%",
-        opacity: 0.8,
+
+        shadowColor: Colors.black,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.7,
+        shadowRadius: 10,
+        elevation: 5,
     },
     googleText:{
         fontFamily: "Poppins_700Bold",
-        marginLeft: 5,
+        marginLeft: 10,
     }
 });

@@ -11,6 +11,7 @@ export default function RootLayout() {
     }}>
     <Stack.Screen name="Intro/Login" />
     <Stack.Screen name="Intro/Register"/>
+    <Stack.Screen name="Intro/Verification"/>
     </Stack>
   );
 }

@@ -28,4 +28,5 @@ export const Colors = {
   black: "#1E201E",
   white: "#FFFFFF",
   gray: "#E4E2E2",
+  highlightgreen: "#6FC751",
 };
