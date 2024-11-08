@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import LoginInput from "@/components/LoginInput";
@@ -6,7 +6,6 @@ import CustomButton from "@/components/CustomButton";
 import PasswordInput from "@/components/PasswordInput";
 import { Link, router } from "expo-router";
 import BackButton from "@/components/BackButton";
-import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 
 export default function LoginScreen(){
@@ -31,7 +30,7 @@ export default function LoginScreen(){
                 <View style={styles.divideLine}></View>
             </View>
             <TouchableOpacity style={styles.googleButton}>
-                <FontAwesome name="google" size={20} color="black"></FontAwesome>
+                <Image source={require("../../assets/images/google-icon.png")} style={styles.googleIcon}></Image>
                 <Text style={styles.googleText}>Login with Google</Text>
             </TouchableOpacity>
         </View>
@@ -104,6 +103,10 @@ const styles = StyleSheet.create({
     },
     googleText:{
         fontFamily: "Poppins_700Bold",
-        marginLeft: 10,
+        marginLeft: 5,
+    },
+    googleIcon:{
+        width: 24,
+        height: 24,
     }
 });

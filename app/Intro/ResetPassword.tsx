@@ -4,6 +4,7 @@ import PasswordInput from "@/components/PasswordInput";
 import { Text, StyleSheet, View} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
+import { router } from "expo-router";
 
 export default function ResetPasswordScreen(){
     const { loaded } = useCustomFonts();
@@ -21,7 +22,7 @@ export default function ResetPasswordScreen(){
                     <PasswordInput placeholder="Enter new password..."></PasswordInput>
                     <PasswordInput placeholder="Confirm password..."></PasswordInput>
                 </View>
-                <CustomButton title="Reset password" onPress={() => {}}></CustomButton>
+                <CustomButton title="Reset password" onPress={() => {router.push("/Intro/PasswordChanged")}}></CustomButton>
             </View>
         </SafeAreaView>
     );
