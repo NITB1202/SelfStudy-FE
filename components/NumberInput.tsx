@@ -1,54 +1,56 @@
-import React, { forwardRef, useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
-import useCustomFonts from '@/hooks/useCustomFonts';
-import { Colors } from '@/constants/Colors';
+import React, { forwardRef, useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
+import useCustomFonts from "@/hooks/useCustomFonts";
+import { Colors } from "@/constants/Colors";
 
 interface NumberInputProps {
   onChangeText: (text: string) => void;
 }
 
-const NumberInput = forwardRef<TextInput, NumberInputProps>(({ onChangeText }, ref) => {
-  const loaded = useCustomFonts();
-  const [isFocus, setFocus] = useState(false);
+const NumberInput = forwardRef<TextInput, NumberInputProps>(
+  ({ onChangeText }, ref) => {
+    const loaded = useCustomFonts();
+    const [isFocus, setFocus] = useState(false);
 
-  if (!loaded) {
-    return null;
+    if (!loaded) {
+      return null;
+    }
+
+    return (
+      <View style={[styles.container, isFocus && styles.focus]}>
+        <TextInput
+          style={styles.text}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          keyboardType="numeric"
+          maxLength={1}
+          ref={ref}
+          onChangeText={onChangeText}
+        />
+      </View>
+    );
   }
-
-  return (
-    <View style={[styles.container, isFocus && styles.focus]}>
-      <TextInput
-        style={styles.text}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
-        keyboardType="numeric"
-        maxLength={1}
-        ref={ref}
-        onChangeText={onChangeText}
-      />
-    </View>
-  );
-});
+);
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     width: 52,
     height: 52,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 3,
     borderRadius: 10,
   },
   text: {
-    color: 'black',
-    fontFamily: 'Poppins_700Bold',
+    color: "black",
+    fontFamily: "Poppins_700Bold",
     fontSize: 26,
-    height: '100%',
-    textAlign: 'center',
+    height: "100%",
+    textAlign: "center",
   },
   focus: {
-    borderColor: Colors.highlightgreen,
+    borderColor: "#7AB2D3",
   },
 });
 
