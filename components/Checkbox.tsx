@@ -12,8 +12,6 @@ export default function Checkbox({ onToggle }: CheckboxProps) {
   const handlePress = () => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
-
-    // Gọi hàm nếu được truyền
     if (onToggle) {
       onToggle(newCheckedState);
     }
