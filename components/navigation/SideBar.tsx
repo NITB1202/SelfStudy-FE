@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"; // Icon libraries
-
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 interface SidebarProps {
-  onClose: () => void; // Function to close the sidebar
+  onClose: () => void;
 }
 
 export default function Sidebar({ onClose }: SidebarProps) {
-  const [activeMenu, setActiveMenu] = useState("Plan"); // Default active menu is "Plan"
+  const [activeMenu, setActiveMenu] = useState("Plan");
 
   const menuItems = [
     {
       id: "Plan",
       label: "Plan",
-      icon: <MaterialCommunityIcons name="target" size={24} color="#1E282D" />, // Updated to use the "target" icon
+      icon: <MaterialCommunityIcons name="target" size={24} color="#1E282D" />,
     },
     {
       id: "Document",
@@ -42,20 +41,16 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
   return (
     <View style={styles.sidebar}>
-      {/* Close Button */}
-      {/* Close Button */}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <MaterialCommunityIcons name="close-circle" size={24} color="white" />
       </TouchableOpacity>
 
-      {/* Header Section */}
       <View>
         <Image
-          source={require("../../assets/images/Header.png")} // Replace with your header image
+          source={require("../../assets/images/Header.png")}
           style={styles.logo}
         />
       </View>
-
       {/* Menu Items */}
       <View style={styles.menu}>
         {menuItems.map((item) => (
@@ -63,19 +58,12 @@ export default function Sidebar({ onClose }: SidebarProps) {
             key={item.id}
             style={[
               styles.menuItem,
-              activeMenu === item.id && styles.activeMenuItem, // Apply active style
+              activeMenu === item.id && styles.activeMenuItem,
             ]}
-            onPress={() => setActiveMenu(item.id)} // Set active menu
+            onPress={() => setActiveMenu(item.id)}
           >
             {item.icon}
-            <Text
-              style={[
-                styles.menuText,
-                // Apply active text style
-              ]}
-            >
-              {item.label}
-            </Text>
+            <Text style={[styles.menuText]}>{item.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -99,7 +87,7 @@ const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
     top: 20,
-    left: 15, // Positioned to the left
+    left: 15,
     zIndex: 2,
   },
   logo: {
@@ -117,10 +105,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
     borderRadius: 8,
-    backgroundColor: "#FFFFFF", // Default background color for menu items
+    backgroundColor: "#FFFFFF",
   },
   activeMenuItem: {
-    backgroundColor: "#EDEDED", // Highlight background for active item
+    backgroundColor: "#EDEDED",
   },
   menuText: {
     marginLeft: 10,

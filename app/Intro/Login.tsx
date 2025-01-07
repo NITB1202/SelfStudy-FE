@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "rgba(0, 0, 0, 0.1)",
     borderRadius: 10,
     paddingVertical: 5,
     shadowColor: "#000",

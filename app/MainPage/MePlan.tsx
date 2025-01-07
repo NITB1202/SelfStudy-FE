@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import PlanList from "../../components/plant/PlanList";
 import BottomNavBar from "../../components/navigation/ButtonNavBar";
 import { router, useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function MePlan() {
   const { fontsLoaded } = useCustomFonts();
@@ -19,32 +20,26 @@ export default function MePlan() {
   }
 
   const [date, setDate] = useState(dayjs());
-  const navigation = useNavigation(); // Khởi tạo hook useNavigation
-
-  // Hàm xử lý khi người dùng nhấn vào một kế hoạch
-  const handlePlanPress = (planId: number) => {
-    console.log("Plan pressed with ID:", planId);
-    // Bạn có thể xử lý chuyển trang hoặc hiển thị thông tin chi tiết về kế hoạch ở đây
-    router.push("/MainPage/Plan");
+  const navigation = useNavigation();
+  const handlePlanPress = (planName: string) => {
+    console.log("Plan pressed with Name:", planName);
+    router.push(`/MainPage/Plan?planName=${encodeURIComponent(planName)}`);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <Header />
-      {/* Title */}
       <Text style={styles.title}>Hey, you have 3 plans today!</Text>
-      {/* Calendar */}
       <View style={styles.calendarContainer}>
         <DateTimePicker
           mode="single"
-          date={date.toDate()} // Chuyển đổi dayjs thành Date
+          date={date.toDate()}
           onChange={(params) => setDate(dayjs(params.date))}
+          selectedItemColor="#7AB2D3"
         />
       </View>
-      {/* Plan List */}
+
       <View style={styles.planListContainer}>
-        {/* Truyền hàm handlePlanPress vào PlanList */}
         <PlanList onPlanPress={handlePlanPress} />
       </View>
       <View>
@@ -56,7 +51,7 @@ export default function MePlan() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Đảm bảo container chiếm toàn bộ màn hình
+    flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
@@ -81,8 +76,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   planListContainer: {
-    flex: 1, // Đảm bảo PlanList chiếm toàn bộ không gian còn lại
-    width: "100%", // Căn chỉnh PlanList theo chiều ngang
+    flex: 1,
+    width: "100%",
     marginTop: 20,
   },
 });

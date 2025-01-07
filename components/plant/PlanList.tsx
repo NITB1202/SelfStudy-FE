@@ -6,10 +6,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import icon
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PlanItem from "./PlanItem";
-import { TabBarIcon } from "../navigation/TabBarIcon";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation
+// import { TabBarIcon } from "../navigation/TabBarIcon";
+// import { useNavigation } from "@react-navigation/native";
 
 interface Plan {
   id: number;
@@ -19,7 +19,7 @@ interface Plan {
 }
 
 interface PlanListProps {
-  onPlanPress: (planId: number) => void; // Thêm sự kiện onPlanPress
+  onPlanPress: (planName: string) => void;
 }
 
 export default function PlanList({ onPlanPress }: PlanListProps) {
@@ -62,7 +62,7 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
   };
 
   const renderItem = ({ item }: { item: Plan }) => (
-    <TouchableOpacity onPress={() => onPlanPress(item.id)}>
+    <TouchableOpacity onPress={() => onPlanPress(item.planName)}>
       <PlanItem
         progress={item.progress}
         planName={item.planName}
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     color: "black",
-    marginLeft: 8, // Tạo khoảng cách giữa icon và chữ
+    marginLeft: 8,
   },
   contentContainer: {
     paddingBottom: 20,

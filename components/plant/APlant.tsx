@@ -12,7 +12,11 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function APlan() {
+interface APlanProps {
+  Name: string; // Nhận props tên kế hoạch
+}
+
+export default function APlan({ Name }: APlanProps) {
   const [name, setName] = useState("New Plan"); // Đặt giá trị mặc định cho name
   const [description, setDescription] = useState(
     "My first plan to test the application"
@@ -63,10 +67,10 @@ export default function APlan() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Plan</Text>
+      <Text style={styles.title}>{Name}</Text>
 
       {/* Name Field */}
-      <View style={styles.fieldContainer}>
+      {/* <View style={styles.fieldContainer}>
         <Text style={styles.label}>Name</Text>
         <TextInput
           style={styles.input}
@@ -74,7 +78,7 @@ export default function APlan() {
           value={name}
           onChangeText={setName}
         />
-      </View>
+      </View> */}
 
       {/* Description Field */}
       <View style={styles.fieldContainer}>

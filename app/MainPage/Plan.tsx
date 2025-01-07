@@ -11,39 +11,62 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import APlan from "../../components/plant/APlant";
 import BackButton from "@/components/BackButton";
-import { router } from "expo-router";
+import { router, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import Checkbox from "@/components/Checkbox";
 
 export default function PlanScreen() {
-  const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);
+  const [tasks, setTasks] = useState([
+    { id: 1, name: "Task01", completed: false },
+  ]);
   const [newTask, setNewTask] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null); // Theo dõi task đang chỉnh sửa
+  const [editingTaskName, setEditingTaskName] = useState(""); // Tên task đang được chỉnh sửa
+  const searchParams = useLocalSearchParams();
+  const planName = searchParams.planName as string;
 
-  // Thêm task mới vào danh sách
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
         ...prevTasks,
-        { id: prevTasks.length + 1, name: newTask },
+        { id: prevTasks.length + 1, name: newTask, completed: false },
       ]);
-      setNewTask(""); // Reset input sau khi thêm task
+      setNewTask("");
     }
   };
+  const toggleTaskCompletion = (id: number, isChecked: boolean) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: isChecked } : task
+      )
+    );
+  };
 
-  // Xóa task theo id
   const handleDeleteTask = (id: number) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
+  const startEditingTask = (id: number, name: string) => {
+    setEditingTaskId(id);
+    setEditingTaskName(name);
+  };
+
+  const saveEditedTask = (id: number) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, name: editingTaskName } : task
+      )
+    );
+    setEditingTaskId(null);
+    setEditingTaskName("");
+  };
+
   return (
     <View style={styles.container}>
-      {/* Back Button */}
       <BackButton />
-
-      {/* Scrollable AddAPlan Component */}
       <ScrollView style={styles.planSectionWrapper}>
-        <APlan />
+        <APlan Name={planName} />
       </ScrollView>
-
-      {/* Tasks Section */}
       <View style={styles.tasksSectionWrapper}>
         <Text style={styles.sectionTitle}>Tasks</Text>
         <FlatList
@@ -51,16 +74,36 @@ export default function PlanScreen() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.taskContainer}>
-              <MaterialCommunityIcons
-                name="checkbox-blank-outline"
-                size={24}
-                color="#7AB2D3"
+              <Checkbox
+                onToggle={(isChecked) =>
+                  toggleTaskCompletion(item.id, isChecked)
+                }
               />
-              <TextInput
-                style={styles.taskInput}
-                value={item.name}
-                editable={false}
-              />
+              <View style={styles.taskContent}>
+                {editingTaskId === item.id ? (
+                  <TextInput
+                    style={styles.taskInput}
+                    value={editingTaskName}
+                    onChangeText={setEditingTaskName}
+                    onSubmitEditing={() => saveEditedTask(item.id)}
+                    autoCorrect={false}
+                    keyboardType="default"
+                  />
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => startEditingTask(item.id, item.name)}
+                  >
+                    <Text
+                      style={[
+                        styles.taskText,
+                        item.completed && styles.taskTextCompleted,
+                      ]}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
               <TouchableOpacity onPress={() => handleDeleteTask(item.id)}>
                 <MaterialCommunityIcons
                   name="delete"
@@ -85,12 +128,14 @@ export default function PlanScreen() {
                 value={newTask}
                 onChangeText={setNewTask}
               />
+
+              <TouchableOpacity onPress={handleAddTask}>
+                <MaterialCommunityIcons name="check" size={24} color="green" />
+              </TouchableOpacity>
             </View>
           }
         />
       </View>
-
-      {/* Save Button */}
       <TouchableOpacity
         style={styles.saveButton}
         onPress={() => {
@@ -111,11 +156,11 @@ const styles = StyleSheet.create({
   },
   planSectionWrapper: {
     flex: 0,
-    maxHeight: "50%", // Chiều cao tối đa là 50% màn hình
+    maxHeight: "50%",
     marginBottom: 10,
   },
   tasksSectionWrapper: {
-    flex: 1, // Chiếm nửa dưới màn hình
+    flex: 1,
     marginTop: 10,
   },
   sectionTitle: {
@@ -124,6 +169,7 @@ const styles = StyleSheet.create({
     color: "#7AB2D3",
     marginBottom: 10,
   },
+
   taskContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -137,10 +183,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
   },
+  taskContent: {
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  taskText: {
+    fontSize: 14,
+    color: "#000",
+  },
   taskInput: {
     flex: 1,
-    marginLeft: 10,
-    fontSize: 12,
+
+    fontSize: 14,
     color: "#000",
   },
   addTaskContainer: {
@@ -154,6 +208,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: "100%",
     height: 44,
+  },
+  taskTextCompleted: {
+    textDecorationLine: "line-through",
+    color: "gray",
   },
   addTaskInput: {
     fontSize: 14,

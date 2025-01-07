@@ -37,9 +37,9 @@ export default function PasswordChangedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
+    paddingVertical: 165,
   },
   image: {
     width: 150,

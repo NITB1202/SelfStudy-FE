@@ -42,10 +42,7 @@ export default function Header() {
         }} // Thay bằng link ảnh thực tế
         style={styles.avatar}
       />
-
-      {/* Modal Sidebar */}
       <Modal
-        animationType="fade" // Bạn có thể sử dụng "slide" hoặc "fade"
         transparent={true}
         visible={isSidebarVisible}
         onRequestClose={toggleSidebar}
@@ -60,16 +57,15 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row", // Xếp các phần tử theo hàng ngang
-    alignItems: "center", // Căn giữa các phần tử theo chiều dọc
-    justifyContent: "space-between", // Tách các phần tử ra tối đa
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 10,
     width: "100%",
     height: 42,
-    backgroundColor: "transparent", // Không có màu nền
-    shadowColor: "transparent", // Loại bỏ đổ bóng
-    elevation: 0, // Loại bỏ độ cao đổ bóng
-    borderWidth: 0, // Không có đường viền
+    backgroundColor: "transparent",
+    shadowColor: "transparent",
+    borderWidth: 0,
   },
 
   iconContainer: {
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#EAF5FA", // Màu nền cho icon
+    backgroundColor: "#EAF5FA",
     borderRadius: 10,
     elevation: 4,
   },
@@ -104,7 +100,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền mờ khi modal mở
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },

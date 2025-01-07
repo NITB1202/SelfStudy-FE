@@ -4,9 +4,9 @@ import Svg, { Circle, Text as SvgText } from "react-native-svg";
 
 // Định nghĩa kiểu cho props
 interface PlanItemProps {
-  progress: number; // Giá trị tiến độ (0-100)
-  planName: string; // Tên kế hoạch
-  deadline: string; // Hạn chót
+  progress: number;
+  planName: string;
+  deadline: string;
 }
 
 export default function PlanItem({
@@ -14,15 +14,13 @@ export default function PlanItem({
   planName,
   deadline,
 }: PlanItemProps) {
-  // Đảm bảo progress nằm trong khoảng 0-100
   const normalizedProgress = Math.min(Math.max(progress, 0), 100);
 
-  // Kích thước và bán kính của vòng tròn
-  const radius = 30; // Bán kính
-  const strokeWidth = 8; // Độ dày
-  const circumference = 2 * Math.PI * radius; // Chu vi
+  const radius = 30;
+  const strokeWidth = 6;
+  const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
-    circumference - (normalizedProgress / 100) * circumference; // Độ dài đường gạch
+    circumference - (normalizedProgress / 100) * circumference;
 
   return (
     <View style={styles.container}>
