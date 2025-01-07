@@ -74,34 +74,23 @@ export default function PlanScreen() {
           )}
           ListFooterComponent={
             <View style={styles.addTaskContainer}>
-              <TouchableOpacity
-                onPress={() => setIsAddingTask(true)} // Hiển thị TextInput khi nhấn vào dấu +
-              >
+              <TouchableOpacity onPress={handleAddTask}>
                 <MaterialCommunityIcons
                   name="plus-circle-outline"
                   size={30}
                   color="#7AB2D3"
                 />
               </TouchableOpacity>
+              <TextInput
+                style={styles.addTaskInput}
+                placeholder="Add new task"
+                value={newTask}
+                onChangeText={setNewTask}
+              />
 
-              {isAddingTask && (
-                <View style={styles.addTaskInputContainer}>
-                  <TextInput
-                    style={styles.addTaskInput}
-                    placeholder="Add new task"
-                    value={newTask}
-                    onChangeText={setNewTask}
-                    onSubmitEditing={handleAddTask} // Thêm task khi người dùng nhấn Enter
-                  />
-                  <TouchableOpacity onPress={handleAddTask}>
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      size={24}
-                      color="#7AB2D3"
-                    />
-                  </TouchableOpacity>
-                </View>
-              )}
+              <TouchableOpacity onPress={handleAddTask}>
+                <MaterialCommunityIcons name="check" size={24} color="green" />
+              </TouchableOpacity>
             </View>
           }
         />
