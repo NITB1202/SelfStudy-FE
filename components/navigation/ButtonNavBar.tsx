@@ -4,7 +4,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function BottomNavBar() {
+interface BottomNavBarProps {
+  onAddPress?: () => void;
+}
+
+export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
   const [activeTab, setActiveTab] = useState("Me");
 
   return (
@@ -54,10 +58,9 @@ export default function BottomNavBar() {
         </TouchableOpacity>
       </View>
 
-      {/* Center Add Button */}
       <View style={styles.centerButtonWrapper}>
         <LinearGradient
-          colors={["#B9E5E8", "#7AB2D3"]} // Màu gradient
+          colors={["#B9E5E8", "#7AB2D3"]}
           style={styles.addButton}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
@@ -66,7 +69,11 @@ export default function BottomNavBar() {
             style={styles.touchableButton}
             onPress={() => {
               setActiveTab("Add");
-              router.push("/MainPage/AddPlanPage");
+              if (onAddPress) {
+                onAddPress(); // Gọi hàm từ prop nếu được truyền
+              } else {
+                console.warn("No onAddPress function provided!");
+              }
             }}
           >
             <MaterialIcons name="add" size={36} color="white" />
@@ -111,7 +118,9 @@ export default function BottomNavBar() {
           <Text
             style={[
               styles.navText,
-              { color: activeTab === "Notification" ? "#7AB2D3" : "#C0C0C0" },
+              {
+                color: activeTab === "Notification" ? "#7AB2D3" : "#C0C0C0",
+              },
             ]}
           >
             Notification
@@ -121,7 +130,6 @@ export default function BottomNavBar() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
