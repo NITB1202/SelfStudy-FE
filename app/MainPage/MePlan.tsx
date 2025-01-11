@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import Header from "@/components/Header";
@@ -25,35 +25,44 @@ export default function MePlan() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <Header />
-      <Text style={styles.title}>Hey, you have <Text style={styles.highlightText}>3</Text> plans today!</Text>
-      <View style={styles.calendarContainer}>
-        <DateTimePicker
-          mode="single"
-          date={date.toDate()}
-          onChange={(params) => setDate(dayjs(params.date))}
-          selectedItemColor="#7AB2D3"
-        />
-      </View>
-
-      <View style={styles.planListContainer}>
-        <PlanList onPlanPress={handlePlanPress} />
-      </View>
-      <View>
-        <BottomNavBar />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <Text style={styles.title}>
+          Hey, you have <Text style={styles.highlightText}>3</Text> plans today!
+        </Text>
+        <View style={styles.calendarContainer}>
+          <DateTimePicker
+            mode="single"
+            date={date.toDate()}
+            onChange={(params) => setDate(dayjs(params.date))}
+            selectedItemColor="#7AB2D3"
+          />
+        </View>
+        <View style={styles.planListContainer}>
+          <PlanList onPlanPress={handlePlanPress} />
+        </View>
+      </ScrollView>
+      <BottomNavBar />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: "flex-start",
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    backgroundColor: "white",
+    gap: 10,
   },
   title: {
     fontFamily: "Roboto_400Regular",
@@ -83,5 +92,5 @@ const styles = StyleSheet.create({
   highlightText:{
     color: Colors.primary,
     fontWeight: "900",
-  }
+  },
 });

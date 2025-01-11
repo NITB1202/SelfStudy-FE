@@ -66,12 +66,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 10,
     width: "100%",
-    height: 42,
     backgroundColor: "transparent",
-    shadowColor: "transparent",
-    borderWidth: 0,
+    paddingHorizontal: 20,
+    borderBottomColor: "rgba(1,1,1,0.1)",
+    borderBottomWidth: 1,
   },
-
   iconContainer: {
     width: 40,
     height: 40,
