@@ -32,7 +32,6 @@ export default function RegisterScreen() {
         </View>
         <CustomButton
           title="Register"
-          style={styles.registerButton}
           onPress={() => {
             router.push("/Intro/Login");
           }}
@@ -92,18 +91,6 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
   },
-  registerButton: {
-    backgroundColor: "#7AB2D3",
-    width: "100%",
-    paddingVertical: 5,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
-    alignItems: "center",
-  },
   registerText: {
     color: "white",
     fontFamily: "PlusJakartaSans_700Bold",
@@ -128,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   googleButton: {
- flexDirection: "row",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",

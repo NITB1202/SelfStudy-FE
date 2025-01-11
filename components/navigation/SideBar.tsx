@@ -81,7 +81,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
 const styles = StyleSheet.create({
   sidebar: {
     position: "absolute",
-    width: "40%",
     height: "100%",
     backgroundColor: "white",
     zIndex: 1,

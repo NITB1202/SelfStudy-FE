@@ -87,10 +87,6 @@ export default function PlanScreen() {
                 value={newTask}
                 onChangeText={setNewTask}
               />
-
-              <TouchableOpacity onPress={handleAddTask}>
-                <MaterialCommunityIcons name="check" size={24} color="green" />
-              </TouchableOpacity>
             </View>
           }
         />

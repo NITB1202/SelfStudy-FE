@@ -29,7 +29,6 @@ export default function ForgotPassWordScreen() {
         <CustomButton
           title="Send code"
           style={styles.sendButton}
-          textStyle={styles.sendText}
           onPress={() => {
             router.push("/Intro/Verification");
           }}
@@ -82,13 +81,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sendButton: {
-    paddingVertical: 10,
     marginTop: 20,
-  },
-  sendText: {
-    color: "white",
-    fontFamily: "Poppins_700Bold",
-    fontSize: 16,
-    textAlign: "center",
   },
 });

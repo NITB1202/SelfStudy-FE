@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 332,
-    height: 350,
+    height: 280,
   },
   subtitle: {
     fontFamily: "PlusJakartaSans_700Bold",

@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.1,
     shadowRadius: 3.5,
-    elevation: 10,
+    elevation: 5,
     paddingHorizontal: 20,
     width: "95%",
     borderRadius: 40,
@@ -165,12 +165,13 @@ const styles = StyleSheet.create({
   },
   navText: {
     fontSize: 12,
+    fontWeight: "600"
   },
   centerButtonWrapper: {
     position: "absolute",
     top: "-55%",
-    left: "55%",
-    transform: [{ translateX: -12 }],
+    left: "52%",
+    transform: [{ translateX: -14 }],
   },
   addButton: {
     width: 55,

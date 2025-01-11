@@ -26,7 +26,6 @@ export default function ResetPasswordScreen() {
         </View>
         <CustomButton
           title="Reset password"
-          textStyle={styles.resetText}
           onPress={() => {
             router.push("/Intro/PasswordChanged");
           }}
@@ -75,10 +74,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     padding: 20,
-  },
-  resetText: {
-    color: "white",
-    fontFamily: "Poppins_700Bold",
-    fontSize: 16,
   },
 });
