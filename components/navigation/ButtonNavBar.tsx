@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   centerButtonWrapper: {
     position: "absolute",
     top: "-55%",
-    left: "53%",
+    left: "55%",
     transform: [{ translateX: -12 }],
   },
   addButton: {

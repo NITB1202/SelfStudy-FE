@@ -21,39 +21,41 @@ export default function Header() {
   };
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={[Colors.secondary, Colors.primary]}
-        style = {styles.iconContainer}>
-        <TouchableOpacity onPress={toggleSidebar}>
-          <Ionicons name="list" size={24} color="white" />
-        </TouchableOpacity>
-      </LinearGradient>
+    <View>
+      <View style={styles.container}>
+        <LinearGradient
+          colors={[Colors.secondary, Colors.primary]}
+          style = {styles.iconContainer}>
+          <TouchableOpacity onPress={toggleSidebar}>
+            <Ionicons name="list" size={24} color="white" />
+          </TouchableOpacity>
+        </LinearGradient>
 
-      <View style={styles.userContainer}>
-        <Ionicons
-          name="chevron-down"
-          size={24}
-          color={Colors.primary }
-          style={styles.iconDown}
-        />
-        <Text style={styles.userName}>Robin</Text>
-        <Image
-          source={{
-            uri: "https://i1-giaitri.vnecdn.net/2022/09/23/-5865-1663929656.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=2qbqN6-vYy6SJLboH93pYA",
-          }}
-          style={styles.avatar}
-        />
-      </View>
-
-      <Modal
-        transparent={true}
-        visible={isSidebarVisible}
-        onRequestClose={toggleSidebar}
-      >
-        <View style={styles.modalContainer}>
-          <Sidebar onClose={toggleSidebar} />
+        <View style={styles.userContainer}>
+          <Ionicons
+            name="chevron-down"
+            size={24}
+            color={Colors.primary }
+            style={styles.iconDown}
+          />
+          <Text style={styles.userName}>Robin</Text>
+          <Image
+            source={{
+              uri: "https://i1-giaitri.vnecdn.net/2022/09/23/-5865-1663929656.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=2qbqN6-vYy6SJLboH93pYA",
+            }}
+            style={styles.avatar}
+          />
         </View>
+      </View>
+      <View style={styles.bottomBorder} />
+      <Modal
+          transparent={true}
+          visible={isSidebarVisible}
+          onRequestClose={toggleSidebar}
+        >
+          <View style={styles.modalContainer}>
+            <Sidebar onClose={toggleSidebar} />
+          </View>
       </Modal>
     </View>
   );
@@ -68,8 +70,6 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "transparent",
     paddingHorizontal: 20,
-    borderBottomColor: "rgba(1,1,1,0.1)",
-    borderBottomWidth: 1,
   },
   iconContainer: {
     width: 40,
@@ -105,5 +105,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-start",
     alignItems: "flex-start",
+  },
+  bottomBorder: {
+    borderBottomColor: "rgba(1,1,1,0.1)",
+    borderBottomWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
 });

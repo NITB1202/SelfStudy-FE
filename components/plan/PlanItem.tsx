@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   deadlineLabel: {
-    fontSize: 12,
+    fontSize: 13,
     color: "gray",
     marginRight: 4,
   },
