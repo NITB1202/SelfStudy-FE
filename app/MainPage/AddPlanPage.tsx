@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackButton from "@/components/BackButton";
-import AddPlan from "@/components/plant/AddPlant";
 import { router, useNavigation } from "expo-router";
+import AddPlan from "@/components/plan/AddPlan";
 
 export default function PlanScreen() {
   const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);

@@ -66,7 +66,6 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           end={{ x: 0, y: 1 }}
         >
           <TouchableOpacity
-            style={styles.touchableButton}
             onPress={() => {
               setActiveTab("Add");
               if (onAddPress) {
@@ -185,10 +184,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   touchableButton: {
-    width: 70,
-    height: 70,
+    width: 20,
+    height: 20,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 35,
+    borderRadius: 10,
   },
 });
