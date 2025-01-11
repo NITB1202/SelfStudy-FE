@@ -1,16 +1,14 @@
-import BackButton from "@/components/BackButton";
-import CustomButton from "@/components/CustomButton";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import Header from "@/components/Header";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import PlanList from "../../components/plan/PlanList";
 import BottomNavBar from "../../components/navigation/ButtonNavBar";
 import { router, useNavigation } from "expo-router";
-import { useRouter } from "expo-router";
+import PlanList from "@/components/plan/PlanList";
+import { Colors } from "@/constants/Colors";
 
 export default function MePlan() {
   const { fontsLoaded } = useCustomFonts();
@@ -27,35 +25,44 @@ export default function MePlan() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <Header />
-      <Text style={styles.title}>Hey, you have 3 plans today!</Text>
-      <View style={styles.calendarContainer}>
-        <DateTimePicker
-          mode="single"
-          date={date.toDate()}
-          onChange={(params) => setDate(dayjs(params.date))}
-          selectedItemColor="#7AB2D3"
-        />
-      </View>
-
-      <View style={styles.planListContainer}>
-        <PlanList onPlanPress={handlePlanPress} />
-      </View>
-      <View>
-        <BottomNavBar />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <Text style={styles.title}>
+          Hey, you have <Text style={styles.highlightText}>3</Text> plans today!
+        </Text>
+        <View style={styles.calendarContainer}>
+          <DateTimePicker
+            mode="single"
+            date={date.toDate()}
+            onChange={(params) => setDate(dayjs(params.date))}
+            selectedItemColor="#7AB2D3"
+          />
+        </View>
+        <View style={styles.planListContainer}>
+          <PlanList onPlanPress={handlePlanPress} />
+        </View>
+      </ScrollView>
+      <BottomNavBar />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: "flex-start",
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    backgroundColor: "white",
+    gap: 10,
   },
   title: {
     fontFamily: "Roboto_400Regular",
@@ -74,10 +81,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
+    borderColor: "rgba(1,1,1,0.1)",
+    borderWidth: 1, 
   },
   planListContainer: {
     flex: 1,
     width: "100%",
     marginTop: 20,
+  },
+  highlightText:{
+    color: Colors.primary,
+    fontWeight: "900",
   },
 });

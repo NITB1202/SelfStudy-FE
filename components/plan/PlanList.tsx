@@ -3,13 +3,11 @@ import {
   View,
   StyleSheet,
   Text,
-  FlatList,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PlanItem from "./PlanItem";
-// import { TabBarIcon } from "../navigation/TabBarIcon";
-// import { useNavigation } from "@react-navigation/native";
+
 
 interface Plan {
   id: number;
@@ -61,33 +59,31 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
     return date.toLocaleString();
   };
 
-  const renderItem = ({ item }: { item: Plan }) => (
-    <TouchableOpacity onPress={() => onPlanPress(item.planName)}>
-      <PlanItem
-        progress={item.progress}
-        planName={item.planName}
-        deadline={formatDeadline(item.deadline)}
-      />
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <MaterialCommunityIcons
-          name="clipboard-list-outline"
+          name="target"
           size={30}
           color="#7AB2D3"
         />
         <Text style={styles.headerText}>Plans</Text>
       </View>
-      <FlatList
-        data={plans}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => <View style={styles.planSeparator} />}
-        contentContainerStyle={[styles.contentContainer, { width: 379 }]}
-      />
+      {
+        plans.map((item)=>{
+          return(
+            <Pressable
+              key={item.id}
+              onPress={() => onPlanPress(item.planName)}>
+              <PlanItem
+                planName={item.planName}
+                progress={item.progress}
+                deadline={item.deadline}>
+              </PlanItem>
+            </Pressable>
+          );
+        })
+      }
     </View>
   );
 }
@@ -97,7 +93,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "flex-start",
-    marginTop: 10,
   },
   header: {
     flexDirection: "row",

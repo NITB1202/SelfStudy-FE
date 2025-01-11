@@ -28,13 +28,22 @@ export default function Sidebar({ onClose }: SidebarProps) {
     {
       id: "Session",
       label: "Session",
-      icon: <Ionicons name="timer-outline" size={24} color="#1E282D" />,
+      icon: 
+        <MaterialCommunityIcons 
+          name="timer-outline" 
+          size={24} 
+          color="#1E282D" 
+        />,
     },
     {
       id: "Statistic",
       label: "Statistic",
       icon: (
-        <MaterialCommunityIcons name="chart-bar" size={24} color="#1E282D" />
+        <MaterialCommunityIcons
+          name="chart-box-outline" 
+          size={24} 
+          color="#1E282D"
+        />
       ),
     },
   ];
@@ -42,16 +51,14 @@ export default function Sidebar({ onClose }: SidebarProps) {
   return (
     <View style={styles.sidebar}>
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <MaterialCommunityIcons name="close-circle" size={24} color="white" />
+        <Ionicons name="close-circle-outline" size={24} color="white" />
       </TouchableOpacity>
 
-      <View>
-        <Image
-          source={require("../../assets/images/Header.png")}
-          style={styles.logo}
-        />
-      </View>
-      {/* Menu Items */}
+      <Image
+        source={require("../../assets/images/Header.png")}
+        style={styles.logo}
+      />
+
       <View style={styles.menu}>
         {menuItems.map((item) => (
           <TouchableOpacity
@@ -74,37 +81,35 @@ export default function Sidebar({ onClose }: SidebarProps) {
 const styles = StyleSheet.create({
   sidebar: {
     position: "absolute",
-    width: "40%",
     height: "100%",
-    backgroundColor: "white", // Light background similar to the design
+    backgroundColor: "white",
     zIndex: 1,
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    borderRadius: 5,
   },
   closeButton: {
     position: "absolute",
-    top: 20,
-    left: 15,
+    top: 10,
+    left: 10,
     zIndex: 2,
   },
   logo: {
     width: "100%",
-    height: 143,
-    marginBottom: 10,
   },
   menu: {
-    marginTop: 10,
+    gap: 10,
+    padding: 5,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginBottom: 10,
-    borderRadius: 8,
+    borderRadius: 5,
     backgroundColor: "#FFFFFF",
   },
   activeMenuItem: {

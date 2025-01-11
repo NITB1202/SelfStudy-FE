@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -66,17 +66,16 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           end={{ x: 0, y: 1 }}
         >
           <TouchableOpacity
-            style={styles.touchableButton}
             onPress={() => {
               setActiveTab("Add");
               if (onAddPress) {
-                onAddPress(); // Gọi hàm từ prop nếu được truyền
+                onAddPress();
               } else {
                 console.warn("No onAddPress function provided!");
               }
             }}
           >
-            <MaterialIcons name="add" size={36} color="white" />
+            <Ionicons name="add-outline" size={36} color="white" />
           </TouchableOpacity>
         </LinearGradient>
       </View>
@@ -135,27 +134,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 60,
-    backgroundColor: "#fff",
-    borderRadius: 30,
+    backgroundColor: "white",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
+    shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.1,
     shadowRadius: 3.5,
-    elevation: 10,
+    elevation: 5,
     paddingHorizontal: 20,
-    marginBottom: 10,
-    width: "100%",
+    width: "95%",
+    borderRadius: 40,
+    borderColor: "rgba(1,1,1,0.1)",
+    borderWidth: 1,
+    paddingVertical: 3,
+    marginBottom: 5,
   },
 
   leftNavItems: {
     flexDirection: "row",
-    gap: 30,
+    gap: 20,
     alignItems: "center",
   },
   rightNavItems: {
     flexDirection: "row",
-    gap: 30,
+    gap: 20,
     alignItems: "center",
   },
   navItem: {
@@ -164,18 +165,18 @@ const styles = StyleSheet.create({
   },
   navText: {
     fontSize: 12,
-    marginTop: 4,
+    fontWeight: "600"
   },
   centerButtonWrapper: {
     position: "absolute",
-    top: -30,
-    left: "50%",
-    transform: [{ translateX: -12 }],
+    top: "-55%",
+    left: "52%",
+    transform: [{ translateX: -14 }],
   },
   addButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 55,
+    height: 55,
+    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -185,10 +186,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   touchableButton: {
-    width: 70,
-    height: 70,
+    width: 20,
+    height: 20,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 35,
+    borderRadius: 10,
   },
 });

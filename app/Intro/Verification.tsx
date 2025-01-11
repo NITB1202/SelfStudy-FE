@@ -65,7 +65,6 @@ export default function VerificationScreen() {
         </View>
         <Text style={styles.countdown}>{formatTime(timeLeft)}</Text>
         <CustomButton
-          style={styles.verifyButton}
           title="Verify"
           onPress={() => {
             router.push("/Intro/ResetPassword");
@@ -139,17 +138,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#000000",
     fontFamily: "Poppins_400Regular",
-  },
-  verifyButton: {
-    backgroundColor: "#7AB2D3",
-    width: "100%",
-    paddingVertical: 6,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
   },
   verifyText: {
     color: "white",

@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
-    marginBottom: 20,
   },
   title: {
     fontFamily: "PlusJakartaSans_700Bold",
@@ -61,9 +60,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 332,
-    height: 40,
+    paddingHorizontal: 20,
+    width: "100%",
   },
 });

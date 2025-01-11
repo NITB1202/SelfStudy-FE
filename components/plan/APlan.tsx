@@ -13,11 +13,11 @@ import DateTimePicker, {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface APlanProps {
-  Name: string; // Nhận props tên kế hoạch
+  Name: string;
 }
 
 export default function APlan({ Name }: APlanProps) {
-  const [name, setName] = useState("New Plan"); // Đặt giá trị mặc định cho name
+  const [name, setName] = useState("New Plan");
   const [description, setDescription] = useState(
     "My first plan to test the application"
   );
