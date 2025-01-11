@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -75,7 +75,7 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
               }
             }}
           >
-            <MaterialIcons name="add" size={36} color="white" />
+            <Ionicons name="add-outline" size={36} color="white" />
           </TouchableOpacity>
         </LinearGradient>
       </View>
