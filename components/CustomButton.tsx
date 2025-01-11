@@ -5,7 +5,7 @@ import {
   ViewStyle,
   TextStyle,
   Text,
-  Platform, // Để kiểm tra nền tảng
+  Platform,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import useCustomFonts from "@/hooks/useCustomFonts";
@@ -15,9 +15,9 @@ interface CustomButtonProps {
   onPress: (event: GestureResponderEvent) => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
-  color?: "primary" | "secondary"; // Tùy chọn màu sắc
-  borderRadius?: number; // Bo tròn nút
-  shadow?: boolean; // Thêm hoặc tắt shadow
+  color?: "primary" | "secondary";
+  borderRadius?: number;
+  shadow?: boolean;
 }
 
 export default function CustomButton({
@@ -26,25 +26,24 @@ export default function CustomButton({
   style,
   textStyle,
   color = "primary",
-  borderRadius = 10, // Bo tròn mặc định
-  shadow = true, // Shadow mặc định bật
+  borderRadius = 10,
+  shadow = true,
 }: CustomButtonProps) {
   const { fontsLoaded } = useCustomFonts();
 
-  // Kiểm tra xem font đã tải xong chưa, nếu chưa thì không render nội dung
   if (!fontsLoaded) {
     return null;
   }
 
-  const buttonColor = color === "primary" ? "#7AB2D3" : "#C0C0C0"; // Màu xanh nhạt hoặc xám
-  const textColor = color === "primary" ? "#FFFFFF" : "#000000"; // Chữ trắng hoặc đen
+  const buttonColor = color === "primary" ? "#7AB2D3" : "#C0C0C0";
+  const textColor = color === "primary" ? "#FFFFFF" : "#000000";
 
   return (
     <TouchableOpacity
       style={[
         styles.button,
         { backgroundColor: buttonColor, borderRadius: borderRadius },
-        shadow && Platform.OS === "ios" ? styles.shadow : { elevation: 6 }, // Áp dụng shadow cho iOS và elevation cho Android
+        shadow && Platform.OS === "ios" ? styles.shadow : { elevation: 6 },
         style,
       ]}
       onPress={onPress}
@@ -59,18 +58,17 @@ export default function CustomButton({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 5, // Căn chỉnh chiều dọc cho nút
-    paddingHorizontal: 20, // Thêm padding ngang
-    borderRadius: 10, // Bo tròn nút nhiều hơn để trông mềm mại
+    paddingVertical: 5, 
+    paddingHorizontal: 20,
+    borderRadius: 10,
     alignItems: "center",
-    justifyContent: "center", // Đảm bảo text nằm giữa nút
-    width: 332, // Nút sẽ chiếm toàn bộ chiều ngang container
+    justifyContent: "center",
+    width: "100%",
     height: 40,
   },
-
   text: {
-    fontFamily: "Poppins_700Bold", // Font chữ in đậm
-    fontSize: 20, // Tăng kích thước chữ cho phù hợp với thiết kế
+    fontFamily: "Poppins_700Bold", 
+    fontSize: 20,
   },
   shadow: {
     shadowColor: "#000",

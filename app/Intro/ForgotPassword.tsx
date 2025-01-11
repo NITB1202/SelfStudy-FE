@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   instruction: {
     fontFamily: "Roboto_400Regular",
     color: "gray",
-    textAlign: "center", // Căn chữ về bên trái
+    textAlign: "center",
     marginTop: 10,
     fontSize: 16,
     width: "100%",
@@ -82,16 +82,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sendButton: {
-    backgroundColor: "#7AB2D3",
-    width: "100%",
     paddingVertical: 10,
     marginTop: 20,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
   },
   sendText: {
     color: "white",

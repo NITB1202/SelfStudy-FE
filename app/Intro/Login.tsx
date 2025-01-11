@@ -45,7 +45,6 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.googleButton}>
           <Image
             source={require("../../assets/images/google-icon.png")}
-            style={styles.googleIcon}
           />
           <Text style={styles.googleText}>Login with Google</Text>
         </TouchableOpacity>
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    alignSelf: "flex-start", // Đặt nút Back về góc trái
+    alignSelf: "flex-start",
     marginTop: 20,
     marginLeft: 0,
   },
@@ -82,33 +81,33 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     color: "#7AB2D3",
     textAlign: "center",
-    width: "100%", // Đồng bộ chiều rộng
+    width: "100%",
   },
   inputContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     gap: 10,
-    paddingVertical: 60, // Padding trên dưới là 40
-    paddingHorizontal: 10, // Padding trái phải là 10
+    paddingVertical: 60,
+    paddingHorizontal: 10,
   },
   inputEmail: {
     marginBottom: 10,
-    width: "100%", // Chiều rộng giống các thành phần khác
+    width: "100%",
   },
   link: {
     width: "100%",
     textAlign: "right",
     marginTop: 10,
     marginBottom: 20,
-    fontWeight: "500",
+    fontWeight: "bold",
     color: "#7AB2D3",
     fontSize: 15,
     fontFamily: "Roboto_700Bold",
   },
   loginButton: {
     backgroundColor: "#7AB2D3",
-    width: "100%", // Đồng bộ chiều rộng với input
+    width: "100%",
     paddingVertical: 5,
     borderRadius: 8,
     marginTop: 10,
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   divideLine: {
-    flex: 1, // Dãy phân cách co giãn đều
+    flex: 1,
     height: 1,
     backgroundColor: "gray",
   },
@@ -128,8 +127,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%", // Đồng bộ chiều rộng
+    width: "100%",
     paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   option: {
     marginHorizontal: 5,
@@ -150,17 +150,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.5,
     elevation: 5,
-    width: "100%", // Đồng bộ chiều rộng với input
+    width: "100%",
   },
   googleText: {
     fontFamily: "Poppins_400Regular",
     marginLeft: 5,
     color: "gray",
-    fontSize: 16,
-  },
-  googleIcon: {
-    width: 24,
-    height: 24,
+    fontSize: 20,
   },
   footerText: {
     marginTop: 40,
@@ -172,5 +168,6 @@ const styles = StyleSheet.create({
   signUpLink: {
     color: "#7AB2D3",
     fontFamily: "Roboto_700Bold",
+    fontWeight: "bold"
   },
 });

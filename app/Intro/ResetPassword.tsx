@@ -9,7 +9,6 @@ import { router } from "expo-router";
 export default function ResetPasswordScreen() {
   const { fontsLoaded } = useCustomFonts();
 
-  // Kiểm tra xem font đã tải xong chưa, nếu chưa thì không render nội dung
   if (!fontsLoaded) {
     return null;
   }
@@ -27,7 +26,6 @@ export default function ResetPasswordScreen() {
         </View>
         <CustomButton
           title="Reset password"
-          style={styles.resetButton}
           textStyle={styles.resetText}
           onPress={() => {
             router.push("/Intro/PasswordChanged");
@@ -52,21 +50,21 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     marginTop: 80,
-    color: "#7AB2D3", // Màu xanh nhạt cho tiêu đề
+    color: "#7AB2D3",
   },
   instruction: {
     color: "gray",
     paddingHorizontal: 20,
-    //marginBottom: 10,
-    textAlign: "center", // Căn giữa mô tả
+    textAlign: "justify",
     fontFamily: "Roboto_400Regular",
+    marginTop: 10,
   },
   inputContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
-    gap: 20, // Khoảng cách giữa các trường nhập mật khẩu
+    gap: 20,
     width: "100%",
     height: 98,
     marginBottom: 30,
@@ -77,20 +75,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     padding: 20,
-  },
-  resetButton: {
-    backgroundColor: "#7AB2D3", // Màu xanh nhạt
-    paddingVertical: 8,
-    marginVertical: 20,
-    borderRadius: 8,
-    // Hiệu ứng shadow
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
-    height: 40,
-    width: "100%",
   },
   resetText: {
     color: "white",

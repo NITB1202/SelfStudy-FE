@@ -10,20 +10,38 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import BackButton from "@/components/BackButton";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
 
 export default function VerificationScreen() {
   const inputs = Array.from({ length: 4 }, () => useRef<TextInput>(null));
   const loaded = useCustomFonts();
-  const handleTextChange = (text: string, index: number) => {
-    if (text.length === 1 && index < inputs.length - 1)
-      inputs[index + 1]?.current?.focus();
-  };
+  const [timeLeft, setTimeLeft] = useState(120);
 
   if (!loaded) {
     return null;
   }
+
+  useEffect(() => {
+    if (timeLeft === 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
+
+  const handleTextChange = (text: string, index: number) => {
+    if (text.length === 1 && index < inputs.length - 1)
+      inputs[index + 1]?.current?.focus();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,7 +63,7 @@ export default function VerificationScreen() {
             ></NumberInput>
           ))}
         </View>
-        <Text style={styles.countdown}>00:00</Text>
+        <Text style={styles.countdown}>{formatTime(timeLeft)}</Text>
         <CustomButton
           style={styles.verifyButton}
           title="Verify"
@@ -54,7 +72,7 @@ export default function VerificationScreen() {
           }}
         ></CustomButton>
         <View style={styles.linkContainer}>
-          <Text>Didn't receive a code? </Text>
+          <Text style={styles.linkText}>Didn't receive a code? </Text>
           <TouchableHighlight>
             <Text style={styles.highlight}>Resend</Text>
           </TouchableHighlight>
@@ -73,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   backButton: {
-    alignSelf: "flex-start", // Đặt nút Back về góc trái
+    alignSelf: "flex-start",
     marginTop: 10,
     marginLeft: 0,
   },
@@ -84,13 +102,13 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 40,
     paddingVertical: 20,
-    gap: 10, // Tăng khoảng cách giữa các ô nhập
+    gap: 10,
   },
   title: {
     fontSize: 36,
     fontFamily: "PlusJakartaSans_700Bold",
     marginTop: 80,
-    color: "#7AB2D3", // Màu xanh nhạt cho tiêu đề
+    color: "#7AB2D3",
   },
   instruction: {
     color: "gray",
@@ -110,9 +128,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   highlight: {
-    color: "#7AB2D3", // Màu xanh nhạt cho liên kết
+    color: "#7AB2D3",
     fontFamily: "Roboto_700Bold",
     fontSize: 16,
+    fontWeight: "bold"
   },
   countdown: {
     fontSize: 24,
@@ -122,11 +141,10 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
   },
   verifyButton: {
-    backgroundColor: "#7AB2D3", // Màu xanh nhạt
+    backgroundColor: "#7AB2D3",
     width: "100%",
     paddingVertical: 6,
     borderRadius: 8,
-    // Hiệu ứng shadow
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -138,4 +156,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
     fontSize: 16,
   },
+  linkText:{
+    fontSize: 16,
+  }
 });

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    width: "100%", // Cố định chiều rộng giống CustomButton
-    height: 40, // Cố định chiều cao giống CustomButton
+    width: "100%",
+    height: 40,
   },
 });
