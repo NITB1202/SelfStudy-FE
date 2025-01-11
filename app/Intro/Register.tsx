@@ -34,7 +34,7 @@ export default function RegisterScreen() {
           title="Register"
           style={styles.registerButton}
           onPress={() => {
-            router.push("/Intro/Login"); // Điều hướng sang trang Login
+            router.push("/Intro/Login");
           }}
         />
         <View style={styles.divideContainer}>
@@ -45,9 +45,8 @@ export default function RegisterScreen() {
         <TouchableOpacity style={styles.googleButton}>
           <Image
             source={require("../../assets/images/google-icon.png")}
-            style={styles.googleIcon}
           />
-          <Text style={styles.googleText}>Sign up with Google</Text>
+          <Text style={styles.googleText}>Register with Google</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   backButton: {
-    alignSelf: "flex-start", // Đặt nút Back về góc trái// Đặt nút Back về góc trái
+    alignSelf: "flex-start",
     marginTop: 20,
     marginLeft: 0,
   },
@@ -74,14 +73,14 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     color: "#7AB2D3",
     textAlign: "center",
-    width: "100%", // Đồng bộ chiều rộng
+    width: "100%",
   },
   body: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    paddingVertical: 60, // Padding trên dưới là 40
-    paddingHorizontal: 10, // Padding trái phải là 10
+    paddingVertical: 60,
+    paddingHorizontal: 10,
   },
   inputContainer: {
     justifyContent: "center",
@@ -91,11 +90,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   input: {
-    width: "100%", // Đảm bảo chiều rộng input chiếm toàn bộ container
+    width: "100%",
   },
   registerButton: {
     backgroundColor: "#7AB2D3",
-    width: "100%", // Đồng bộ chiều rộng với input
+    width: "100%",
     paddingVertical: 5,
     borderRadius: 8,
     shadowColor: "#000",
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   divideLine: {
-    flex: 1, // Dãy phân cách co giãn đều
+    flex: 1,
     height: 1,
     backgroundColor: "gray",
   },
@@ -119,8 +118,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%", // Đồng bộ chiều rộng
+    width: "100%",
     paddingVertical: 10,
+    paddingHorizontal: 10,
   },
   option: {
     marginHorizontal: 5,
@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   googleButton: {
-    flexDirection: "row",
+ flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "rgba(0, 0, 0, 0.1)",
     borderRadius: 10,
     paddingVertical: 5,
     shadowColor: "#000",
@@ -141,16 +141,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.5,
     elevation: 5,
-    width: "100%", // Đồng bộ chiều rộng với input
+    width: "100%",
   },
   googleText: {
     fontFamily: "Poppins_400Regular",
     marginLeft: 5,
     color: "#1E282DA6",
-    fontSize: 16,
-  },
-  googleIcon: {
-    width: 24,
-    height: 24,
+    fontSize: 20,
   },
 });
