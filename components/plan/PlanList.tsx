@@ -8,8 +8,6 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PlanItem from "./PlanItem";
-// import { TabBarIcon } from "../navigation/TabBarIcon";
-// import { useNavigation } from "@react-navigation/native";
 
 interface Plan {
   id: number;
@@ -75,7 +73,7 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <MaterialCommunityIcons
-          name="clipboard-list-outline"
+          name="target"
           size={30}
           color="#7AB2D3"
         />

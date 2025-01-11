@@ -1,5 +1,3 @@
-import BackButton from "@/components/BackButton";
-import CustomButton from "@/components/CustomButton";
 import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
@@ -9,8 +7,8 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import BottomNavBar from "../../components/navigation/ButtonNavBar";
 import { router, useNavigation } from "expo-router";
-import { useRouter } from "expo-router";
 import PlanList from "@/components/plan/PlanList";
+import { Colors } from "@/constants/Colors";
 
 export default function MePlan() {
   const { fontsLoaded } = useCustomFonts();
@@ -29,7 +27,7 @@ export default function MePlan() {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Text style={styles.title}>Hey, you have 3 plans today!</Text>
+      <Text style={styles.title}>Hey, you have <Text style={styles.highlightText}>3</Text> plans today!</Text>
       <View style={styles.calendarContainer}>
         <DateTimePicker
           mode="single"
@@ -74,10 +72,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
+    borderColor: "rgba(1,1,1,0.1)",
+    borderWidth: 1, 
   },
   planListContainer: {
     flex: 1,
     width: "100%",
     marginTop: 20,
   },
+  highlightText:{
+    color: Colors.primary,
+    fontWeight: "900",
+  }
 });

@@ -69,7 +69,7 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
             onPress={() => {
               setActiveTab("Add");
               if (onAddPress) {
-                onAddPress(); // Gọi hàm từ prop nếu được truyền
+                onAddPress();
               } else {
                 console.warn("No onAddPress function provided!");
               }
@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 60,
     backgroundColor: "#fff",
     borderRadius: 30,
     shadowColor: "#000",
@@ -145,16 +144,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
     width: "100%",
+    borderColor: "rgba(1,1,1,0.1)",
+    borderWidth: 1,
+    paddingVertical: 3,
   },
 
   leftNavItems: {
     flexDirection: "row",
-    gap: 30,
+    gap: 20,
     alignItems: "center",
   },
   rightNavItems: {
     flexDirection: "row",
-    gap: 30,
+    gap: 20,
     alignItems: "center",
   },
   navItem: {
@@ -163,18 +165,17 @@ const styles = StyleSheet.create({
   },
   navText: {
     fontSize: 12,
-    marginTop: 4,
   },
   centerButtonWrapper: {
     position: "absolute",
-    top: -30,
-    left: "50%",
+    top: "-55%",
+    left: "53%",
     transform: [{ translateX: -12 }],
   },
   addButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 55,
+    height: 55,
+    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
