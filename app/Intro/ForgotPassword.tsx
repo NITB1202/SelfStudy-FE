@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   instruction: {
     fontFamily: "Roboto_400Regular",
     color: "gray",
-    textAlign: "center", // Căn chữ về bên trái
+    textAlign: "center",
     marginTop: 10,
     fontSize: 16,
     width: "100%",
