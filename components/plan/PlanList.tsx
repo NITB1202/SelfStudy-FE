@@ -8,6 +8,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PlanItem from "./PlanItem";
 
+
 interface Plan {
   id: number;
   progress: number;
