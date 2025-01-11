@@ -72,7 +72,7 @@ export default function VerificationScreen() {
           }}
         ></CustomButton>
         <View style={styles.linkContainer}>
-          <Text>Didn't receive a code? </Text>
+          <Text style={styles.linkText}>Didn't receive a code? </Text>
           <TouchableHighlight>
             <Text style={styles.highlight}>Resend</Text>
           </TouchableHighlight>
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     color: "#7AB2D3",
     fontFamily: "Roboto_700Bold",
     fontSize: 16,
+    fontWeight: "bold"
   },
   countdown: {
     fontSize: 24,
@@ -155,4 +156,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
     fontSize: 16,
   },
+  linkText:{
+    fontSize: 16,
+  }
 });
