@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackButton from "@/components/BackButton";
-import AddPlan from "@/components/plant/AddPlant";
+import AddPlan from "@/components/plan/AddPlan";
 import { router, useNavigation } from "expo-router";
 
 export default function PlanScreen() {

@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import PlanList from "../../components/plant/PlanList";
+import PlanList from "../../components/plan/PlanList";
 import BottomNavBar from "../../components/navigation/ButtonNavBar";
 import { router, useNavigation } from "expo-router";
 import { useRouter } from "expo-router";

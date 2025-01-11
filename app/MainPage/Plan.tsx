@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import APlan from "../../components/plant/APlant";
+import APlan from "../../components/plan/APlan";
 import BackButton from "@/components/BackButton";
 import { router, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";

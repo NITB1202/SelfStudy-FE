@@ -39,7 +39,7 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           style={styles.navItem}
           onPress={() => {
             setActiveTab("MissedDeadline");
-            router.push("/");
+            router.push("/MissedDeadline/page");
           }}
         >
           <MaterialIcons
