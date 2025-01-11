@@ -1,3 +1,4 @@
+
 import { Colors } from "@/constants/Colors";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
@@ -18,6 +19,7 @@ export default function PlanItem({
   const normalizedProgress = Math.min(Math.max(progress, 0), 100);
 
   const radius = 30;
+
   const strokeWidth = 5;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
@@ -101,6 +103,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(1,1,1,0.1)",
     borderWidth: 1,
     width: "100%",
+
   },
   infoContainer: {
     flex: 1,
