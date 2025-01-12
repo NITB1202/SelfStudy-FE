@@ -4,6 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons"; // Import thư viện icon
 import PrivatePage from "./Private/page";
 import TeamPage from "./Team/page";
 import { LinearGradient } from "expo-linear-gradient";
+import BottomNavBar from "@/components/navigation/ButtonNavBar";
 
 const MissedDeadline: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<"private" | "team">("private");
@@ -56,6 +57,9 @@ const MissedDeadline: React.FC = () => {
         {selectedTab === "private" && <PrivatePage />}
         {selectedTab === "team" && <TeamPage />}
       </View>
+      <View>
+        <BottomNavBar initialActiveTab="MissedDeadline" />
+      </View>
     </View>
   );
 };
@@ -67,7 +71,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     gap: 20,
-    padding: 10,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
   iconContainer: {
     flexDirection: "row",

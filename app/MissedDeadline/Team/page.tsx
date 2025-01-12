@@ -146,13 +146,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    padding: 10,
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 11,
+    fontWeight: "400",
     marginBottom: 10,
-    color: "#333",
+    color: "rgba(0, 0, 0, 0.5)",
   },
   selectorContainer: {
     flexDirection: "row",
