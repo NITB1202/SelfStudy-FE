@@ -121,7 +121,7 @@ export default function BottomNavBar({
           style={styles.navItem}
           onPress={() => {
             setActiveTab("Notification");
-            router.push("/Noti/page");
+            router.push("/Notification");
           }}
         >
           <MaterialIcons

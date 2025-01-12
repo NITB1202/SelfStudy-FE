@@ -30,7 +30,7 @@ export default function ForgotPassWordScreen() {
           title="Send code"
           style={styles.sendButton}
           onPress={() => {
-            router.push("/Intro/Verification");
+            router.push("/Authentication/Verification");
           }}
         />
       </View>

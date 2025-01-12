@@ -33,7 +33,7 @@ export default function RegisterScreen() {
         <CustomButton
           title="Register"
           onPress={() => {
-            router.push("/Intro/Login");
+            router.push("/Authentication/Login");
           }}
         />
         <View style={styles.divideContainer}>

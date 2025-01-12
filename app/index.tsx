@@ -32,7 +32,7 @@ export default function Index() {
       <CustomButton
         title="Get Started"
         onPress={() => {
-          router.push("/Intro/Login");
+          router.push("/Authentication/Login");
         }}
       />
     </View>

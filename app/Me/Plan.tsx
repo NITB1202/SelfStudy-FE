@@ -10,7 +10,7 @@ import { router, useNavigation } from "expo-router";
 import PlanList from "@/components/plan/PlanList";
 import { Colors } from "@/constants/Colors";
 
-export default function MePlan() {
+export default function Plan() {
   const { fontsLoaded } = useCustomFonts();
 
   if (!fontsLoaded) {
@@ -21,7 +21,7 @@ export default function MePlan() {
   const navigation = useNavigation();
   const handlePlanPress = (planName: string) => {
     console.log("Plan pressed with Name:", planName);
-    router.push(`/MainPage/Plan?planName=${encodeURIComponent(planName)}`);
+    router.push(`/Me/PlanDetail?planName=${encodeURIComponent(planName)}`);
   };
 
   return (
@@ -43,7 +43,7 @@ export default function MePlan() {
           <PlanList onPlanPress={handlePlanPress} />
         </View>
       </ScrollView>
-      <BottomNavBar onAddPress={() => router.push("/MainPage/AddPlanPage")} />
+      <BottomNavBar onAddPress={() => router.push("/Me/AddPlan")} />
     </SafeAreaView>
   );
 }

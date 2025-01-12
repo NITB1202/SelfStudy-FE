@@ -27,7 +27,7 @@ export default function ResetPasswordScreen() {
         <CustomButton
           title="Reset password"
           onPress={() => {
-            router.push("/Intro/PasswordChanged");
+            router.push("/Authentication/PasswordChanged");
           }}
         />
       </View>

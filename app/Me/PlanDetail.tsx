@@ -3,13 +3,12 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   Text,
   TextInput,
   ScrollView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import APlan from "../../components/plan/APlan";
+import PlanInfo from "../../components/plan/PlanInfo";
 import BackButton from "@/components/BackButton";
 import { router, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
@@ -67,7 +66,7 @@ export default function PlanScreen() {
     <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
-        <APlan Name={planName} />
+        <PlanInfo Name={planName} />
         <View style={styles.divideLine}></View>
         <View style={styles.tasksSectionWrapper}>
           <Text style={styles.sectionTitle}>Tasks</Text>
@@ -140,7 +139,7 @@ export default function PlanScreen() {
         <CustomButton
           title="Save"
           onPress={() => {
-            router.push("/MainPage/MePlan");
+            router.push("/Me/Plan");
           }}
         />
       </View>

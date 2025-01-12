@@ -10,10 +10,6 @@ export default function RootLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Intro/Login" />
-      <Stack.Screen name="Intro/Register" />
-      <Stack.Screen name="Intro/Verification" />
-      <Stack.Screen name="MainPage/MePlan" />
     </Stack>
   );
 }

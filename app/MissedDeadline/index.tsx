@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import PrivatePage from "./Private/page";
-import TeamPage from "./Team/page";
+import PrivatePage from "./Private";
+import TeamPage from "./Team";
 import { LinearGradient } from "expo-linear-gradient";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 

@@ -96,7 +96,7 @@ export default function PlanScreen() {
       <TouchableOpacity
         style={styles.saveButton}
         onPress={() => {
-          router.push("/MainPage/MePlan");
+          router.push("/Me/Plan");
         }}
       >
         <Text style={styles.saveButtonText}>Save</Text>

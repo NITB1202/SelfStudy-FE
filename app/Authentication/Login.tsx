@@ -27,14 +27,14 @@ export default function LoginScreen() {
           style={styles.inputEmail}
         />
         <PasswordInput placeholder="Enter your password..." />
-        <Link style={styles.link} href="/Intro/ForgotPassword">
+        <Link style={styles.link} href="/Authentication/ForgotPassword">
           Forgot password?
         </Link>
         <CustomButton
           title="Login"
           style={styles.loginButton}
           onPress={() => {
-            router.push("/MainPage/MePlan");
+            router.push("/Me/Plan");
           }}
         />
         <View style={styles.divideContainer}>
@@ -50,7 +50,7 @@ export default function LoginScreen() {
         </TouchableOpacity>
         <Text style={styles.footerText}>
           Don't have an account?{" "}
-          <Link style={styles.signUpLink} href="/Intro/Register">
+          <Link style={styles.signUpLink} href="/Authentication/Register">
             Sign up here
           </Link>
         </Text>

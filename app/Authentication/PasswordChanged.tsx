@@ -7,7 +7,6 @@ import { router } from "expo-router";
 export default function PasswordChangedScreen() {
   const { fontsLoaded } = useCustomFonts();
 
-  // Kiểm tra xem font đã tải xong chưa, nếu chưa thì không render nội dung
   if (!fontsLoaded) {
     return null;
   }
@@ -25,7 +24,7 @@ export default function PasswordChangedScreen() {
         <CustomButton
           title="Back to login"
           onPress={() => {
-            router.push("/Intro/Login");
+            router.push("/Authentication/Login");
           }}
           color="primary"
         />
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     fontFamily: "PlusJakartaSans_700Bold",
     fontSize: 36,
     marginTop: 20,
-    color: "#7AB2D3", // Màu xanh lá cho tiêu đề
+    color: "#7AB2D3",
   },
   instruction: {
     color: "#1E282DA6",

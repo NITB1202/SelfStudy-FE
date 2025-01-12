@@ -67,7 +67,7 @@ export default function VerificationScreen() {
         <CustomButton
           title="Verify"
           onPress={() => {
-            router.push("/Intro/ResetPassword");
+            router.push("/Authentication/ResetPassword");
           }}
         ></CustomButton>
         <View style={styles.linkContainer}>
