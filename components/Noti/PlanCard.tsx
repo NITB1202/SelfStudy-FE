@@ -10,7 +10,7 @@ interface PlanCardProps {
   expiredTime: string;
   recoveryTime: string;
   isRead: boolean;
-  onToggleRead: () => void; // Hàm toggle được truyền từ component cha
+  onToggleRead: () => void;
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
@@ -22,38 +22,40 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   return (
     <Pressable onPress={onToggleRead} style={styles.container}>
-      <Image source={defaultIcon} style={styles.iconImage} />
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>{name}</Text>
-            <Text style={styles.expiredTime}>{expiredTime}</Text>
-          </View>
+      <View style={styles.statusRow}>
+        <View style={styles.statusContainer}>
+          {isRead ? (
+            <View style={styles.readStatus}>
+              <Text style={styles.statusText}>read</Text>
+              <MaterialIcons
+                name="check-circle-outline"
+                size={16}
+                color="grey"
+              />
+            </View>
+          ) : (
+            <View style={styles.unreadStatus}>
+              <Text style={styles.statusText}>unread</Text>
+              <MaterialCommunityIcons
+                name="alert-circle-outline"
+                size={16}
+                color="grey"
+              />
+            </View>
+          )}
         </View>
-        <View>
-          <Text>
+      </View>
+
+      <View style={styles.contentRow}>
+        <Image source={defaultIcon} style={styles.iconImage} />
+        <View style={styles.content}>
+          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.expiredTime}>{expiredTime}</Text>
+          <Text style={styles.description}>
             The plan has expired. You can recover it before{" "}
             <Text style={styles.boldText}>{recoveryTime}</Text>
           </Text>
         </View>
-      </View>
-      {/* Hiển thị trạng thái read/unread ở góc trên */}
-      <View style={styles.statusContainer}>
-        {isRead ? (
-          <View style={styles.readStatus}>
-            <Text style={styles.statusText}>read</Text>
-            <MaterialIcons name="check-circle-outline" size={16} color="grey" />
-          </View>
-        ) : (
-          <View style={styles.readStatus}>
-            <Text style={styles.statusText}>unread</Text>
-            <MaterialCommunityIcons
-              name="alert-circle-outline"
-              size={16}
-              color="grey"
-            />
-          </View>
-        )}
       </View>
     </Pressable>
   );
@@ -61,27 +63,24 @@ const PlanCard: React.FC<PlanCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: "column",
     borderWidth: 1,
     borderColor: "#e0e0e0",
     borderRadius: 12,
     padding: 10,
     backgroundColor: "#ffffff",
-    maxWidth: 400,
-    marginHorizontal: "auto",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-    marginBottom: 16, // Khoảng cách giữa các card
+    marginBottom: 10,
+  },
+  statusRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   statusContainer: {
-    position: "absolute",
-    top: 8,
-    right: 8,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -89,10 +88,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  unreadStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   statusText: {
     fontSize: 12,
     color: "grey",
     marginRight: 4, // Khoảng cách giữa text và icon
+  },
+  contentRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   iconImage: {
     width: 57,
@@ -103,24 +110,20 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  titleContainer: {
-    flex: 1,
-  },
   title: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333333",
+    marginBottom: 4,
   },
   expiredTime: {
     fontSize: 13,
     color: "rgba(0, 0, 0, 0.5)",
-    marginTop: 4,
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    color: "#333333",
   },
   boldText: {
     fontWeight: "bold",
