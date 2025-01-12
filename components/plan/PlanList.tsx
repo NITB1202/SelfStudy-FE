@@ -26,31 +26,31 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
       id: 1,
       progress: 78.6,
       planName: "PLAN01",
-      deadline: "2024-12-02 11:20:00",
+      deadline: "02/12/2024 11:20:00",
     },
     {
       id: 2,
       progress: 65.4,
       planName: "PLAN02",
-      deadline: "2024-12-05 14:30:00",
+      deadline: "12/05/2024 14:30:00",
     },
     {
       id: 3,
       progress: 50.0,
       planName: "PLAN03",
-      deadline: "2024-12-10 09:00:00",
+      deadline: "12/10/2024 09:00:00",
     },
     {
       id: 4,
       progress: 25.0,
       planName: "PLAN04",
-      deadline: "2024-12-15 10:00:00",
+      deadline: "01/01/2025 10:00:00",
     },
     {
       id: 5,
       progress: 95.0,
       planName: "PLAN05",
-      deadline: "2024-12-20 12:00:00",
+      deadline: "03/02/2025 12:00:00",
     },
   ];
 

@@ -74,9 +74,8 @@ export default function PlanScreen() {
           {
             tasks.map(item => {
               return(
-                <>
+                <View key={item.id}>
                   <View
-                    key={item.id}
                     style={styles.taskContainer}>
                     <Checkbox
                       onToggle={(isChecked) =>
@@ -116,7 +115,7 @@ export default function PlanScreen() {
                       />
                     </TouchableOpacity>
                   </View>
-                </>
+                </View>
               );
             })
           }
