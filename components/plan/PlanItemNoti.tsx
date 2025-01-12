@@ -39,7 +39,6 @@ export default function PlanItemNoti({
       <Svg
         height={(radius + strokeWidth) * 2}
         width={(radius + strokeWidth) * 2}
-        style={styles.progressCircle}
       >
         <Circle
           cx={radius + strokeWidth}
@@ -103,10 +102,9 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderColor: "rgba(0, 0, 0, 0.1)",
     borderWidth: 1,
+    gap: 10,
   },
-  progressCircle: {
-    marginHorizontal: 10,
-  },
+
   infoContainer: {
     flex: 1,
     flexDirection: "row",
