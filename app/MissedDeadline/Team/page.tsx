@@ -11,13 +11,10 @@ const TeamPage: React.FC = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Team</Text>
 
-      {/* Item 1 */}
       <View style={styles.item}>
         <Checkbox onToggle={handleToggle} />
         <Text style={styles.text}>PLAN01 - Deadline: 2024-12-02 11:20:00</Text>
       </View>
-
-      {/* Item 2 */}
       <View style={styles.item}>
         <Checkbox onToggle={handleToggle} />
         <Text style={styles.text}>PLAN02 - Deadline: 2024-12-03 10:00:00</Text>

@@ -1,51 +1,43 @@
-import { Colors } from "@/constants/Colors";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Svg, {
-  Circle,
-  Defs,
-  LinearGradient,
-  Stop,
-  Text as SvgText,
-} from "react-native-svg";
+import Svg, { Circle, Text as SvgText } from "react-native-svg";
+import Checkbox from "@/components/Checkbox";
 
-// Định nghĩa kiểu cho props
 interface PlanItemProps {
   progress: number;
   planName: string;
   deadline: string;
+  isChecked: boolean;
+  onToggle: () => void;
 }
 
-export default function PlanItem({
+export default function PlanItemNoti({
   progress,
   planName,
   deadline,
+  isChecked,
+  onToggle,
 }: PlanItemProps) {
   const normalizedProgress = Math.min(Math.max(progress, 0), 100);
 
-  const radius = 30;
-
-  const strokeWidth = 5;
+  const radius = 25;
+  const strokeWidth = 4;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
     circumference - (normalizedProgress / 100) * circumference;
 
   return (
     <View style={styles.container}>
-      {/* Progress Circle SVG */}
+      {/* Checkbox */}
+      <Checkbox onToggle={onToggle} isChecked={isChecked} />
+
+      {/* Progress Circle */}
       <Svg
         height={(radius + strokeWidth) * 2}
         width={(radius + strokeWidth) * 2}
+        style={styles.progressCircle}
       >
-        {/* Định nghĩa gradient */}
-        <Defs>
-          <LinearGradient id="gradientId" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0%" stopColor={Colors.primary} />
-            <Stop offset="100%" stopColor={Colors.secondary} />
-          </LinearGradient>
-        </Defs>
-
-        {/* Vòng tròn nền */}
+        {/* Background Circle */}
         <Circle
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
@@ -54,13 +46,12 @@ export default function PlanItem({
           strokeWidth={strokeWidth}
           fill="none"
         />
-
-        {/* Vòng tròn tiến độ */}
+        {/* Progress Circle */}
         <Circle
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
           r={radius}
-          stroke="url(#gradientId)"
+          stroke="#7AB2D3"
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={`${circumference} ${circumference}`}
@@ -70,18 +61,17 @@ export default function PlanItem({
             radius + strokeWidth
           })`}
         />
-
-        {/* Text phần trăm nằm giữa vòng tròn */}
+        {/* Percentage Text */}
         <SvgText
           x={radius + strokeWidth}
           y={radius + strokeWidth}
           fill="black"
-          fontSize="13"
+          fontSize="12"
           fontWeight="bold"
           textAnchor="middle"
           alignmentBaseline="middle"
         >
-          {`${normalizedProgress.toFixed(0)}%`.trim()}
+          {`${normalizedProgress.toFixed(1)}%`}
         </SvgText>
       </Svg>
 
@@ -89,7 +79,7 @@ export default function PlanItem({
       <View style={styles.infoContainer}>
         <Text style={styles.planName}>{planName}</Text>
         <View style={styles.deadlineContainer}>
-          <Text style={styles.deadlineLabel}>Deadline:</Text>
+          <Text style={styles.deadlineLabel}>Deadline</Text>
           <Text style={styles.deadline}>{deadline}</Text>
         </View>
       </View>
@@ -106,18 +96,21 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-    borderColor: "rgba(1,1,1,0.1)",
+    elevation: 2,
+    borderColor: "rgba(0, 0, 0, 0.1)",
     borderWidth: 1,
-    width: "100%",
+  },
+  progressCircle: {
+    marginHorizontal: 10,
   },
   infoContainer: {
     flex: 1,
+    flexDirection: "row",
     justifyContent: "space-between",
-    marginLeft: 10,
+    alignItems: "center",
   },
   planName: {
     fontSize: 16,
@@ -125,18 +118,16 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   deadlineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 4,
+    flexDirection: "column",
+    alignItems: "flex-end",
   },
   deadlineLabel: {
-    fontSize: 13,
+    fontSize: 12,
     color: "gray",
-    marginRight: 4,
   },
   deadline: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#7AB2D3",
+    fontWeight: "bold",
+    color: "#FF2D30",
   },
 });
