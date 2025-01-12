@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // Import thư viện icon
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import PrivatePage from "./Private/page";
 import TeamPage from "./Team/page";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,55 +8,93 @@ import BottomNavBar from "@/components/navigation/ButtonNavBar";
 
 const MissedDeadline: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<"private" | "team">("private");
+  const [currentRole, setCurrentRole] = useState<string>(
+    selectedTab === "private" ? "admin" : "member"
+  );
+
+  const handleTabChange = (tab: "private" | "team") => {
+    setSelectedTab(tab);
+    setCurrentRole(tab === "private" ? "admin" : "member");
+  };
 
   return (
     <View style={styles.container}>
       {/* Icon Section */}
       <View style={styles.iconContainer}>
-        <LinearGradient
-          colors={["#B9E8BE", "#3FBE4E"]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.iconButton}
-        >
-          <TouchableOpacity>
-            <MaterialIcons name="refresh" size={24} color="white" />
-          </TouchableOpacity>
-        </LinearGradient>
-        <LinearGradient
-          colors={["#FFA4A5", "#FF2D30"]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.iconButton}
-        >
-          <TouchableOpacity>
-            <MaterialIcons name="delete" size={24} color="white" />
-          </TouchableOpacity>
-        </LinearGradient>
+        {currentRole === "admin" ? (
+          <>
+            <LinearGradient
+              colors={["#B9E8BE", "#3FBE4E"]}
+              start={{ x: 0.5, y: 0 }}
+              end={{ x: 0.5, y: 1 }}
+              style={styles.iconButton}
+            >
+              <Pressable
+                onPress={() => console.log("Refresh pressed")}
+                style={({ pressed }) => [
+                  styles.iconContent,
+                  pressed && styles.iconPressed,
+                ]}
+              >
+                <MaterialIcons name="refresh" size={20} color="white" />
+              </Pressable>
+            </LinearGradient>
+            <LinearGradient
+              colors={["#FFA4A5", "#FF2D30"]}
+              start={{ x: 0.5, y: 0 }}
+              end={{ x: 0.5, y: 1 }}
+              style={styles.iconButton}
+            >
+              <Pressable
+                onPress={() => console.log("Delete pressed")}
+                style={({ pressed }) => [
+                  styles.iconContent,
+                  pressed && styles.iconPressed,
+                ]}
+              >
+                <MaterialIcons name="delete" size={20} color="white" />
+              </Pressable>
+            </LinearGradient>
+          </>
+        ) : (
+          <>
+            <View style={styles.iconPlaceholder} />
+            <View style={styles.iconPlaceholder} />
+          </>
+        )}
       </View>
 
       {/* Tabs */}
       <View style={styles.tabContainer}>
-        <TouchableOpacity
+        <Pressable
           style={[styles.tab, selectedTab === "private" && styles.activeTab]}
-          onPress={() => setSelectedTab("private")}
+          onPress={() => handleTabChange("private")}
         >
           <Text style={styles.tabText}>PRIVATE</Text>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity
+        <Pressable
           style={[styles.tab, selectedTab === "team" && styles.activeTab]}
-          onPress={() => setSelectedTab("team")}
+          onPress={() => handleTabChange("team")}
         >
           <Text style={styles.tabText}>TEAM</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Tab Content */}
       <View style={styles.contentContainer}>
         {selectedTab === "private" && <PrivatePage />}
-        {selectedTab === "team" && <TeamPage />}
+        {selectedTab === "team" && (
+          <TeamPage
+            onRoleChange={(role) => {
+              console.log(`Role changed to: ${role}`);
+              setCurrentRole(role); // Update role dynamically
+            }}
+          />
+        )}
       </View>
+
+      {/* Bottom Navigation */}
       <View>
         <BottomNavBar initialActiveTab="MissedDeadline" />
       </View>
@@ -78,14 +116,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     gap: 10,
+    minHeight: 40, // Ensure consistent height for the icon container
   },
   iconButton: {
-    marginLeft: 10,
-    backgroundColor: "#ff5c5c",
     borderRadius: 5,
-    padding: 8,
+    padding: 4,
+    width: 35,
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
   },
-
+  iconContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  iconPressed: {
+    opacity: 0.7, // Add visual feedback when pressed
+  },
+  iconPlaceholder: {
+    marginLeft: 10,
+    width: 40,
+    height: 40,
+  },
   tabContainer: {
     flexDirection: "row",
     gap: 5,

@@ -1,60 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import Select from "@/components/Select";
 import PlanItemNoti from "@/components/plan/PlanItemNoti";
 import Checkbox from "@/components/Checkbox";
-import Select from "@/components/Select";
 
 const teamsData = {
   Team1: {
     role: "admin",
     plans: [
-      {
-        progress: 78.6,
-        planName: "PLAN01",
-        deadline: "2024-12-02 11:20:00",
-      },
-      {
-        progress: 30,
-        planName: "PLAN02",
-        deadline: "2024-12-03 10:00:00",
-      },
+      { progress: 78.6, planName: "PLAN01", deadline: "2024-12-02 11:20:00" },
+      { progress: 30, planName: "PLAN02", deadline: "2024-12-03 10:00:00" },
     ],
   },
   Team2: {
     role: "admin",
     plans: [
-      {
-        progress: 90,
-        planName: "PLAN03",
-        deadline: "2024-12-04 14:00:00",
-      },
-      {
-        progress: 50,
-        planName: "PLAN04",
-        deadline: "2024-12-05 12:00:00",
-      },
+      { progress: 90, planName: "PLAN03", deadline: "2024-12-04 14:00:00" },
+      { progress: 50, planName: "PLAN04", deadline: "2024-12-05 12:00:00" },
     ],
   },
   Team3: {
     role: "member",
     plans: [
-      {
-        progress: 40,
-        planName: "PLAN05",
-        deadline: "2024-12-06 16:00:00",
-      },
-      {
-        progress: 70,
-        planName: "PLAN06",
-        deadline: "2024-12-07 18:00:00",
-      },
+      { progress: 40, planName: "PLAN05", deadline: "2024-12-06 16:00:00" },
+      { progress: 70, planName: "PLAN06", deadline: "2024-12-07 18:00:00" },
     ],
   },
 };
 
-const TeamPage: React.FC = () => {
+type TeamPageProps = {
+  onRoleChange: (role: string) => void;
+};
+
+const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
   const [selectedTeam, setSelectedTeam] =
     useState<keyof typeof teamsData>("Team1");
   const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
@@ -62,6 +42,11 @@ const TeamPage: React.FC = () => {
 
   const currentTeam = teamsData[selectedTeam];
   const isAdmin = currentTeam.role === "admin";
+
+  // Gọi callback khi team thay đổi
+  useEffect(() => {
+    onRoleChange(currentTeam.role); // Gửi role lên màn hình cha
+  }, [selectedTeam]);
 
   const handleCheckAllToggle = () => {
     if (!isAdmin) return;
@@ -79,7 +64,7 @@ const TeamPage: React.FC = () => {
     setIsAllChecked(newCheckedItems.every((item) => item));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCheckedItems(currentTeam.plans.map(() => false));
     setIsAllChecked(false);
   }, [selectedTeam]);
@@ -140,13 +125,8 @@ const TeamPage: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  container: {
-    flexGrow: 1,
-  },
+  wrapper: { flex: 1, backgroundColor: "#f5f5f5" },
+  container: { flexGrow: 1 },
   title: {
     fontSize: 11,
     fontWeight: "400",
@@ -159,18 +139,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "60%",
   },
-  selectWrapper: {
-    position: "relative",
-    zIndex: 1,
-    flex: 1,
-  },
+  selectWrapper: { position: "relative", zIndex: 1, flex: 1 },
   searchButton: {
     width: 40,
     height: 40,
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10, // Bo tròn giống hình
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 1,
@@ -183,11 +159,7 @@ const styles = StyleSheet.create({
     gap: 10,
     marginLeft: 10,
   },
-  checkAllText: {
-    fontSize: 16,
-
-    color: "#333",
-  },
+  checkAllText: { fontSize: 16, color: "#333" },
 });
 
 export default TeamPage;
