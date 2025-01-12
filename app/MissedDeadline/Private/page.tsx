@@ -1,27 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Checkbox from "@/components/Checkbox";
+import PlanItemNoti from "@/components/plan/PlanItemNoti";
+
+const plansData = [
+  {
+    progress: 78.6,
+    planName: "PLAN01",
+    deadline: "2024-12-02 11:20:00",
+  },
+  {
+    progress: 60,
+    planName: "PLAN02",
+    deadline: "2024-12-03 10:00:00",
+  },
+];
 
 const PrivatePage: React.FC = () => {
-  const handleToggle = (isChecked: boolean) => {
-    console.log(`Checkbox state: ${isChecked}`);
+  const [checkedItems, setCheckedItems] = useState<boolean[]>(
+    plansData.map(() => false)
+  );
+  const [isAllChecked, setIsAllChecked] = useState(false);
+
+  const handleCheckAllToggle = () => {
+    const newCheckedState = !isAllChecked;
+    setIsAllChecked(newCheckedState);
+    setCheckedItems(plansData.map(() => newCheckedState));
+  };
+
+  const handleItemToggle = (index: number) => {
+    const newCheckedItems = [...checkedItems];
+    newCheckedItems[index] = !newCheckedItems[index];
+    setCheckedItems(newCheckedItems);
+
+    setIsAllChecked(newCheckedItems.every((item) => item));
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Private</Text>
-
-      {/* Item 1 */}
-      <View style={styles.item}>
-        <Checkbox onToggle={handleToggle} />
-        <Text style={styles.text}>PLAN01 - Deadline: 2024-12-02 11:20:00</Text>
+      {/* Check All Section */}
+      <View style={styles.checkAllContainer}>
+        <Checkbox onToggle={handleCheckAllToggle} isChecked={isAllChecked} />
+        <Text style={styles.checkAllText}>Check all</Text>
       </View>
 
-      {/* Item 2 */}
-      <View style={styles.item}>
-        <Checkbox onToggle={handleToggle} />
-        <Text style={styles.text}>PLAN02 - Deadline: 2024-12-03 10:00:00</Text>
-      </View>
+      {plansData.map((plan, index) => (
+        <PlanItemNoti
+          key={index}
+          progress={plan.progress}
+          planName={plan.planName}
+          deadline={plan.deadline}
+          isChecked={checkedItems[index]}
+          onToggle={() => handleItemToggle(index)}
+        />
+      ))}
     </ScrollView>
   );
 };
@@ -29,22 +61,17 @@ const PrivatePage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
     backgroundColor: "#f5f5f5",
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  item: {
+  checkAllContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
-  },
-  text: {
     marginLeft: 10,
-    fontSize: 16,
+  },
+  checkAllText: {
+    fontSize: 14,
+    marginLeft: 10,
+    fontWeight: "500",
   },
 });
 

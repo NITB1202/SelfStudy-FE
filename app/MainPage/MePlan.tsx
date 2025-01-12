@@ -43,7 +43,7 @@ export default function MePlan() {
           <PlanList onPlanPress={handlePlanPress} />
         </View>
       </ScrollView>
-      <BottomNavBar />
+      <BottomNavBar onAddPress={() => router.push("/MainPage/AddPlanPage")} />
     </SafeAreaView>
   );
 }
@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     borderColor: "rgba(1,1,1,0.1)",
-    borderWidth: 1, 
+    borderWidth: 1,
   },
   planListContainer: {
     flex: 1,
     width: "100%",
     marginTop: 20,
   },
-  highlightText:{
+  highlightText: {
     color: Colors.primary,
     fontWeight: "900",
   },

@@ -1,20 +1,30 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface BottomNavBarProps {
-  onAddPress?: () => void;
+  onAddPress?: () => void; // Nút Add sẽ chỉ hiển thị khi có callback này
+  initialActiveTab?: string; // Tab được active ban đầu
 }
 
-export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
-  const [activeTab, setActiveTab] = useState("Me");
+export default function BottomNavBar({
+  onAddPress,
+  initialActiveTab = "Me",
+}: BottomNavBarProps) {
+  const [activeTab, setActiveTab] = useState(initialActiveTab);
 
   return (
     <View style={styles.container}>
-      <View style={styles.leftNavItems}>
-        <TouchableOpacity
+      {/* Left Navigation Items */}
+      <View
+        style={[
+          styles.leftNavItems,
+          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+        ]}
+      >
+        <Pressable
           style={styles.navItem}
           onPress={() => {
             setActiveTab("Me");
@@ -34,8 +44,8 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           >
             Me
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           style={styles.navItem}
           onPress={() => {
             setActiveTab("MissedDeadline");
@@ -55,33 +65,38 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           >
             Missed Deadline
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
-      <View style={styles.centerButtonWrapper}>
-        <LinearGradient
-          colors={["#B9E5E8", "#7AB2D3"]}
-          style={styles.addButton}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              setActiveTab("Add");
-              if (onAddPress) {
-                onAddPress();
-              } else {
-                console.warn("No onAddPress function provided!");
-              }
-            }}
+      {/* Center Add Button (Only if onAddPress is provided) */}
+      {onAddPress && (
+        <View style={styles.centerButtonWrapper}>
+          <LinearGradient
+            colors={["#B9E5E8", "#7AB2D3"]}
+            style={styles.addButton}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
           >
-            <Ionicons name="add-outline" size={36} color="white" />
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
+            <Pressable
+              onPress={() => {
+                setActiveTab("Add");
+                onAddPress();
+              }}
+            >
+              <Ionicons name="add-outline" size={36} color="white" />
+            </Pressable>
+          </LinearGradient>
+        </View>
+      )}
 
-      <View style={styles.rightNavItems}>
-        <TouchableOpacity
+      {/* Right Navigation Items */}
+      <View
+        style={[
+          styles.rightNavItems,
+          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+        ]}
+      >
+        <Pressable
           style={styles.navItem}
           onPress={() => {
             setActiveTab("Team");
@@ -101,12 +116,12 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           >
             Team
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           style={styles.navItem}
           onPress={() => {
             setActiveTab("Notification");
-            router.push("/");
+            router.push("/Noti/page");
           }}
         >
           <MaterialIcons
@@ -124,15 +139,15 @@ export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
           >
             Notification
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "white",
     shadowColor: "#000",
@@ -147,8 +162,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 3,
     marginBottom: 5,
+    justifyContent: "space-between", // Default: space-between for all items
   },
-
   leftNavItems: {
     flexDirection: "row",
     gap: 20,
@@ -159,37 +174,33 @@ const styles = StyleSheet.create({
     gap: 20,
     alignItems: "center",
   },
+  noAddNavItems: {
+    gap: 40, // Cách 40px giữa leftNavItems và rightNavItems khi không có nút Add
+  },
   navItem: {
     justifyContent: "center",
     alignItems: "center",
   },
   navText: {
     fontSize: 12,
-    fontWeight: "600"
+    fontWeight: "600",
   },
   centerButtonWrapper: {
     position: "absolute",
     top: "-55%",
-    left: "52%",
-    transform: [{ translateX: -14 }],
+    left: "50%",
+    transform: [{ translateX: 0 }], // Align center button
   },
   addButton: {
-    width: 55,
-    height: 55,
+    width: 60,
+    height: 60,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
     elevation: 5,
-  },
-  touchableButton: {
-    width: 20,
-    height: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
   },
 });
