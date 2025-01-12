@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
-    width: "75%",
+    width: "60%",
   },
   selectWrapper: {
     position: "relative",

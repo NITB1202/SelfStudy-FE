@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
     borderRadius: 5,
   },
   activeTab: {
