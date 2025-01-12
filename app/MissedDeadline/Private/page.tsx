@@ -33,7 +33,6 @@ const PrivatePage: React.FC = () => {
     newCheckedItems[index] = !newCheckedItems[index];
     setCheckedItems(newCheckedItems);
 
-    // Update "Check All" status
     setIsAllChecked(newCheckedItems.every((item) => item));
   };
 
@@ -62,7 +61,6 @@ const PrivatePage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 10,
     backgroundColor: "#f5f5f5",
   },
   checkAllContainer: {

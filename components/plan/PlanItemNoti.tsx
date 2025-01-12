@@ -7,16 +7,18 @@ interface PlanItemProps {
   progress: number;
   planName: string;
   deadline: string;
-  isChecked: boolean;
-  onToggle: () => void;
+  isChecked?: boolean;
+  onToggle?: () => void;
+  showCheckbox?: boolean; // Thuộc tính kiểm soát việc hiển thị checkbox
 }
 
 export default function PlanItemNoti({
   progress,
   planName,
   deadline,
-  isChecked,
+  isChecked = false, // Mặc định là false
   onToggle,
+  showCheckbox = true, // Mặc định hiển thị checkbox
 }: PlanItemProps) {
   const normalizedProgress = Math.min(Math.max(progress, 0), 100);
 
@@ -29,7 +31,9 @@ export default function PlanItemNoti({
   return (
     <View style={styles.container}>
       {/* Checkbox */}
-      <Checkbox onToggle={onToggle} isChecked={isChecked} />
+      {showCheckbox && (
+        <Checkbox onToggle={onToggle || (() => {})} isChecked={isChecked} />
+      )}
 
       {/* Progress Circle */}
       <Svg
@@ -37,7 +41,6 @@ export default function PlanItemNoti({
         width={(radius + strokeWidth) * 2}
         style={styles.progressCircle}
       >
-        {/* Background Circle */}
         <Circle
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
@@ -46,7 +49,6 @@ export default function PlanItemNoti({
           strokeWidth={strokeWidth}
           fill="none"
         />
-        {/* Progress Circle */}
         <Circle
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
@@ -61,7 +63,6 @@ export default function PlanItemNoti({
             radius + strokeWidth
           })`}
         />
-        {/* Percentage Text */}
         <SvgText
           x={radius + strokeWidth}
           y={radius + strokeWidth}
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
-    padding: 12,
+    padding: 10,
     marginVertical: 8,
     borderRadius: 12,
     shadowColor: "#000",
