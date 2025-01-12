@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable, BackHandler } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigationContext } from "@/context/NavigationContext";
+import { router, usePathname } from "expo-router";
 
 interface BottomNavBarProps {
-  onAddPress?: () => void; // Nút Add sẽ chỉ hiển thị khi có callback này
-  initialActiveTab?: string; // Tab được active ban đầu
+  onAddPress?: () => void;
+  initialActiveTab?: string;
 }
 
 export default function BottomNavBar({
@@ -14,6 +15,28 @@ export default function BottomNavBar({
   initialActiveTab = "Me",
 }: BottomNavBarProps) {
   const [activeTab, setActiveTab] = useState(initialActiveTab);
+  const { onChangeBottomPath } = useNavigationContext();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onBackPress = () => {
+      switch(pathname){
+        case "/Me/Plan":
+          setActiveTab("Me");
+          break;
+        case "/Notification":
+          setActiveTab("Notification");
+          break;
+        case "/MissedDeadline":
+          setActiveTab("MissedDeadline");
+          break;
+        case "/Team/Plan":
+          setActiveTab("Team");
+          break;
+      }
+    };
+    onBackPress();
+}, [pathname]);
 
   return (
     <View style={styles.container}>
@@ -21,14 +44,14 @@ export default function BottomNavBar({
       <View
         style={[
           styles.leftNavItems,
-          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+          !onAddPress && styles.noAddNavItems,
         ]}
       >
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Me");
             setActiveTab("Me");
-            router.push("/MainPage/MePlan");
           }}
         >
           <MaterialIcons
@@ -48,8 +71,8 @@ export default function BottomNavBar({
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "MissedDeadline");
             setActiveTab("MissedDeadline");
-            router.push("/MissedDeadline/page");
           }}
         >
           <MaterialIcons
@@ -93,14 +116,14 @@ export default function BottomNavBar({
       <View
         style={[
           styles.rightNavItems,
-          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+          !onAddPress && styles.noAddNavItems,
         ]}
       >
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Team");
             setActiveTab("Team");
-            router.push("/");
           }}
         >
           <MaterialIcons
@@ -120,8 +143,8 @@ export default function BottomNavBar({
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Notification");
             setActiveTab("Notification");
-            router.push("/Notification");
           }}
         >
           <MaterialIcons
@@ -162,7 +185,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 3,
     marginBottom: 5,
-    justifyContent: "space-between", // Default: space-between for all items
+    justifyContent: "space-between",
   },
   leftNavItems: {
     flexDirection: "row",
@@ -175,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noAddNavItems: {
-    gap: 40, // Cách 40px giữa leftNavItems và rightNavItems khi không có nút Add
+    gap: 40,
   },
   navItem: {
     justifyContent: "center",
@@ -189,7 +212,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "-55%",
     left: "50%",
-    transform: [{ translateX: 0 }], // Align center button
+    transform: [{ translateX: 0 }],
   },
   addButton: {
     width: 60,

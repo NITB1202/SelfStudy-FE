@@ -43,7 +43,9 @@ export default function Plan() {
           <PlanList onPlanPress={handlePlanPress} />
         </View>
       </ScrollView>
-      <BottomNavBar onAddPress={() => router.push("/Me/AddPlan")} />
+      <BottomNavBar
+        initialActiveTab="Me"
+        onAddPress={() => router.push("/Me/AddPlan")} />
     </SafeAreaView>
   );
 }
