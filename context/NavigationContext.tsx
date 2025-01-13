@@ -1,9 +1,11 @@
-import { router } from "expo-router";
+import { Href, router } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface NavigationContextProps{
     sideNavPath: string;
     bottomNavPath: string;
+    setSidePath: (value: string) => void;
+    setBottomPath: (value: string) => void;
     onChangeSidePath: (oldValue: string, newValue: string) => void;
     onChangeBottomPath: (oldValue: string, newValue: string) => void; 
 }
@@ -11,6 +13,8 @@ interface NavigationContextProps{
 const defaultValue: NavigationContextProps = {
     sideNavPath: "Plan",
     bottomNavPath: "Me",
+    setSidePath: () => {},
+    setBottomPath: () =>{},
     onChangeSidePath: () => {},
     onChangeBottomPath: () => {},
 };
@@ -22,17 +26,17 @@ export const useNavigationContext = () => useContext(NavigationContext);
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [sideNavPath, setSideNavPath] = useState<string>('Plan');
     const [bottomNavPath, setBottomNavPath] = useState<string>('Me');
+
+
+    const setSidePath = (value: string) => setSideNavPath(value);
+    const setBottomPath = (value: string) => setBottomNavPath(value);
   
     const onChangeSidePath = (oldValue: string, newValue: string) => {
       if (oldValue === newValue) return;
       setSideNavPath(newValue);
-
-      const path =
-        bottomNavPath === 'Notification' || bottomNavPath === 'MissedDeadline'
-          ? `/${bottomNavPath}`
-          : `/${bottomNavPath}/${newValue}`;
-  
-      router.push(path);
+      
+      const path = `/${bottomNavPath}/${newValue}`;
+      router.push(path as Href);
     };
   
     const onChangeBottomPath = (oldValue: string, newValue: string) => {
@@ -44,12 +48,14 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           ? `/${newValue}`
           : `/${newValue}/${sideNavPath}`;
   
-      router.push(path);
+      router.push(path as Href);
     };
   
     const value = {
       sideNavPath,
       bottomNavPath,
+      setSidePath,
+      setBottomPath,
       onChangeSidePath,
       onChangeBottomPath,
     };

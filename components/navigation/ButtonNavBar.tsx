@@ -3,39 +3,44 @@ import { View, Text, StyleSheet, Pressable, BackHandler } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigationContext } from "@/context/NavigationContext";
-import { router, usePathname } from "expo-router";
+import { usePathname } from "expo-router";
 
 interface BottomNavBarProps {
   onAddPress?: () => void;
-  initialActiveTab?: string;
 }
 
 export default function BottomNavBar({
   onAddPress,
-  initialActiveTab = "Me",
 }: BottomNavBarProps) {
-  const [activeTab, setActiveTab] = useState(initialActiveTab);
-  const { onChangeBottomPath } = useNavigationContext();
+  const [activeTab, setActiveTab] = useState("");
+  const { onChangeBottomPath, setBottomPath } = useNavigationContext();
   const pathname = usePathname();
 
   useEffect(() => {
-    const onBackPress = () => {
-      switch(pathname){
-        case "/Me/Plan":
-          setActiveTab("Me");
-          break;
-        case "/Notification":
-          setActiveTab("Notification");
-          break;
-        case "/MissedDeadline":
-          setActiveTab("MissedDeadline");
-          break;
-        case "/Team/Plan":
-          setActiveTab("Team");
-          break;
+    const loadActiveTab = () => {
+      let tab = "";
+
+      if(pathname.startsWith("/Me")){
+        tab = "Me"
       }
+
+      if(pathname.startsWith("/MissedDeadline")){
+        tab = "MissedDeadline"
+      }
+
+      if(pathname.startsWith("/Notification")){
+        tab = "Notification"
+      }
+
+      if(pathname.startsWith("/Team")){
+        tab = "Team"
+      }
+
+      if(activeTab === tab) return;
+      setActiveTab(tab);
+      setBottomPath(tab);
     };
-    onBackPress();
+    loadActiveTab();
 }, [pathname]);
 
   return (

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigationContext } from "@/context/NavigationContext";
 interface SidebarProps {
+  initialTab: string;
   onClose: () => void;
 }
 
-export default function Sidebar({ onClose }: SidebarProps) {
-  const [activeMenu, setActiveMenu] = useState("Plan");
+export default function Sidebar({ initialTab, onClose}: SidebarProps) {
+  const [activeMenu, setActiveMenu] = useState(initialTab);
+  const { onChangeSidePath } = useNavigationContext();
 
   const menuItems = [
     {
@@ -67,7 +70,10 @@ export default function Sidebar({ onClose }: SidebarProps) {
               styles.menuItem,
               activeMenu === item.id && styles.activeMenuItem,
             ]}
-            onPress={() => setActiveMenu(item.id)}
+            onPress={() => {
+              onChangeSidePath(activeMenu, item.id);
+              setActiveMenu(item.id);
+            }}
           >
             {item.icon}
             <Text style={[styles.menuText]}>{item.label}</Text>
