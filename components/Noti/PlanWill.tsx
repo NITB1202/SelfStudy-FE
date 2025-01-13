@@ -1,21 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import defaultIcon from "../../assets/images/plan/notification.png";
 
-import defaultIcon from "../../assets/images/plan/expired.png";
-
-interface PlanCardProps {
+interface PlanWillProps {
   name: string;
+  remindTime?: string;
   expiredTime: string;
-  recoveryTime?: string;
   isRead: boolean;
   onToggleRead: () => void;
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({
+const PlanWill: React.FC<PlanWillProps> = ({
   name,
+  remindTime,
   expiredTime,
-  recoveryTime,
   isRead,
   onToggleRead,
 }) => {
@@ -51,10 +50,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.expiredTime}>{expiredTime}</Text>
-          <Text style={styles.description}>
-            The plan has expired. You can recover it before{" "}
-            <Text>{recoveryTime}</Text>
+          {remindTime && <Text style={styles.remindTime}>{remindTime}</Text>}
+          <Text style={styles.expiredTime}>
+            Your plan will expire at {expiredTime}
           </Text>
         </View>
       </View>
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e0e0e0",
     borderRadius: 12,
-    padding: 10,
+    padding: 12,
     backgroundColor: "#ffffff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     borderRadius: 32.5,
-    backgroundColor: "#FF5B5E",
+    backgroundColor: "#7AB2D3",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -123,14 +121,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000000",
   },
-  expiredTime: {
+  remindTime: {
     fontSize: 13,
     color: "rgba(0, 0, 0, 0.5)",
+    marginBottom: 4,
   },
-  description: {
-    fontSize: 14,
+  expiredTime: {
+    fontSize: 13,
     color: "#000000",
   },
 });
 
-export default PlanCard;
+export default PlanWill;
