@@ -134,7 +134,7 @@ const Noti: React.FC = () => {
       </View>
       {/* Bottom Navigation */}
       <View>
-        <BottomNavBar initialActiveTab="Notification" />
+        <BottomNavBar />
       </View>
     </SafeAreaView>
   );
