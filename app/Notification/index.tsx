@@ -6,9 +6,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
+import { MaterialIcons } from "@expo/vector-icons";
 import PlanCard from "@/components/Noti/PlanCard";
+import PlanWill from "@/components/Noti/PlanWill";
+import Invite from "@/components/Noti/Invite";
+import Question from "@/components/Message/Question";
+import Error from "@/components/Message/Error";
+import Success from "@/components/Message/Success";
+import BottomNavBar from "@/components/navigation/ButtonNavBar";
 
 const Noti: React.FC = () => {
   const [notifications, setNotifications] = useState([
@@ -22,15 +29,16 @@ const Noti: React.FC = () => {
     {
       id: 2,
       name: "PLAN 2",
-      expiredTime: "10:00:00 10/02/2025",
-      recoveryTime: "23:59:59 on 14/02/2025",
+      remindTime: "10:00:00 10/02/2025",
+      expiredTime: "23:59:59 14/02/2025",
       isRead: true,
     },
     {
       id: 3,
-      name: "PLAN 3",
+      name: "Invitation",
       expiredTime: "08:00:00 11/02/2025",
-      recoveryTime: "12:00:00 on 16/02/2025",
+      people: "Annie",
+      team: "SE100",
       isRead: false,
     },
   ]);
@@ -51,6 +59,24 @@ const Noti: React.FC = () => {
     );
   };
 
+  // Hàm xử lý Accept và Decline cho Invite
+  const handleAccept = (id: number) => {
+    console.log(`Accepted invitation for notification ID: ${id}`);
+  };
+
+  const handleDecline = (id: number) => {
+    console.log(`Declined invitation for notification ID: ${id}`);
+  };
+
+  // Test Message
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleOkPress = () => {
+    console.log("OK Pressed");
+    setIsModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.markAllContainer} onPress={markAllAsRead}>
@@ -58,17 +84,58 @@ const Noti: React.FC = () => {
         <MaterialIcons name="check-circle-outline" size={24} color="#7AB2D3" />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {notifications.map((notif) => (
-          <PlanCard
-            key={notif.id} // key phải là duy nhất
-            name={notif.name}
-            expiredTime={notif.expiredTime}
-            recoveryTime={notif.recoveryTime}
-            isRead={notif.isRead}
-            onToggleRead={() => toggleReadStatus(notif.id)}
-          />
-        ))}
+        {notifications.map((notif) =>
+          notif.id === 2 ? (
+            <PlanWill
+              key={notif.id}
+              name={notif.name}
+              remindTime={notif.remindTime}
+              expiredTime={notif.expiredTime}
+              isRead={notif.isRead}
+              onToggleRead={() => toggleReadStatus(notif.id)}
+            />
+          ) : notif.id === 3 ? (
+            <Invite
+              key={notif.id}
+              name={notif.name}
+              expiredTime={notif.expiredTime}
+              people={notif.people}
+              team={notif.team}
+              isRead={notif.isRead}
+              onToggleRead={() => toggleReadStatus(notif.id)}
+              onAccept={() => handleAccept(notif.id)}
+              onDecline={() => handleDecline(notif.id)}
+            />
+          ) : (
+            <PlanCard
+              key={notif.id}
+              name={notif.name}
+              expiredTime={notif.expiredTime}
+              recoveryTime={notif.recoveryTime}
+              isRead={notif.isRead}
+              onToggleRead={() => toggleReadStatus(notif.id)}
+            />
+          )
+        )}
       </ScrollView>
+
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {/* Nút để hiển thị Modal */}
+        <Button title="Show Message" onPress={() => setIsModalVisible(true)} />
+
+        {/* Component Message */}
+        <Success
+          visible={isModalVisible}
+          title="Sample Title"
+          description="This is a sample description for the modal."
+          onClose={() => setIsModalVisible(false)}
+          onOkPress={handleOkPress}
+        />
+      </View>
+      {/* Bottom Navigation */}
+      <View>
+        <BottomNavBar initialActiveTab="Notification" />
+      </View>
     </SafeAreaView>
   );
 };

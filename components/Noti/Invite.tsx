@@ -2,25 +2,33 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import defaultIcon from "../../assets/images/plan/expired.png";
+// Import a default icon
+import defaultIcon from "../../assets/images/plan/invitation.png";
 
-interface PlanCardProps {
+interface InviteProps {
   name: string;
   expiredTime: string;
-  recoveryTime?: string;
+  people?: string;
+  team?: string;
   isRead: boolean;
   onToggleRead: () => void;
+  onAccept: () => void;
+  onDecline: () => void;
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({
+const Invite: React.FC<InviteProps> = ({
   name,
   expiredTime,
-  recoveryTime,
+  people,
+  team,
   isRead,
   onToggleRead,
+  onAccept,
+  onDecline,
 }) => {
   return (
     <Pressable onPress={onToggleRead} style={styles.container}>
+      {/* Status Row */}
       <View style={styles.statusRow}>
         <View style={styles.statusContainer}>
           {isRead ? (
@@ -45,7 +53,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </View>
       </View>
 
+      {/* Content Row */}
       <View style={styles.contentRow}>
+        {/* Container hình tròn bao quanh icon */}
         <View style={styles.iconWrapper}>
           <Image source={defaultIcon} style={styles.iconImage} />
         </View>
@@ -53,9 +63,19 @@ const PlanCard: React.FC<PlanCardProps> = ({
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.expiredTime}>{expiredTime}</Text>
           <Text style={styles.description}>
-            The plan has expired. You can recover it before{" "}
-            <Text>{recoveryTime}</Text>
+            {people || "Someone"} has invited you to the team{" "}
+            <Text>{`"${team || "Unknown"}"`}</Text>.
           </Text>
+
+          {/* Action Buttons */}
+          <View style={styles.actions}>
+            <Pressable style={styles.acceptButton} onPress={onAccept}>
+              <Text style={styles.acceptText}>Accept</Text>
+            </Pressable>
+            <Pressable style={styles.declineButton} onPress={onDecline}>
+              <Text style={styles.declineText}>Decline</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -68,7 +88,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e0e0e0",
     borderRadius: 12,
-    padding: 10,
+    padding: 12,
     backgroundColor: "#ffffff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -106,7 +126,7 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     borderRadius: 32.5,
-    backgroundColor: "#FF5B5E",
+    backgroundColor: "#7AD37D",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -131,6 +151,51 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#000000",
   },
+
+  actions: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginTop: 10,
+    gap: 10,
+  },
+  acceptButton: {
+    backgroundColor: "#7AB2D3",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 10,
+  },
+
+  acceptText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+  declineButton: {
+    backgroundColor: "#e0e0e0",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 10,
+  },
+
+  declineText: {
+    color: "#000000",
+    fontWeight: "bold",
+    fontSize: 15,
+  },
 });
 
-export default PlanCard;
+export default Invite;
