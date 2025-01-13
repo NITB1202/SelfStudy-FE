@@ -28,7 +28,7 @@ export default function BottomNavBar({
           style={styles.navItem}
           onPress={() => {
             setActiveTab("Me");
-            router.push("/MainPage/MePlan");
+            router.push("/Me/Plan");
           }}
         >
           <MaterialIcons
@@ -49,7 +49,7 @@ export default function BottomNavBar({
           style={styles.navItem}
           onPress={() => {
             setActiveTab("MissedDeadline");
-            router.push("/MissedDeadline/page");
+            router.push("/MissedDeadline");
           }}
         >
           <MaterialIcons
