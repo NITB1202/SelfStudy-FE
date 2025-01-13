@@ -16,6 +16,7 @@ interface SubjectCardProps {
   imageUri: string;
   onDelete: () => void;
   onUpdate: (newName: string, newImage: string) => void;
+  onPress: () => void; // Thêm thuộc tính onPress
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({
@@ -23,6 +24,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
   imageUri,
   onDelete,
   onUpdate,
+  onPress,
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -60,7 +62,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
   };
 
   return (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.cardContainer}>
       <Pressable
         style={styles.menuIcon}
         onPress={() => setIsMenuVisible(!isMenuVisible)}
@@ -81,7 +83,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
           style={styles.textInput}
           value={name}
           onChangeText={setName}
-          onBlur={saveName} // Kiểm tra khi người dùng rời trường nhập liệu
+          onBlur={saveName}
           autoFocus
         />
       ) : (
@@ -103,7 +105,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

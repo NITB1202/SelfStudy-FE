@@ -7,7 +7,7 @@ import { Colors } from "@/constants/Colors";
 import { usePathname } from "expo-router";
 import { useNavigationContext } from "@/context/NavigationContext";
 
-export default function Header() {
+export default function Header({ showMenu = true }) {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("Plan");
   const pathname = usePathname();
@@ -46,16 +46,20 @@ export default function Header() {
   return (
     <View>
       <View style={styles.container}>
-        <LinearGradient
-          colors={[Colors.secondary, Colors.primary]}
-          style={styles.iconContainer}
-        >
-          <Pressable onPress={toggleSidebar}>
-            <Ionicons name="list" size={24} color="white" />
-          </Pressable>
-        </LinearGradient>
+        {/* Nút menu (chỉ hiển thị nếu showMenu = true) */}
+        {showMenu && (
+          <LinearGradient
+            colors={[Colors.secondary, Colors.primary]}
+            style={styles.iconContainer}
+          >
+            <Pressable onPress={toggleSidebar}>
+              <Ionicons name="list" size={24} color="white" />
+            </Pressable>
+          </LinearGradient>
+        )}
 
-        <View style={styles.userContainer}>
+        {/* Avatar luôn nằm bên phải */}
+        <View style={styles.rightContainer}>
           <Ionicons
             name="chevron-down"
             size={24}
@@ -104,9 +108,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 4,
   },
-  userContainer: {
+  rightContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: "auto", // Đẩy avatar luôn nằm bên phải
     gap: 10,
   },
   userName: {

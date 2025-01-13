@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, ScrollView, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  Button,
+} from "react-native";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import SubjectCard from "./component/subject";
 import AddSubjectModal from "./add";
+import Details from "./details";
 
 export default function Document() {
   const [subjects, setSubjects] = useState([
@@ -23,13 +31,15 @@ export default function Document() {
   ]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentSubject, setCurrentSubject] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
-  // Hiển thị modal khi nhấn nút "Add"
   const handleAddPress = () => {
     setIsModalVisible(true);
   };
 
-  // Xử lý xác nhận thêm mới chủ đề
   const handleConfirmAdd = (name: string, image: string) => {
     const newId = subjects.length + 1;
     const newSubject = { id: newId, name, image };
@@ -37,14 +47,12 @@ export default function Document() {
     setIsModalVisible(false);
   };
 
-  // Xử lý xóa chủ đề
   const handleDeleteSubject = (id: number) => {
     setSubjects((prevSubjects) =>
       prevSubjects.filter((subject) => subject.id !== id)
     );
   };
 
-  // Xử lý cập nhật thông tin của chủ đề
   const handleUpdateSubject = (
     id: number,
     newName: string,
@@ -58,6 +66,28 @@ export default function Document() {
       )
     );
   };
+
+  const handlePressSubject = (id: number, name: string) => {
+    setCurrentSubject({ id, name });
+  };
+
+  const handleBack = () => {
+    setCurrentSubject(null);
+  };
+
+  if (currentSubject) {
+    return (
+      <Details
+        route={{
+          params: {
+            id: currentSubject.id,
+            name: currentSubject.name,
+          },
+        }}
+        onBack={handleBack}
+      />
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,6 +107,7 @@ export default function Document() {
               key={subject.id}
               subjectName={subject.name}
               imageUri={subject.image}
+              onPress={() => handlePressSubject(subject.id, subject.name)}
               onDelete={() => handleDeleteSubject(subject.id)}
               onUpdate={(newName, newImage) =>
                 handleUpdateSubject(subject.id, newName, newImage)
