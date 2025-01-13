@@ -1,44 +1,30 @@
-// import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios, { AxiosInstance } from 'axios';
 
-// declare module 'axios' {
-//   export interface AxiosRequestConfig {
-//     attachToken?: boolean; 
-//   }
-// }
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: 'https://selfstudy.up.railway.app/',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
 
-// const apiClient: AxiosInstance = axios.create({
-//   baseURL: 'http://13.250.63.20:8000',
-//   timeout: 10000,
-//   headers: {
-//     'Content-Type': 'application/json',
-//     Accept: 'application/json',
-//   },
-// });
+axiosInstance.interceptors.request.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-// apiClient.interceptors.request.use(
-//   async (config: InternalAxiosRequestConfig<any>) => {
-//     if (config.attachToken) {
-//       const token = await AsyncStorage.getItem('accessToken');
-//       if (token) {
-//         config.headers.Authorization = `Bearer ${token}`;
-//       }
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-
-// apiClient.interceptors.response.use(
-//   (response: AxiosResponse) => response,
-//   (error) => {
-//     console.error('Response Error:', error.response || error.message);
-//     if (error.response?.status === 401) {
-//       console.log('Unauthorized! Redirecting to login...');
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default apiClient;
+export default axiosInstance;

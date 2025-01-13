@@ -7,12 +7,48 @@ import PasswordInput from "@/components/PasswordInput";
 import { Link, router } from "expo-router";
 import BackButton from "@/components/BackButton";
 import { Colors } from "@/constants/Colors";
+import { useState } from "react";
+import { isValidEmail } from "@/util/validator";
+import { useAuth } from "@/context/AuthContext";
+import authApi from "@/api/authApi";
+import { decodeToken } from "@/util/jwtUtil";
 
 export default function LoginScreen() {
   const { fontsLoaded } = useCustomFonts();
+  const [loginRequest, setLoginRequest] = useState({
+    email: "",
+    password: "",
+  })
+
+  const { login } = useAuth();
 
   if (!fontsLoaded) {
     return null;
+  }
+
+  const handleLogin = async ()=>{
+    if(!isValidEmail(loginRequest.email)){
+      //Add error message later
+      console.log("Invalid email format");
+      return;
+    }
+
+    try{
+      const response: any = await authApi.login(loginRequest.email, loginRequest.password);
+      const accessToken = response.accessToken;
+
+      await login(accessToken);
+      await authApi.logout();
+
+      const decodedToken = decodeToken(accessToken);
+
+      if(decodedToken.role === "USER")
+        router.push("/Me/Plan");
+
+    }
+    catch(error){
+      console.log(error);
+    }
   }
 
   return (
@@ -23,19 +59,30 @@ export default function LoginScreen() {
       <View style={styles.inputContainer}>
         <Text style={styles.title}>Login</Text>
         <LoginInput
-          placeholder="Enter your email..."
+          placeholder="Enter your email"
           style={styles.inputEmail}
+          onChangeText={(text)=> {
+            setLoginRequest((prev) => ({
+              ...prev,
+              email: text,
+            }));
+          }}
         />
-        <PasswordInput placeholder="Enter your password..." />
+        <PasswordInput 
+          placeholder="Enter your password"
+          onChangeText={(text)=>{
+            setLoginRequest((prev) => ({
+              ...prev,
+              password: text,
+            }));
+          }}/>
         <Link style={styles.link} href="/Authentication/ForgotPassword">
           Forgot password?
         </Link>
         <CustomButton
           title="Login"
           style={styles.loginButton}
-          onPress={() => {
-            router.push("/Me/Plan");
-          }}
+          onPress={handleLogin}
         />
         <View style={styles.divideContainer}>
           <View style={styles.divideLine}></View>

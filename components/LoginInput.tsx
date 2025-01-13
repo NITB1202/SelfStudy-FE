@@ -4,12 +4,16 @@ import { Colors } from "@/constants/Colors";
 interface LoginInputPros {
   placeholder: string;
   style?: ViewStyle;
+  onChangeText?: (text:string) => void;
 }
 
-export default function LoginInput({ placeholder, style }: LoginInputPros) {
+export default function LoginInput({ placeholder, style, onChangeText}: LoginInputPros) {
   return (
     <View style={[styles.container, style]}>
-      <TextInput placeholder={placeholder}></TextInput>
+      <TextInput 
+        placeholder={placeholder}
+        onChangeText={onChangeText}>
+      </TextInput>
     </View>
   );
 }
