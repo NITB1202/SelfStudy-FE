@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, Image, Pressable, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Sidebar from "../components/navigation/SideBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
 import { usePathname } from "expo-router";
 import { useNavigationContext } from "@/context/NavigationContext";
-
 
 export default function Header() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -22,29 +14,29 @@ export default function Header() {
   const { setSidePath } = useNavigationContext();
 
   useEffect(() => {
-      const loadActiveTab = () => {
-        let tab = "Plan";
+    const loadActiveTab = () => {
+      let tab = "Plan";
 
-        switch(pathname){
-          case "/Me/Plan":
-            tab = "Plan";
-            break;
-          case "/Me/Document":
-            tab = "Document"
-            break;
-          case "/Me/Session":
-            tab = "Session"
-            break;
-          case "/Me/Statistic":
-            tab = "Statistic"
-            break;
-        }
+      switch (pathname) {
+        case "/Me/Plan":
+          tab = "Plan";
+          break;
+        case "/Me/Document":
+          tab = "Document";
+          break;
+        case "/Me/Session":
+          tab = "Session";
+          break;
+        case "/Me/Statistic":
+          tab = "Statistic";
+          break;
+      }
 
-        if(tab === activeTab) return;
-        setActiveTab(tab);
-        setSidePath(tab);
-      };
-      loadActiveTab();
+      if (tab === activeTab) return;
+      setActiveTab(tab);
+      setSidePath(tab);
+    };
+    loadActiveTab();
   }, [pathname]);
 
   const toggleSidebar = () => {
@@ -56,17 +48,18 @@ export default function Header() {
       <View style={styles.container}>
         <LinearGradient
           colors={[Colors.secondary, Colors.primary]}
-          style = {styles.iconContainer}>
-          <TouchableOpacity onPress={toggleSidebar}>
+          style={styles.iconContainer}
+        >
+          <Pressable onPress={toggleSidebar}>
             <Ionicons name="list" size={24} color="white" />
-          </TouchableOpacity>
+          </Pressable>
         </LinearGradient>
 
         <View style={styles.userContainer}>
           <Ionicons
             name="chevron-down"
             size={24}
-            color={Colors.primary }
+            color={Colors.primary}
             style={styles.iconDown}
           />
           <Text style={styles.userName}>Robin</Text>
@@ -80,15 +73,13 @@ export default function Header() {
       </View>
       <View style={styles.bottomBorder} />
       <Modal
-          transparent={true}
-          visible={isSidebarVisible}
-          onRequestClose={toggleSidebar}
-        >
-          <View style={styles.modalContainer}>
-            <Sidebar
-              initialTab={activeTab}
-              onClose={toggleSidebar} />
-          </View>
+        transparent={true}
+        visible={isSidebarVisible}
+        onRequestClose={toggleSidebar}
+      >
+        <View style={styles.modalContainer}>
+          <Sidebar initialTab={activeTab} onClose={toggleSidebar} />
+        </View>
       </Modal>
     </View>
   );

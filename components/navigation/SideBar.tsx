@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigationContext } from "@/context/NavigationContext";
+
 interface SidebarProps {
   initialTab: string;
   onClose: () => void;
 }
 
-export default function Sidebar({ initialTab, onClose}: SidebarProps) {
+export default function Sidebar({ initialTab, onClose }: SidebarProps) {
   const [activeMenu, setActiveMenu] = useState(initialTab);
   const { onChangeSidePath } = useNavigationContext();
 
@@ -31,20 +32,21 @@ export default function Sidebar({ initialTab, onClose}: SidebarProps) {
     {
       id: "Session",
       label: "Session",
-      icon: 
-        <MaterialCommunityIcons 
-          name="timer-outline" 
-          size={24} 
-          color="#1E282D" 
-        />,
+      icon: (
+        <MaterialCommunityIcons
+          name="timer-outline"
+          size={24}
+          color="#1E282D"
+        />
+      ),
     },
     {
       id: "Statistic",
       label: "Statistic",
       icon: (
         <MaterialCommunityIcons
-          name="chart-box-outline" 
-          size={24} 
+          name="chart-box-outline"
+          size={24}
           color="#1E282D"
         />
       ),
@@ -53,9 +55,10 @@ export default function Sidebar({ initialTab, onClose}: SidebarProps) {
 
   return (
     <View style={styles.sidebar}>
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+      {/* Close Button */}
+      <Pressable style={styles.closeButton} onPress={onClose}>
         <Ionicons name="close-circle-outline" size={24} color="white" />
-      </TouchableOpacity>
+      </Pressable>
 
       <Image
         source={require("../../assets/images/Header.png")}
@@ -64,7 +67,7 @@ export default function Sidebar({ initialTab, onClose}: SidebarProps) {
 
       <View style={styles.menu}>
         {menuItems.map((item) => (
-          <TouchableOpacity
+          <Pressable
             key={item.id}
             style={[
               styles.menuItem,
@@ -77,7 +80,7 @@ export default function Sidebar({ initialTab, onClose}: SidebarProps) {
           >
             {item.icon}
             <Text style={[styles.menuText]}>{item.label}</Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
     </View>
