@@ -12,11 +12,13 @@ import { FontAwesome } from "@expo/vector-icons";
 interface PasswordInputPros {
   style?: ViewStyle;
   placeholder: string;
+  onChangeText?: (text: string) => void;
 }
 
 export default function PasswordInput({
   style,
   placeholder,
+  onChangeText
 }: PasswordInputPros) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -26,6 +28,7 @@ export default function PasswordInput({
         placeholder={placeholder}
         style={styles.input}
         secureTextEntry={!isPasswordVisible}
+        onChangeText={onChangeText}
       ></TextInput>
       <TouchableOpacity
         style={styles.button}

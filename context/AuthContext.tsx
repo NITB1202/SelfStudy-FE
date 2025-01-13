@@ -1,14 +1,14 @@
-import authApi from "@/api/authApi";
 import { Role } from "@/enum/Role";
 import { decodeToken } from "@/util/jwtUtil";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import authApi from "@/api/authApi";
 
 interface AuthContextProps{
     isAuthenticated: boolean;
     userId: string;
     role: Role | null;
-    login: (email: string, password: string) => void;
+    login: (accessToken: string) => void;
     logout: () => void;
 }
 
@@ -59,12 +59,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     resetState();
     },[]);
 
-    const login = async (username: string, password: string) => {
+    const login = (accessToken: string) => {
         try{
-            const response = await authApi.login(username, password);
-            const accessToken = response.data.accessToken;
             const decodedToken = decodeToken(accessToken);
-
             AsyncStorage.setItem("accessToken", accessToken);
             const role = decodedToken.role === "USER"? Role.USER : Role.ADMIN;
 
