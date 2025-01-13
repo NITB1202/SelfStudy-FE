@@ -96,7 +96,7 @@ const MissedDeadline: React.FC = () => {
 
       {/* Bottom Navigation */}
       <View>
-        <BottomNavBar initialActiveTab="MissedDeadline" />
+        <BottomNavBar/>
       </View>
     </View>
   );

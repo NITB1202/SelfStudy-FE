@@ -1,19 +1,47 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable, BackHandler } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigationContext } from "@/context/NavigationContext";
+import { usePathname } from "expo-router";
 
 interface BottomNavBarProps {
-  onAddPress?: () => void; // Nút Add sẽ chỉ hiển thị khi có callback này
-  initialActiveTab?: string; // Tab được active ban đầu
+  onAddPress?: () => void;
 }
 
 export default function BottomNavBar({
   onAddPress,
-  initialActiveTab = "Me",
 }: BottomNavBarProps) {
-  const [activeTab, setActiveTab] = useState(initialActiveTab);
+  const [activeTab, setActiveTab] = useState("");
+  const { onChangeBottomPath, setBottomPath } = useNavigationContext();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const loadActiveTab = () => {
+      let tab = "";
+
+      if(pathname.startsWith("/Me")){
+        tab = "Me"
+      }
+
+      if(pathname.startsWith("/MissedDeadline")){
+        tab = "MissedDeadline"
+      }
+
+      if(pathname.startsWith("/Notification")){
+        tab = "Notification"
+      }
+
+      if(pathname.startsWith("/Team")){
+        tab = "Team"
+      }
+
+      if(activeTab === tab) return;
+      setActiveTab(tab);
+      setBottomPath(tab);
+    };
+    loadActiveTab();
+}, [pathname]);
 
   return (
     <View style={styles.container}>
@@ -21,14 +49,14 @@ export default function BottomNavBar({
       <View
         style={[
           styles.leftNavItems,
-          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+          !onAddPress && styles.noAddNavItems,
         ]}
       >
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Me");
             setActiveTab("Me");
-            router.push("/Me/Plan");
           }}
         >
           <MaterialIcons
@@ -48,8 +76,8 @@ export default function BottomNavBar({
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "MissedDeadline");
             setActiveTab("MissedDeadline");
-            router.push("/MissedDeadline");
           }}
         >
           <MaterialIcons
@@ -93,14 +121,14 @@ export default function BottomNavBar({
       <View
         style={[
           styles.rightNavItems,
-          !onAddPress && styles.noAddNavItems, // Áp dụng khoảng cách khi không có nút Add
+          !onAddPress && styles.noAddNavItems,
         ]}
       >
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Team");
             setActiveTab("Team");
-            router.push("/");
           }}
         >
           <MaterialIcons
@@ -120,8 +148,8 @@ export default function BottomNavBar({
         <Pressable
           style={styles.navItem}
           onPress={() => {
+            onChangeBottomPath(activeTab, "Notification");
             setActiveTab("Notification");
-            router.push("/Notification");
           }}
         >
           <MaterialIcons
@@ -162,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 3,
     marginBottom: 5,
-    justifyContent: "space-between", // Default: space-between for all items
+    justifyContent: "space-between",
   },
   leftNavItems: {
     flexDirection: "row",
@@ -175,7 +203,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noAddNavItems: {
-    gap: 40, // Cách 40px giữa leftNavItems và rightNavItems khi không có nút Add
+    gap: 40,
   },
   navItem: {
     justifyContent: "center",
@@ -189,7 +217,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "-55%",
     left: "50%",
-    transform: [{ translateX: 0 }], // Align center button
+    transform: [{ translateX: 0 }],
   },
   addButton: {
     width: 60,
