@@ -34,14 +34,15 @@ export default function LoginScreen() {
     }
 
     try{
-      // const response: any = await authApi.login(loginRequest.email, loginRequest.password);
-      // const accessToken = response.accessToken;
+      const response: any = await authApi.login(loginRequest.email, loginRequest.password);
+      const accessToken = response.accessToken;
 
-      // await login(accessToken);
+      await login(accessToken);
+      await authApi.logout();
 
-      // const decodedToken = decodeToken(accessToken);
+      const decodedToken = decodeToken(accessToken);
 
-      // if(decodedToken.role === "USER")
+      if(decodedToken.role === "USER")
         router.push("/Me/Plan");
 
     }
