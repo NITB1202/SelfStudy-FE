@@ -10,6 +10,9 @@ const authApi = {
     },
     verify: (email: string, code: string) =>{
         return axiosInstance.post("/auth/verify", {email, code});
+    },
+    resetPassword(email: string, password: string){
+        return axiosInstance.post("/auth/reset", {email,password});
     }
 }
 

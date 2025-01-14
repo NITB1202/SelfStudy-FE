@@ -58,9 +58,8 @@ export default function LoginScreen() {
 
       const decodedToken = decodeToken(accessToken);
 
-      if(decodedToken.role === "USER")
-        router.push("/Me/Plan");
-
+      // if(decodedToken.role === "USER")
+      router.push("/Me/Plan");
     }
     catch(error: any){
       let errorDes = "";

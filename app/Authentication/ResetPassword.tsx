@@ -5,13 +5,66 @@ import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import { router } from "expo-router";
+import { useState } from "react";
+import authApi from "@/api/authApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Error from "@/components/Message/Error"
 
 export default function ResetPasswordScreen() {
   const { fontsLoaded } = useCustomFonts();
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: ""
+  })
 
   if (!fontsLoaded) {
     return null;
   }
+
+  const handleReset = async () => {
+    if(password === ""){
+      setShowMessage(true);
+      setMessage({
+        title: "Error",
+        description: "The password is empty."
+      });
+      return;
+    }
+
+    if(confirm === ""){
+      setShowMessage(true);
+      setMessage({
+        title: "Error",
+        description: "The confirmation password is empty."
+      });
+      return;
+    }
+
+    if(password !== confirm){
+      setShowMessage(true);
+      setMessage({
+        title: "Error",
+        description: "The password and the confirmation password must match."
+      });
+      return;
+    }
+
+    try{
+      const email = await AsyncStorage.getItem("email");
+      if(email !== null){
+        await authApi.resetPassword(email, password);
+        AsyncStorage.removeItem("email");
+        router.push("/Authentication/PasswordChanged");
+      }
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <BackButton />
@@ -21,16 +74,30 @@ export default function ResetPasswordScreen() {
       </Text>
       <View style={styles.body}>
         <View style={styles.inputContainer}>
-          <PasswordInput placeholder="Enter new password..."></PasswordInput>
-          <PasswordInput placeholder="Confirm password..."></PasswordInput>
+          <PasswordInput 
+            placeholder="Enter new password"
+            onChangeText={(text) => setPassword(text)}>
+          </PasswordInput>
+          <PasswordInput 
+            placeholder="Confirm password"
+            onChangeText={(text) => setConfirm(text)}>
+          </PasswordInput>
         </View>
         <CustomButton
           title="Reset password"
-          onPress={() => {
-            router.push("/Authentication/PasswordChanged");
-          }}
+          onPress={handleReset}
         />
       </View>
+      {
+        showMessage &&
+          <Error
+            title={message.title}
+            description={message.description}
+            visible={showMessage}
+            onClose={()=> setShowMessage(false)}
+            onOkPress={()=> setShowMessage(false)}>
+          </Error>
+      }
     </SafeAreaView>
   );
 }
