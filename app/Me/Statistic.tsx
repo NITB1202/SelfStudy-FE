@@ -63,7 +63,7 @@ export default function Statistic() {
         <View style={styles.pieContainer}>
           <Text style={styles.chartTitle}>Study session complete</Text>
           <View style={styles.pieContainer1}>
-            <Svg height="160" width="160" viewBox="0 -8 35 50">
+            <Svg height="180" width="180" viewBox="0 -8 35 50">
               {/* Background Circle */}
               <Circle
                 cx="18"
