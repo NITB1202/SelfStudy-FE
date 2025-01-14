@@ -6,6 +6,7 @@ import Checkbox from "@/components/Checkbox";
 import ProgressCircle from "./time";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
+import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
 
 export default function Page() {
   const [volume, setVolume] = useState(50);
@@ -40,6 +41,14 @@ export default function Page() {
         },
       },
     ]);
+  };
+
+  const handleStrictMode = () => {
+    Alert.alert("Strict Mode", "Strict mode is now active.");
+  };
+
+  const handleSettings = () => {
+    Alert.alert("Settings", "Navigate to settings.");
   };
 
   return (
@@ -111,7 +120,72 @@ export default function Page() {
             </Text>
           </Pressable>
         </View>
+
+        {/* New Buttons */}
+        {/* Additional Buttons */}
+        <View style={styles.additionalButtons}>
+          {/* Strict Mode Button */}
+          <Pressable style={styles.iconButton} onPress={handleStrictMode}>
+            <Svg height={80} width={80}>
+              <Defs>
+                <LinearGradient id="strictGradient" x1="0" y1="0" x2="1" y2="1">
+                  <Stop offset="0%" stopColor="#4A628A" />
+                  <Stop offset="100%" stopColor="#131A24" />
+                </LinearGradient>
+              </Defs>
+              <Rect
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                rx="15"
+                fill="url(#strictGradient)"
+              />
+            </Svg>
+            <Ionicons
+              name="remove-circle"
+              size={40}
+              color="#FFFFFF"
+              style={styles.icon}
+            />
+            <Text style={styles.iconButtonText}>Strict mode</Text>
+          </Pressable>
+
+          {/* Settings Button */}
+          <Pressable style={styles.iconButton} onPress={handleSettings}>
+            <Svg height={80} width={80}>
+              <Defs>
+                <LinearGradient
+                  id="settingsGradient"
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="1"
+                >
+                  <Stop offset="0%" stopColor="#628393" />
+                  <Stop offset="100%" stopColor="#1E282D" />
+                </LinearGradient>
+              </Defs>
+              <Rect
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                rx="15"
+                fill="url(#settingsGradient)"
+              />
+            </Svg>
+            <Ionicons
+              name="settings"
+              size={40}
+              color="#FFFFFF"
+              style={styles.icon}
+            />
+            <Text style={styles.iconButtonText1}>Settings</Text>
+          </Pressable>
+        </View>
       </View>
+
       <View style={styles.bottom}>
         <BottomNavBar />
       </View>
@@ -186,11 +260,38 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginHorizontal: 30,
+    marginBottom: 20,
   },
   finishText: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  additionalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+  },
+  iconButton: {
+    alignItems: "center",
+    position: "relative",
+  },
+  icon: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+  },
+  iconButtonText: {
+    fontSize: 16,
+    color: "#4A628A",
+    marginTop: 5,
+    fontWeight: "500",
+  },
+  iconButtonText1: {
+    fontSize: 16,
+    color: "#1E282D",
+    marginTop: 5,
+    fontWeight: "500",
   },
   bottom: {
     alignItems: "center",
