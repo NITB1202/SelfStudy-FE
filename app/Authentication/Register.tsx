@@ -1,18 +1,99 @@
 import LoginInput from "@/components/LoginInput";
 import PasswordInput from "@/components/PasswordInput";
-import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import CustomButton from "@/components/CustomButton";
 import BackButton from "@/components/BackButton";
 import { router } from "expo-router";
+import { useState } from "react";
+import { isValidEmail } from "@/util/validator";
+import Error from "@/components/Message/Error";
+import userApi from "@/api/userApi";
+import authApi from "@/api/authApi";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterScreen() {
   const { fontsLoaded } = useCustomFonts();
+  const [ request, setRequest ] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [confirm, setConfirm] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title:"",
+    description: "",
+  });
+  const { login } = useAuth();
 
   if (!fontsLoaded) {
     return null;
   }
+
+  const handleRegister = async () => {
+    if(request.username === "" || request.email === "" ||
+      request.password === "" || confirm === ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "All fields are required."
+      });
+      return;
+    }
+
+    if(!isValidEmail(request.email)){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Invalid email format."
+      });
+      return;
+    }
+
+    if(request.password !== confirm){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The password and the confirmation password must match."
+      });
+      return;
+    }
+
+    try{
+      await userApi.register(request.username, request.email, request.password);
+      const response: any = await authApi.login(request.email,request.password);
+      const accessToken = response.accessToken;
+
+      await login(accessToken);
+      router.push("/Me/Plan");
+    }
+    catch(error: any){
+      let message = ""
+      switch(error.status){
+        case 400:
+          message = "The email has already been used."
+          break;
+        case 500:
+          message = "Error occurs when connecting to the server. Please try again."
+          break;
+      }
+
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: message
+      });
+    }
+  }
+
+  const updateField = (fieldName: keyof typeof request, value: string) => {
+    setRequest((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,32 +103,39 @@ export default function RegisterScreen() {
       <View style={styles.body}>
         <Text style={styles.title}>Register</Text>
         <View style={styles.inputContainer}>
-          <LoginInput placeholder="Enter username..." style={styles.input} />
-          <LoginInput placeholder="Enter email..." style={styles.input} />
-          <PasswordInput placeholder="Enter password..." style={styles.input} />
-          <PasswordInput
-            placeholder="Confirm password..."
+          <LoginInput 
+            placeholder="Enter username" 
             style={styles.input}
+            onChangeText={(text)=> updateField("username", text)} />
+          <LoginInput 
+            placeholder="Enter email"
+            style={styles.input}
+            onChangeText={(text) => updateField("email", text)} />
+          <PasswordInput 
+            placeholder="Enter password" 
+            style={styles.input}
+            onChangeText={(text)=> updateField("password", text)} />
+          <PasswordInput
+            placeholder="Confirm password"
+            style={styles.input}
+            onChangeText={(text)=> setConfirm(text)}
           />
         </View>
         <CustomButton
           title="Register"
-          onPress={() => {
-            router.push("/Authentication/Login");
-          }}
+          onPress={handleRegister}
         />
-        <View style={styles.divideContainer}>
-          <View style={styles.divideLine}></View>
-          <Text style={styles.option}>Or</Text>
-          <View style={styles.divideLine}></View>
-        </View>
-        <TouchableOpacity style={styles.googleButton}>
-          <Image
-            source={require("../../assets/images/google-icon.png")}
-          />
-          <Text style={styles.googleText}>Register with Google</Text>
-        </TouchableOpacity>
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          visible={showError}
+          onClose={()=> setShowError(false)}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
     </SafeAreaView>
   );
 }
@@ -95,45 +183,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "PlusJakartaSans_700Bold",
     fontSize: 16,
-  },
-  divideLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "gray",
-  },
-  divideContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-  },
-  option: {
-    marginHorizontal: 5,
-    color: "gray",
-    fontSize: 14,
-  },
-  googleButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.1)",
-    borderRadius: 10,
-    paddingVertical: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
-    width: "100%",
-  },
-  googleText: {
-    fontFamily: "Poppins_400Regular",
-    marginLeft: 5,
-    color: "#1E282DA6",
-    fontSize: 20,
   },
 });

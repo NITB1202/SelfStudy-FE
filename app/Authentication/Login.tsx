@@ -11,7 +11,6 @@ import { useState } from "react";
 import { isValidEmail } from "@/util/validator";
 import { useAuth } from "@/context/AuthContext";
 import authApi from "@/api/authApi";
-import { decodeToken } from "@/util/jwtUtil";
 import Error from "@/components/Message/Error"
 
 export default function LoginScreen() {
@@ -56,8 +55,7 @@ export default function LoginScreen() {
 
       await login(accessToken);
 
-      const decodedToken = decodeToken(accessToken);
-
+      // const decodedToken = decodeToken(accessToken);
       // if(decodedToken.role === "USER")
       router.push("/Me/Plan");
     }
