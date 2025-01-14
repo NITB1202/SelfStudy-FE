@@ -12,6 +12,7 @@ import { isValidEmail } from "@/util/validator";
 import { useAuth } from "@/context/AuthContext";
 import authApi from "@/api/authApi";
 import { decodeToken } from "@/util/jwtUtil";
+import Error from "@/components/Message/Error"
 
 export default function LoginScreen() {
   const { fontsLoaded } = useCustomFonts();
@@ -19,6 +20,11 @@ export default function LoginScreen() {
     email: "",
     password: "",
   })
+  const [showError,setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: ""
+  });
 
   const { login } = useAuth();
 
@@ -27,9 +33,21 @@ export default function LoginScreen() {
   }
 
   const handleLogin = async ()=>{
+    if(loginRequest.email == "" || loginRequest.password == ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The email or password is empty."
+      });
+      return;
+    }
+    
     if(!isValidEmail(loginRequest.email)){
-      //Add error message later
-      console.log("Invalid email format");
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Invalid email format."
+      });
       return;
     }
 
@@ -38,7 +56,6 @@ export default function LoginScreen() {
       const accessToken = response.accessToken;
 
       await login(accessToken);
-      await authApi.logout();
 
       const decodedToken = decodeToken(accessToken);
 
@@ -46,8 +63,22 @@ export default function LoginScreen() {
         router.push("/Me/Plan");
 
     }
-    catch(error){
-      console.log(error);
+    catch(error: any){
+      let errorDes = "";
+      switch(error.status){
+        case 400:
+          errorDes = "Incorrect password.";
+          break;
+        case 404:
+          errorDes = "This email hasn't been registered yet."
+          break;
+      }
+
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: errorDes
+      });
     }
   }
 
@@ -102,6 +133,16 @@ export default function LoginScreen() {
           </Link>
         </Text>
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          visible={showError}
+          onClose={()=> setShowError(false)}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
     </SafeAreaView>
   );
 }
