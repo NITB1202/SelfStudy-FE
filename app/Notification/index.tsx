@@ -12,8 +12,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import PlanCard from "@/components/Noti/PlanCard";
 import PlanWill from "@/components/Noti/PlanWill";
 import Invite from "@/components/Noti/Invite";
-import Question from "@/components/Message/Question";
-import Error from "@/components/Message/Error";
 import Success from "@/components/Message/Success";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 
@@ -43,14 +41,12 @@ const Noti: React.FC = () => {
     },
   ]);
 
-  // Hàm đánh dấu tất cả thông báo là "read"
   const markAllAsRead = () => {
     setNotifications((prevNotifications) =>
       prevNotifications.map((notif) => ({ ...notif, isRead: true }))
     );
   };
 
-  // Hàm chuyển đổi trạng thái "read" cho một thông báo cụ thể
   const toggleReadStatus = (id: number) => {
     setNotifications((prevNotifications) =>
       prevNotifications.map((notif) =>
@@ -59,7 +55,6 @@ const Noti: React.FC = () => {
     );
   };
 
-  // Hàm xử lý Accept và Decline cho Invite
   const handleAccept = (id: number) => {
     console.log(`Accepted invitation for notification ID: ${id}`);
   };
@@ -67,8 +62,6 @@ const Noti: React.FC = () => {
   const handleDecline = (id: number) => {
     console.log(`Declined invitation for notification ID: ${id}`);
   };
-
-  // Test Message
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -79,61 +72,71 @@ const Noti: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.markAllContainer} onPress={markAllAsRead}>
-        <Text style={styles.markAllText}>Mark as read all</Text>
-        <MaterialIcons name="check-circle-outline" size={24} color="#7AB2D3" />
-      </TouchableOpacity>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {notifications.map((notif) =>
-          notif.id === 2 ? (
-            <PlanWill
-              key={notif.id}
-              name={notif.name}
-              remindTime={notif.remindTime}
-              expiredTime={notif.expiredTime}
-              isRead={notif.isRead}
-              onToggleRead={() => toggleReadStatus(notif.id)}
-            />
-          ) : notif.id === 3 ? (
-            <Invite
-              key={notif.id}
-              name={notif.name}
-              expiredTime={notif.expiredTime}
-              people={notif.people}
-              team={notif.team}
-              isRead={notif.isRead}
-              onToggleRead={() => toggleReadStatus(notif.id)}
-              onAccept={() => handleAccept(notif.id)}
-              onDecline={() => handleDecline(notif.id)}
-            />
-          ) : (
-            <PlanCard
-              key={notif.id}
-              name={notif.name}
-              expiredTime={notif.expiredTime}
-              recoveryTime={notif.recoveryTime}
-              isRead={notif.isRead}
-              onToggleRead={() => toggleReadStatus(notif.id)}
-            />
-          )
-        )}
-      </ScrollView>
+      <View style={styles.content}>
+        <TouchableOpacity
+          style={styles.markAllContainer}
+          onPress={markAllAsRead}
+        >
+          <Text style={styles.markAllText}>Mark as read all</Text>
+          <MaterialIcons
+            name="check-circle-outline"
+            size={24}
+            color="#7AB2D3"
+          />
+        </TouchableOpacity>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {notifications.map((notif) =>
+            notif.id === 2 ? (
+              <PlanWill
+                key={notif.id}
+                name={notif.name}
+                remindTime={notif.remindTime}
+                expiredTime={notif.expiredTime}
+                isRead={notif.isRead}
+                onToggleRead={() => toggleReadStatus(notif.id)}
+              />
+            ) : notif.id === 3 ? (
+              <Invite
+                key={notif.id}
+                name={notif.name}
+                expiredTime={notif.expiredTime}
+                people={notif.people}
+                team={notif.team}
+                isRead={notif.isRead}
+                onToggleRead={() => toggleReadStatus(notif.id)}
+                onAccept={() => handleAccept(notif.id)}
+                onDecline={() => handleDecline(notif.id)}
+              />
+            ) : (
+              <PlanCard
+                key={notif.id}
+                name={notif.name}
+                expiredTime={notif.expiredTime}
+                recoveryTime={notif.recoveryTime}
+                isRead={notif.isRead}
+                onToggleRead={() => toggleReadStatus(notif.id)}
+              />
+            )
+          )}
+        </ScrollView>
 
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        {/* Nút để hiển thị Modal */}
-        <Button title="Show Message" onPress={() => setIsModalVisible(true)} />
-
-        {/* Component Message */}
-        <Success
-          visible={isModalVisible}
-          title="Sample Title"
-          description="This is a sample description for the modal."
-          onClose={() => setIsModalVisible(false)}
-          onOkPress={handleOkPress}
-        />
+        <View style={styles.modalButton}>
+          <Button
+            title="Show Message"
+            onPress={() => setIsModalVisible(true)}
+          />
+          <Success
+            visible={isModalVisible}
+            title="Sample Title"
+            description="This is a sample description for the modal."
+            onClose={() => setIsModalVisible(false)}
+            onOkPress={handleOkPress}
+          />
+        </View>
       </View>
+
       {/* Bottom Navigation */}
-      <View>
+      <View style={styles.bottomNavBar}>
         <BottomNavBar />
       </View>
     </SafeAreaView>
@@ -144,8 +147,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    padding: 20,
-    paddingTop: 50,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingBottom: 70, // Khoảng cách để nội dung không bị che bởi BottomNavBar
   },
   markAllContainer: {
     flexDirection: "row",
@@ -161,6 +167,19 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 16,
+  },
+  modalButton: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  bottomNavBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#EAEAEA",
   },
 });
 
