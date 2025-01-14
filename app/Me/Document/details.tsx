@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
+  Alert,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import DocumentItem from "./component/doc";
+import AddDocModal from "./addDoc";
 
 interface DetailsProps {
   route: {
@@ -17,13 +20,13 @@ interface DetailsProps {
       name: string;
     };
   };
-  onBack: () => void; // Hàm callback quay lại trang cha
+  onBack: () => void;
 }
 
 export default function Details({ route, onBack }: DetailsProps) {
   const { id, name } = route.params;
 
-  const documentsData: Record<
+  const initialDocumentsData: Record<
     number,
     { id: number; name: string; img: string }[]
   > = {
@@ -33,38 +36,69 @@ export default function Details({ route, onBack }: DetailsProps) {
         name: "TaiLieuOnThi.xlsx",
         img: "https://w7.pngwing.com/pngs/619/922/png-transparent-microsoft-excel-illustration-microsoft-excel-microsoft-office-macos-excel-rectangle-logo-microsoft-thumbnail.png",
       },
+      {
+        id: 2,
+        name: "TaiLieuOnThiHDH.xlsx",
+        img: "https://w7.pngwing.com/pngs/619/922/png-transparent-microsoft-excel-illustration-microsoft-excel-microsoft-office-macos-excel-rectangle-logo-microsoft-thumbnail.png",
+      },
     ],
     2: [
       {
-        id: 2,
+        id: 3,
         name: "PhysicsNotes.docx",
-        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Microsoft_Word_2013-2019_logo.svg/1200px-Microsoft_Word_2013-2019_logo.svg.png",
+        img: "https://dulichviet.com.vn/images/bandidau/danh-sach-nhung-buc-anh-viet-nam-lot-top-anh-dep-the-gioi.jpg",
       },
     ],
   };
 
+  const [documentsData, setDocumentsData] = useState(initialDocumentsData);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+
   const documents = documentsData[id] || [];
 
-  const handleEditName = (docId: number) => {
-    console.log(`Edit name for document with id: ${docId}`);
+  const handleAddDocument = (docName: string) => {
+    const newDoc = {
+      id: Math.max(...documents.map((doc) => doc.id), 0) + 1,
+      name: docName,
+      img: "https://via.placeholder.com/80", // Placeholder image
+    };
+    setDocumentsData((prevData) => ({
+      ...prevData,
+      [id]: [...prevData[id], newDoc],
+    }));
+    setIsAddModalVisible(false);
   };
 
   const handleDelete = (docId: number) => {
-    console.log(`Delete document with id: ${docId}`);
+    Alert.alert(
+      "Delete Document",
+      "Are you sure you want to delete this document?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            setDocumentsData((prevData) => ({
+              ...prevData,
+              [id]: prevData[id].filter((doc) => doc.id !== docId),
+            }));
+          },
+        },
+      ]
+    );
   };
 
   return (
     <View style={styles.container}>
       <Header showMenu={false} />
-      {/* Nút Back */}
-      <View style={styles.backButtonContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={onBack}>
-          <Text style={styles.backButtonText}>{"< Back"}</Text>
-        </TouchableOpacity>
+      <View style={styles.headerContainer}>
+        <Pressable style={styles.backButton} onPress={onBack}>
+          <Feather name="arrow-left-circle" size={35} color="#7AB2D3" />
+        </Pressable>
         <Text style={styles.headerTitle}>{name}</Text>
       </View>
 
-      {/* Danh sách tài liệu */}
       <ScrollView contentContainerStyle={styles.documentList}>
         {documents.length === 0 ? (
           <Text style={styles.emptyText}>
@@ -76,16 +110,20 @@ export default function Details({ route, onBack }: DetailsProps) {
               key={doc.id}
               name={doc.name}
               img={doc.img}
-              onEdit={() => handleEditName(doc.id)}
               onDelete={() => handleDelete(doc.id)}
             />
           ))
         )}
       </ScrollView>
+      <View style={styles.bottom}>
+        <BottomNavBar onAddPress={() => setIsAddModalVisible(true)} />
+      </View>
 
-      {/* Thanh điều hướng dưới cùng */}
-      <BottomNavBar
-        onAddPress={() => console.log("Add new document pressed")}
+      {/* Add Document Modal */}
+      <AddDocModal
+        visible={isAddModalVisible}
+        onClose={() => setIsAddModalVisible(false)}
+        onConfirm={handleAddDocument}
       />
     </View>
   );
@@ -94,36 +132,32 @@ export default function Details({ route, onBack }: DetailsProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#ffffff",
     paddingTop: 20,
   },
-  backButtonContainer: {
+  bottom: {
+    alignItems: "center",
+  },
+  headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
     borderBottomColor: "#ececec",
     backgroundColor: "#ffffff",
   },
   backButton: {
     padding: 10,
     borderRadius: 4,
-    backgroundColor: "#007BFF",
-    marginRight: 10,
-  },
-  backButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "600",
+    position: "absolute",
+    top: -55,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#333333",
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#7AB2D3",
+    textAlign: "center",
+    flex: 1,
   },
   documentList: {
-    paddingHorizontal: 16,
     paddingVertical: 20,
   },
   emptyText: {
