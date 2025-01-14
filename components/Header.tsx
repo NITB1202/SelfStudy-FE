@@ -15,6 +15,8 @@ import { useRouter } from "expo-router"; // Import useRouter
 import Sidebar from "../components/navigation/SideBar";
 import { usePathname } from "expo-router";
 import { useNavigationContext } from "@/context/NavigationContext";
+import { useAuth } from "@/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Header({ showMenu = true }) {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -22,7 +24,22 @@ export default function Header({ showMenu = true }) {
   const [activeTab, setActiveTab] = useState("Plan");
   const pathname = usePathname();
   const { setSidePath } = useNavigationContext();
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
+  const { logout } = useAuth();
+  const [userData, setUserData] = useState
+  <{
+    username: string | null;
+    avatar: string | null;
+  }>({
+    username: "",
+    avatar: null,
+  });
+  const [viewWidth, setViewWidth] = useState(0);
+
+  const handleLayout = (event: any) => {
+    const { width, height } = event.nativeEvent.layout;
+    setViewWidth(width);
+  };
 
   useEffect(() => {
     const loadActiveTab = () => {
@@ -50,6 +67,20 @@ export default function Header({ showMenu = true }) {
     loadActiveTab();
   }, [pathname]);
 
+  useEffect(()=>{
+    const fetchUser = async () => {
+      const username = await AsyncStorage.getItem("username");
+      const avatar = await AsyncStorage.getItem("avatar");
+
+      setUserData({
+        username: username, 
+        avatar: avatar
+      });
+
+    };
+    fetchUser();
+  },[])
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -61,9 +92,10 @@ export default function Header({ showMenu = true }) {
   const handleSelectOption = (option: string) => {
     setIsDropdownVisible(false);
     if (option === "Profile") {
-      router.push("/Me/Profile"); // Navigate to the Profile page
+      router.push("/Me/Profile");
     } else if (option === "Log out") {
-      console.log("Log out");
+      logout();
+      router.push("/Authentication/Login");
     }
   };
 
@@ -80,17 +112,19 @@ export default function Header({ showMenu = true }) {
             </Pressable>
           </LinearGradient>
         )}
-        <Pressable style={styles.rightContainer} onPress={toggleDropdown}>
+        <Pressable style={styles.rightContainer} onLayout={handleLayout} onPress={toggleDropdown}>
           <Ionicons
             name="chevron-down"
             size={24}
             color={Colors.primary}
             style={styles.iconDown}
           />
-          <Text style={styles.userName}>Robin</Text>
+          <Text style={styles.userName}>{userData.username}</Text>
           <Image
             source={{
-              uri: "https://i1-giaitri.vnecdn.net/2022/09/23/-5865-1663929656.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=2qbqN6-vYy6SJLboH93pYA",
+              uri: userData.avatar === null? 
+              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg" 
+              : userData.avatar,
             }}
             style={styles.avatar}
           />
@@ -101,7 +135,7 @@ export default function Header({ showMenu = true }) {
       {isDropdownVisible && (
         <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
           <View style={styles.dropdownOverlay}>
-            <View style={styles.dropdown}>
+          <View style={[styles.dropdown, { right: viewWidth }]}>
               <Pressable
                 style={styles.dropdownItem}
                 onPress={() => handleSelectOption("Profile")}
@@ -184,7 +218,7 @@ const styles = StyleSheet.create({
   dropdownOverlay: {
     position: "absolute",
     top: 50,
-    right: 60,
+    right: -80,
     zIndex: 1,
   },
   dropdown: {

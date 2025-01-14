@@ -3,9 +3,11 @@ import useCustomFonts from "@/hooks/useCustomFonts";
 import { Colors } from "@/constants/Colors";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Index() {
   const { fontsLoaded } = useCustomFonts();
+  const { isAuthenticated } = useAuth();
 
   if (!fontsLoaded) {
     return null;
@@ -32,7 +34,10 @@ export default function Index() {
       <CustomButton
         title="Get Started"
         onPress={() => {
-          router.push("/Authentication/Login");
+          if(isAuthenticated)
+            router.push("/Me/Plan");
+          else
+            router.push("/Authentication/Login");
         }}
       />
     </View>

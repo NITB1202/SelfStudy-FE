@@ -2,7 +2,7 @@ import { Role } from "@/enum/Role";
 import { decodeToken } from "@/util/jwtUtil";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import authApi from "@/api/authApi";
+import userApi from "@/api/userApi";
 
 interface AuthContextProps{
     isAuthenticated: boolean;
@@ -43,6 +43,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 {
                     const decodedToken = decodeToken(accessToken);
                     const role = decodedToken.role === "USER"? Role.USER : Role.ADMIN;
+                    const id = decodedToken.id;
+
+                    const response: any  = await userApi.getById(id);
+
+                    AsyncStorage.setItem("username", response.username);
+                    AsyncStorage.setItem("avatar", response.avatarLink);
 
                     setAuthInfo({
                         isAuthenticated: true,
@@ -59,11 +65,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     resetState();
     },[]);
 
-    const login = (accessToken: string) => {
+    const login = async (accessToken: string) => {
         try{
             const decodedToken = decodeToken(accessToken);
             AsyncStorage.setItem("accessToken", accessToken);
             const role = decodedToken.role === "USER"? Role.USER : Role.ADMIN;
+            const id = decodedToken.id;
+
+            const response: any  = await userApi.getById(id);
+
+            AsyncStorage.setItem("username", response.username);
+            AsyncStorage.setItem("avatar", response.avatarLink);
 
             const userInfo = {
                 isAuthenticated: true,
@@ -79,7 +91,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   
     const logout = () => {
-      AsyncStorage.removeItem('accessToken');
+      AsyncStorage.clear();
       setAuthInfo({
         isAuthenticated: false,
         userId: "",
