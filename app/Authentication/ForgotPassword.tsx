@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import authApi from "@/api/authApi";
 import Error from "@/components/Message/Error";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ForgotPassWordScreen() {
   const { fontsLoaded } = useCustomFonts();
@@ -34,6 +35,7 @@ export default function ForgotPassWordScreen() {
 
     try{
       await authApi.sendCode(email);
+      AsyncStorage.setItem("email", email);
       router.push("/Authentication/Verification");
     }
     catch(error: any){

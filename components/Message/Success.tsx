@@ -38,7 +38,7 @@ export default function Success({
           <View style={styles.content}>
             {/* Icon và Title */}
             <View style={styles.header}>
-              <MaterialIcons name="check-circle" size={24} color="#7AD37D" />
+              <MaterialIcons name="check-circle" size={26} color="#7AD37D" />
               <Text style={styles.title}>{title}</Text>
             </View>
 
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     width: "100%",
-    height: 38, // Đảm bảo chiều cao cố định
+    height: 38,
     justifyContent: "flex-start",
   },
   description: {
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   okButton: {
     marginTop: 20,
     width: "100%",
-    backgroundColor: "#7AD37D", // Màu xanh cho nút OK
+    backgroundColor: "#7AD37D",
   },
 });

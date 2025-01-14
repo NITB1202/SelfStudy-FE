@@ -4,11 +4,12 @@ import useCustomFonts from "@/hooks/useCustomFonts";
 import { Colors } from "@/constants/Colors";
 
 interface NumberInputProps {
+  defaultValue?: string;
   onChangeText: (text: string) => void;
 }
 
 const NumberInput = forwardRef<TextInput, NumberInputProps>(
-  ({ onChangeText }, ref) => {
+  ({ defaultValue = "", onChangeText }, ref) => {
     const loaded = useCustomFonts();
     const [isFocus, setFocus] = useState(false);
 
@@ -20,6 +21,7 @@ const NumberInput = forwardRef<TextInput, NumberInputProps>(
       <View style={[styles.container, isFocus && styles.focus]}>
         <TextInput
           style={styles.text}
+          defaultValue={defaultValue}
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           keyboardType="numeric"
