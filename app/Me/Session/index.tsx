@@ -7,14 +7,18 @@ import ProgressCircle from "./time";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
+import { useRouter } from "expo-router";
+import ModalSetting from "./setiing";
 
 export default function Page() {
+  const router = useRouter();
   const [volume, setVolume] = useState(50);
   const [isLooping, setIsLooping] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(660); // 11 phút
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false); // State để điều khiển modal
 
   const songs = ["Westlife - My Love", "Ed Sheeran - Perfect", "Adele - Hello"];
 
@@ -37,7 +41,8 @@ export default function Page() {
         onPress: () => {
           setIsRunning(false);
           setHasStarted(false);
-          setTimeRemaining(660); // Reset lại thời gian
+          setTimeRemaining(660);
+          router.push("/Me/Session/complete");
         },
       },
     ]);
@@ -48,7 +53,12 @@ export default function Page() {
   };
 
   const handleSettings = () => {
-    Alert.alert("Settings", "Navigate to settings.");
+    setModalVisible(true); // Mở modal Settings
+  };
+
+  const handleSave = (settings: any) => {
+    console.log("Saved settings:", settings);
+    setModalVisible(false); // Đóng modal sau khi lưu
   };
 
   return (
@@ -62,12 +72,12 @@ export default function Page() {
             totalTime={660}
             timeRemaining={timeRemaining}
             isRunning={isRunning}
-            onTick={(remaining) => setTimeRemaining(remaining)} // Cập nhật thời gian
+            onTick={(remaining) => setTimeRemaining(remaining)}
             onComplete={() => {
               alert("Time is up!");
               setIsRunning(false);
               setHasStarted(false);
-              setTimeRemaining(660); // Reset thời gian sau khi hoàn tất
+              setTimeRemaining(660);
             }}
           />
           <Text style={styles.stageText}>STAGE 1</Text>
@@ -121,7 +131,6 @@ export default function Page() {
           </Pressable>
         </View>
 
-        {/* New Buttons */}
         {/* Additional Buttons */}
         <View style={styles.additionalButtons}>
           {/* Strict Mode Button */}
@@ -144,7 +153,7 @@ export default function Page() {
             </Svg>
             <Ionicons
               name="remove-circle"
-              size={40}
+              size={60}
               color="#FFFFFF"
               style={styles.icon}
             />
@@ -177,7 +186,7 @@ export default function Page() {
             </Svg>
             <Ionicons
               name="settings"
-              size={40}
+              size={60}
               color="#FFFFFF"
               style={styles.icon}
             />
@@ -189,6 +198,13 @@ export default function Page() {
       <View style={styles.bottom}>
         <BottomNavBar />
       </View>
+
+      {/* Modal Setting */}
+      <ModalSetting
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSave}
+      />
     </View>
   );
 }
@@ -278,8 +294,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: "absolute",
-    top: 20,
-    left: 20,
+    top: 10,
+    left: 11,
   },
   iconButtonText: {
     fontSize: 16,
