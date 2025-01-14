@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SelfStudy-FE",
-    "slug": "SelfStudy-FE",
+    "slug": "studypal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8194c81c-7cff-42a3-9667-d61ad0e6c8c9"
+      }
+    },
+    "owner": "nitb"
   }
 }

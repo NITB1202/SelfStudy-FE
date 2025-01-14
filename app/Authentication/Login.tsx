@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { Text, StyleSheet, View, Image, Linking, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import LoginInput from "@/components/LoginInput";
@@ -25,7 +25,6 @@ export default function LoginScreen() {
     title: "",
     description: ""
   });
-
   const { login } = useAuth();
 
   if (!fontsLoaded) {
@@ -82,6 +81,10 @@ export default function LoginScreen() {
     }
   }
 
+  const handleGoogleLogin = () => {
+    Linking.openURL("http://selfstudy.up.railway.app/oauth2/authorization/google");
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.backButton}>
@@ -120,12 +123,14 @@ export default function LoginScreen() {
           <Text style={styles.option}>Or</Text>
           <View style={styles.divideLine}></View>
         </View>
-        <TouchableOpacity style={styles.googleButton}>
+        <Pressable
+          style={styles.googleButton}
+          onPress={handleGoogleLogin}>
           <Image
             source={require("../../assets/images/google-icon.png")}
           />
           <Text style={styles.googleText}>Login with Google</Text>
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.footerText}>
           Don't have an account?{" "}
           <Link style={styles.signUpLink} href="/Authentication/Register">
