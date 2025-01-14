@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface DocumentItemProps {
   name: string;
   img: string;
-  onEdit: () => void;
+  onEdit?: () => void; // Đánh dấu '?' để biến onEdit thành tùy chọn
   onDelete: () => void;
 }
 
@@ -21,7 +21,7 @@ export default function DocumentItem({
     <View style={styles.documentContainer}>
       <Image source={{ uri: img }} style={styles.documentImage} />
       <Text style={styles.documentName}>{name}</Text>
-      <TouchableOpacity
+      <Pressable
         style={styles.menuIcon}
         onPress={() => setMenuVisible(!menuVisible)}
       >
@@ -30,16 +30,16 @@ export default function DocumentItem({
           size={24}
           color="#A6A6A6"
         />
-      </TouchableOpacity>
+      </Pressable>
 
       {menuVisible && (
         <View style={styles.menu}>
-          <TouchableOpacity style={styles.menuItem} onPress={onEdit}>
+          <Pressable style={styles.menuItem} onPress={onEdit}>
             <Text style={styles.menuText}>Edit name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={onDelete}>
+          </Pressable>
+          <Pressable style={styles.menuItem} onPress={onDelete}>
             <Text style={styles.menuText}>Delete</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>
@@ -48,17 +48,13 @@ export default function DocumentItem({
 
 const styles = StyleSheet.create({
   documentContainer: {
-    alignItems: "center",
-    marginBottom: 24,
-    backgroundColor: "#f9f9f9",
-    padding: 16,
-    borderRadius: 8,
-    width: 200,
-    elevation: 2,
+    alignItems: "flex-start",
+    padding: 10,
+    width: 250,
   },
   documentImage: {
-    width: 80,
-    height: 80,
+    width: 180,
+    height: 180,
     resizeMode: "contain",
     marginBottom: 8,
   },
@@ -66,7 +62,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 8,
   },
   menuIcon: {
     position: "absolute",
@@ -77,7 +72,7 @@ const styles = StyleSheet.create({
   menu: {
     position: "absolute",
     top: 40,
-    right: 0,
+    right: -50,
     backgroundColor: "#fff",
     borderRadius: 8,
     elevation: 5,

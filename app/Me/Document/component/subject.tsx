@@ -16,7 +16,7 @@ interface SubjectCardProps {
   imageUri: string;
   onDelete: () => void;
   onUpdate: (newName: string, newImage: string) => void;
-  onPress: () => void; // Thêm thuộc tính onPress
+  onPress: () => void;
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({
@@ -54,7 +54,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
 
   const saveName = () => {
     if (name.trim() === "") {
-      alert("Name cannot be empty!"); // Hiển thị cảnh báo
+      alert("Name cannot be empty!");
       return;
     }
     setIsEditingName(false);

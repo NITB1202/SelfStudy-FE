@@ -116,11 +116,10 @@ export default function Document() {
           ))
         )}
       </ScrollView>
+      <View style={styles.bottom}>
+        <BottomNavBar onAddPress={handleAddPress} />
+      </View>
 
-      {/* Thanh điều hướng dưới cùng */}
-      <BottomNavBar onAddPress={handleAddPress} />
-
-      {/* Modal thêm mới chủ đề */}
       <AddSubjectModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
@@ -135,6 +134,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
     paddingTop: 20,
+  },
+  bottom: {
+    alignItems: "center",
   },
   content: {
     alignItems: "flex-start",

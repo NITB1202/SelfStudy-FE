@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   Image,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -57,26 +57,18 @@ const AddSubjectModal: React.FC<AddSubjectModalProps> = ({
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          {/* Close Button */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Pressable style={styles.closeButton} onPress={onClose}>
             <MaterialCommunityIcons name="close" size={24} color="#000" />
-          </TouchableOpacity>
-
-          {/* Image Section */}
+          </Pressable>
           <Image source={{ uri: image }} style={styles.image} />
-          <TouchableOpacity
-            onPress={handlePickImage}
-            style={styles.imageButton}
-          >
+          <Pressable onPress={handlePickImage} style={styles.imageButton}>
             <LinearGradient
               colors={["#B9E5E8", "#7AB2D3"]}
               style={styles.gradientButton}
             >
               <MaterialCommunityIcons name="camera" size={24} color="#fff" />
             </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Input Section */}
+          </Pressable>
           <Text style={styles.label}>Name</Text>
           <TextInput
             style={styles.textInput}
@@ -84,14 +76,9 @@ const AddSubjectModal: React.FC<AddSubjectModalProps> = ({
             value={name}
             onChangeText={setName}
           />
-
-          {/* Confirm Button */}
-          <TouchableOpacity
-            style={styles.confirmButton}
-            onPress={handleConfirm}
-          >
+          <Pressable style={styles.confirmButton} onPress={handleConfirm}>
             <Text style={styles.confirmText}>Confirm</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </Modal>
