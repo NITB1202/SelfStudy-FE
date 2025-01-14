@@ -5,12 +5,56 @@ import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import { router } from "expo-router";
+import { useState } from "react";
+import authApi from "@/api/authApi";
+import Error from "@/components/Message/Error";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ForgotPassWordScreen() {
   const { fontsLoaded } = useCustomFonts();
+  const [ email, setEmail ] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: ""
+  });
 
   if (!fontsLoaded) {
     return null;
+  }
+
+  const handleSendCode = async () => {
+    if(email === ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The email is empty."
+      });
+      return;
+    }
+
+    try{
+      await authApi.sendCode(email);
+      AsyncStorage.setItem("email", email);
+      router.push("/Authentication/Verification");
+    }
+    catch(error: any){
+      let message = "";
+      switch(error.status){
+        case 404:
+          message = "This email hasn't been registered yet."
+          break;
+        case 500:
+          message = "Invalid email format."
+          break; 
+      }
+
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: message
+      });
+    }
   }
 
   return (
@@ -25,15 +69,26 @@ export default function ForgotPassWordScreen() {
         </Text>
       </View>
       <View style={styles.inputContainer}>
-        <LoginInput placeholder="Enter your email..." style={styles.space} />
+        <LoginInput 
+          placeholder="Enter your email" 
+          style={styles.space} 
+          onChangeText={(text)=> setEmail(text)}/>
         <CustomButton
           title="Send code"
           style={styles.sendButton}
-          onPress={() => {
-            router.push("/Authentication/Verification");
-          }}
+          onPress={handleSendCode}
         />
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          visible={showError}
+          onClose={()=> setShowError(false)}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
     </SafeAreaView>
   );
 }

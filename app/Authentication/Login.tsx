@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { Text, StyleSheet, View, Image, Linking, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import LoginInput from "@/components/LoginInput";
@@ -11,7 +11,7 @@ import { useState } from "react";
 import { isValidEmail } from "@/util/validator";
 import { useAuth } from "@/context/AuthContext";
 import authApi from "@/api/authApi";
-import { decodeToken } from "@/util/jwtUtil";
+import Error from "@/components/Message/Error"
 
 export default function LoginScreen() {
   const { fontsLoaded } = useCustomFonts();
@@ -19,7 +19,11 @@ export default function LoginScreen() {
     email: "",
     password: "",
   })
-
+  const [showError,setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: ""
+  });
   const { login } = useAuth();
 
   if (!fontsLoaded) {
@@ -27,9 +31,21 @@ export default function LoginScreen() {
   }
 
   const handleLogin = async ()=>{
+    if(loginRequest.email == "" || loginRequest.password == ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The email or password is empty."
+      });
+      return;
+    }
+    
     if(!isValidEmail(loginRequest.email)){
-      //Add error message later
-      console.log("Invalid email format");
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Invalid email format."
+      });
       return;
     }
 
@@ -38,17 +54,32 @@ export default function LoginScreen() {
       const accessToken = response.accessToken;
 
       await login(accessToken);
-      await authApi.logout();
 
-      const decodedToken = decodeToken(accessToken);
-
-      if(decodedToken.role === "USER")
-        router.push("/Me/Plan");
-
+      // const decodedToken = decodeToken(accessToken);
+      // if(decodedToken.role === "USER")
+      router.push("/Me/Plan");
     }
-    catch(error){
-      console.log(error);
+    catch(error: any){
+      let errorDes = "";
+      switch(error.status){
+        case 400:
+          errorDes = "Incorrect password.";
+          break;
+        case 404:
+          errorDes = "This email hasn't been registered yet."
+          break;
+      }
+
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: errorDes
+      });
     }
+  }
+
+  const handleGoogleLogin = () => {
+    Linking.openURL("http://selfstudy.up.railway.app/oauth2/authorization/google");
   }
 
   return (
@@ -89,12 +120,14 @@ export default function LoginScreen() {
           <Text style={styles.option}>Or</Text>
           <View style={styles.divideLine}></View>
         </View>
-        <TouchableOpacity style={styles.googleButton}>
+        <Pressable
+          style={styles.googleButton}
+          onPress={handleGoogleLogin}>
           <Image
             source={require("../../assets/images/google-icon.png")}
           />
           <Text style={styles.googleText}>Login with Google</Text>
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.footerText}>
           Don't have an account?{" "}
           <Link style={styles.signUpLink} href="/Authentication/Register">
@@ -102,6 +135,16 @@ export default function LoginScreen() {
           </Link>
         </Text>
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          visible={showError}
+          onClose={()=> setShowError(false)}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
     </SafeAreaView>
   );
 }

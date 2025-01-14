@@ -41,7 +41,7 @@ export default function Error({
               <View style={styles.iconWrapper}>
                 <MaterialCommunityIcons
                   name="close-thick"
-                  size={24}
+                  size={18}
                   color="#FFFFFF"
                 />
               </View>
@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   iconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     backgroundColor: "#FF5B5E",
     justifyContent: "center",
     alignItems: "center",
