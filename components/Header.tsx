@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, Pressable, Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Sidebar from "../components/navigation/SideBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router"; // Import useRouter
+import Sidebar from "../components/navigation/SideBar";
 import { usePathname } from "expo-router";
 import { useNavigationContext } from "@/context/NavigationContext";
 
 export default function Header({ showMenu = true }) {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("Plan");
   const pathname = usePathname();
   const { setSidePath } = useNavigationContext();
+  const router = useRouter(); // Initialize router
 
   useEffect(() => {
     const loadActiveTab = () => {
@@ -43,10 +54,22 @@ export default function Header({ showMenu = true }) {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleSelectOption = (option: string) => {
+    setIsDropdownVisible(false);
+    if (option === "Profile") {
+      router.push("/Me/Profile"); // Navigate to the Profile page
+    } else if (option === "Log out") {
+      console.log("Log out");
+    }
+  };
+
   return (
     <View>
       <View style={styles.container}>
-        {/* Nút menu (chỉ hiển thị nếu showMenu = true) */}
         {showMenu && (
           <LinearGradient
             colors={[Colors.secondary, Colors.primary]}
@@ -57,9 +80,7 @@ export default function Header({ showMenu = true }) {
             </Pressable>
           </LinearGradient>
         )}
-
-        {/* Avatar luôn nằm bên phải */}
-        <View style={styles.rightContainer}>
+        <Pressable style={styles.rightContainer} onPress={toggleDropdown}>
           <Ionicons
             name="chevron-down"
             size={24}
@@ -73,9 +94,31 @@ export default function Header({ showMenu = true }) {
             }}
             style={styles.avatar}
           />
-        </View>
+        </Pressable>
       </View>
       <View style={styles.bottomBorder} />
+
+      {isDropdownVisible && (
+        <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+          <View style={styles.dropdownOverlay}>
+            <View style={styles.dropdown}>
+              <Pressable
+                style={styles.dropdownItem}
+                onPress={() => handleSelectOption("Profile")}
+              >
+                <Text style={styles.dropdownText}>Profile</Text>
+              </Pressable>
+              <Pressable
+                style={styles.dropdownItem}
+                onPress={() => handleSelectOption("Log out")}
+              >
+                <Text style={styles.dropdownText}>Log out</Text>
+              </Pressable>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+
       <Modal
         transparent={true}
         visible={isSidebarVisible}
@@ -111,7 +154,7 @@ const styles = StyleSheet.create({
   rightContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: "auto", // Đẩy avatar luôn nằm bên phải
+    marginLeft: "auto",
     gap: 10,
   },
   userName: {
@@ -129,12 +172,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
   bottomBorder: {
     borderBottomColor: "rgba(1,1,1,0.1)",
     borderBottomWidth: 1,
@@ -143,5 +180,35 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
+  },
+  dropdownOverlay: {
+    position: "absolute",
+    top: 50,
+    right: 60,
+    zIndex: 1,
+  },
+  dropdown: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    width: 95,
+  },
+  dropdownItem: {
+    paddingVertical: 5,
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
 });
