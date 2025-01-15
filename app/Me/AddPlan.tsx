@@ -15,9 +15,19 @@ import CustomButton from "@/components/CustomButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PlanScreen() {
-  const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);
+  const [planInfo, setPlanInfo] = useState({
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    notifyBefore: "",
+  });
+
+  const [tasks, setTasks] = useState<{
+    id: number,
+    name: string
+  }[]>([]);
   const [newTask, setNewTask] = useState("");
-  const [isAddingTask, setIsAddingTask] = useState(false); 
   
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
@@ -25,22 +35,24 @@ export default function PlanScreen() {
         ...prevTasks,
         { id: prevTasks.length + 1, name: newTask },
       ]);
-      setNewTask(""); // Reset input sau khi thêm task
-      setIsAddingTask(false); // Đóng TextInput sau khi thêm task
+      setNewTask("");
     }
   };
   
-
-  // Xóa task theo id
   const handleDeleteTask = (id: number) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
+
+  const handleSave = () => {
+    console.log(planInfo);
+    console.log(tasks);
+  }
 
   return (
      <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
-        <AddPlan />
+        <AddPlan setPlanInfo={setPlanInfo}/>
         <View style={styles.divideLine}></View>
         {/* Tasks Section */}
         <View style={styles.tasksSectionWrapper}>
@@ -87,9 +99,7 @@ export default function PlanScreen() {
       <View style={styles.buttonContainer}>
         <CustomButton
           title="Save"
-          onPress={() => {
-          router.push("/Me/Plan");
-          }}
+          onPress={handleSave}
         />
       </View>
      </SafeAreaView>

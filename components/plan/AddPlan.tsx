@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,33 +10,24 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+import { formatDateToISOString } from "@/util/format";
 
-export default function AddPlan() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+interface AddPlanProps{
+  setPlanInfo?: React.Dispatch<React.SetStateAction<any>>
+}
+
+export default function AddPlan({ setPlanInfo }: AddPlanProps) {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [remindBefore, setRemindBefore] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
-  const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate: Date | undefined,
-    setDate: React.Dispatch<React.SetStateAction<Date>>,
-    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    setShowPicker(false);
-    if (event.type === "set" && selectedDate) {
-      setDate(selectedDate);
-    }
-  };
 
   const handleRemindBeforeChange = (
     field: "hours" | "minutes" | "seconds",
@@ -56,6 +47,68 @@ export default function AddPlan() {
     }
   };
 
+  const handleChange = (field: string, value: string) => {
+    if(setPlanInfo)
+      setPlanInfo((prev: any) => ({
+        ...prev,
+        [field]: value,
+      }));
+  };
+
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedDate) {
+      if(field.startsWith("start"))
+        setStartDate(selectedDate);
+      else
+        setEndDate(selectedDate);
+    }
+  };
+
+  const handleTimeChange = (
+    event: DateTimePickerEvent,
+    selectedTime: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedTime) {
+      if(field.startsWith("start"))
+        setStartDate(selectedTime);
+      else
+        setEndDate(selectedTime);
+    }
+  };
+
+  useEffect(()=>{
+    const updateNotify = () =>{
+      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
+      String(remindBefore.minutes).padStart(2, '0') + ":" + 
+      String(remindBefore.seconds).padStart(2, '0');
+      handleChange("notifyBefore", time);
+    };
+    updateNotify();
+  },[remindBefore]);
+
+  useEffect(()=>{
+    const updateStartDate = () =>{
+      handleChange("startDate", formatDateToISOString(startDate));
+    };
+    updateStartDate();
+  },[startDate]);
+
+  useEffect(()=>{
+    const updateEndDate = () =>{
+      handleChange("endDate", formatDateToISOString(endDate));
+    };
+    updateEndDate();
+  },[endDate]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add new plan</Text>
@@ -66,8 +119,7 @@ export default function AddPlan() {
         <TextInput
           style={styles.input}
           placeholder="Enter plan name"
-          value={name}
-          onChangeText={setName}
+          onChangeText={(text)=> handleChange("name",text)}
         />
       </View>
 
@@ -77,8 +129,7 @@ export default function AddPlan() {
         <TextInput
           style={styles.input}
           placeholder="Enter plan description"
-          value={description}
-          onChangeText={setDescription}
+          onChangeText={(text)=> handleChange("description", text)}
         />
       </View>
 
@@ -111,7 +162,7 @@ export default function AddPlan() {
                 handleDateChange(
                   event,
                   date,
-                  setStartDate,
+                  "startDate",
                   setShowStartDatePicker
                 )
               }
@@ -140,10 +191,10 @@ export default function AddPlan() {
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(
+                handleTimeChange(
                   event,
                   date,
-                  setStartDate,
+                  "startTime",
                   setShowStartTimePicker
                 )
               }
@@ -178,7 +229,7 @@ export default function AddPlan() {
               mode="date"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndDatePicker)
+                handleDateChange(event, date, "endDate", setShowEndDatePicker)
               }
             />
           )}
@@ -205,7 +256,7 @@ export default function AddPlan() {
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndTimePicker)
+                handleTimeChange(event, date, "endTime", setShowEndTimePicker)
               }
             />
           )}
