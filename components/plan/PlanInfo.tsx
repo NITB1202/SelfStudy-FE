@@ -11,7 +11,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { Colors } from "@/constants/Colors";
-import { formatDateTime } from "@/util/format";
+import { formatDateToISOString } from "@/util/format";
 
 interface APlanProps {
   name: string;
@@ -25,7 +25,6 @@ interface APlanProps {
 }
 
 export default function APlan({ name, description, startDate, endDate, notifyBefore, status, completeDate, handleChangeValue}: APlanProps) {
-  const time: string[] = notifyBefore.split(":");
   const [remindBefore, setRemindBefore] = useState({
     hours: 0,
     minutes: 0,
@@ -61,7 +60,31 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
     }
   }, [notifyBefore]);
 
-   const handleDateChange = (
+  useEffect(()=>{
+    const updateNotify = () =>{
+      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
+      String(remindBefore.minutes).padStart(2, '0') + ":" + 
+      String(remindBefore.seconds).padStart(2, '0');
+      handleChangeValue("notifyBefore", time);
+    };
+    updateNotify();
+  },[remindBefore]);
+  
+  useEffect(()=>{
+    const updateStartDate = () =>{
+      handleChangeValue("startDate", formatDateToISOString(startDateForm));
+    };
+    updateStartDate();
+  },[startDateForm]);
+  
+  useEffect(()=>{
+    const updateEndDate = () =>{
+      handleChangeValue("endDate", formatDateToISOString(endDateForm));
+    };
+    updateEndDate();
+  },[endDateForm]);
+
+  const handleDateChange = (
       event: DateTimePickerEvent,
       selectedDate: Date | undefined,
       field: string,
@@ -75,6 +98,21 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
           setEndDateForm(selectedDate);
       }
   };
+
+  const handleTimeChange = (
+      event: DateTimePickerEvent,
+      selectedTime: Date | undefined,
+      field: string,
+      setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
+      setShowPicker(false);
+      if (event.type === "set" && selectedTime) {
+        if(field.startsWith("start"))
+          setStartDateForm(selectedTime);
+        else
+          setEndDateForm(selectedTime);
+      }
+    };
 
   const handleRemindBeforeChange = (
     field: "hours" | "minutes" | "seconds",
@@ -96,7 +134,11 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
 
   return (
     <View style={styles.container}>
-      <TextInput style={styles.title}>{name}</TextInput>
+      <TextInput 
+        style={styles.title}
+        onChangeText={(text)=> handleChangeValue("name", text)}>
+        {name}
+      </TextInput>
       {
         status === "COMPLETE" ? (
           <Text style={styles.completeText}>
@@ -175,7 +217,7 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(
+                handleTimeChange(
                   event,
                   date,
                   "startDate",
@@ -240,7 +282,7 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, "endDate", setShowEndTimePicker)
+                handleTimeChange(event, date, "endDate", setShowEndTimePicker)
               }
             />
           )}

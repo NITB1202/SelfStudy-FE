@@ -19,10 +19,11 @@ import { formatDateToISOString } from "@/util/format";
 import planApi from "@/api/planApi";
 import taskApi from "@/api/taskApi";
 import LoadingScreen from "@/components/LoadingScreen";
+import { Colors } from "@/constants/Colors";
 
 export default function PlanScreen() {
   const [tasks, setTasks] = useState<{
-     id: number,
+     id: string,
      name: string,
      status: string,
   }[]>([]);
@@ -38,11 +39,12 @@ export default function PlanScreen() {
   });
   
   const [newTask, setNewTask] = useState("");
-  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingTaskName, setEditingTaskName] = useState("");
   const searchParams = useLocalSearchParams();
   const id = searchParams.id as string;
   const [loading, setLoading] = useState(false);
+  const [addedTasks, setAddedTask] = useState<string[]>([]);
 
   useEffect(()=>{
     const fetchData = async () =>{
@@ -81,32 +83,32 @@ export default function PlanScreen() {
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
-      setTasks((prevTasks) => [
+      setAddedTask((prevTasks) => [
         ...prevTasks,
-        { id: prevTasks.length + 1, name: newTask, status: "INCOMPLETE" },
+        newTask,
       ]);
       setNewTask("");
     }
   };
 
-  const toggleTaskCompletion = (id: number, isChecked: boolean) => {
+  const toggleTaskCompletion = (id: string, isChecked: boolean) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === id ? { ...task, completed: isChecked } : task
+        task.id === id ? { ...task, status: isChecked? "COMPLETED" : "INCOMPLETE" } : task
       )
     );
   };
 
-  const handleDeleteTask = (id: number) => {
+  const handleDeleteTask = (id: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  const startEditingTask = (id: number, name: string) => {
+  const startEditingTask = (id: string, name: string) => {
     setEditingTaskId(id);
     setEditingTaskName(name);
   };
 
-  const saveEditedTask = (id: number) => {
+  const saveEditedTask = (id: string) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, name: editingTaskName } : task
@@ -116,6 +118,10 @@ export default function PlanScreen() {
     setEditingTaskName("");
   };
 
+  const handleDeleteNewTask = (index: number) => {
+    setAddedTask((prevTasks) => prevTasks.filter((task, taskIndex) => taskIndex !== index));
+  }
+
   const handleChange = (field: string, value: string) => {
     if(setPlanInfo)
       setPlanInfo((prev: any) => ({
@@ -123,6 +129,11 @@ export default function PlanScreen() {
         [field]: value,
       }));
   };
+
+  const handleSave = () =>{
+    console.log(tasks);
+    console.log(addedTasks);
+  }
 
   return (
     <SafeAreaView style={styles.safeview}>
@@ -189,6 +200,28 @@ export default function PlanScreen() {
               );
             })
           }
+          {
+            addedTasks.map((item, index) => (
+              <View key={index} style={styles.taskContainer}>
+                <MaterialCommunityIcons
+                  name="checkbox-blank-outline"
+                  size={24}
+                  color={Colors.green}
+                />
+                <TextInput
+                  style={[styles.taskInput, {marginLeft: 10}]}
+                  value={item}
+                  editable={false}
+                />
+                <TouchableOpacity onPress={() => handleDeleteNewTask(index)}>
+                  <MaterialCommunityIcons
+                    name="delete"
+                    size={24}
+                    color="#C0C0C0"
+                  />
+                </TouchableOpacity>
+              </View>
+          ))}
           <View style={styles.addTaskContainer}>
             <TouchableOpacity onPress={handleAddTask}>
               <MaterialCommunityIcons
@@ -209,9 +242,7 @@ export default function PlanScreen() {
       <View style={styles.buttonContainer}>
         <CustomButton
           title="Save"
-          onPress={() => {
-            router.push("/Me/Plan");
-          }}
+          onPress={handleSave}
         />
       </View>
       {
