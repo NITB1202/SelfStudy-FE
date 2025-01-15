@@ -20,14 +20,14 @@ export default function Profile() {
   const [avatarUri, setAvatarUri] = useState(
     "https://i1-giaitri.vnecdn.net/2022/09/23/-5865-1663929656.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=2qbqN6-vYy6SJLboH93pYA"
   );
-  const [editingField, setEditingField] = useState<string | null>(null); // Trạng thái trường đang chỉnh sửa
+  const [editingField, setEditingField] = useState<string | null>(null);
 
   const handleSave = () => {
     Alert.alert(
       "Profile Updated",
       "Your profile has been successfully updated."
     );
-    setEditingField(null); // Thoát khỏi trạng thái chỉnh sửa
+    setEditingField(null);
   };
 
   const handleResetPassword = () => {
@@ -56,7 +56,7 @@ export default function Profile() {
     });
 
     if (!result.canceled) {
-      setAvatarUri(result.assets[0].uri); // Cập nhật hình đại diện
+      setAvatarUri(result.assets[0].uri);
     }
   };
 
@@ -77,15 +77,15 @@ export default function Profile() {
           <View
             style={[
               styles.inputContainer,
-              editingField === "username" && styles.editingInputContainer, // Viền khi chỉnh sửa
+              editingField === "username" && styles.editingInputContainer,
             ]}
           >
             <TextInput
               style={styles.input}
               value={username}
               onChangeText={setUsername}
-              onFocus={() => setEditingField("username")} // Kích hoạt chỉnh sửa
-              onBlur={() => setEditingField(null)} // Kết thúc chỉnh sửa
+              onFocus={() => setEditingField("username")}
+              onBlur={() => setEditingField(null)}
             />
             {editingField === "username" && (
               <MaterialIcons name="edit" size={20} color="#7AB2D3" />
@@ -99,15 +99,15 @@ export default function Profile() {
           <View
             style={[
               styles.inputContainer,
-              editingField === "email" && styles.editingInputContainer, // Viền khi chỉnh sửa
+              editingField === "email" && styles.editingInputContainer,
             ]}
           >
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
-              onFocus={() => setEditingField("email")} // Kích hoạt chỉnh sửa
-              onBlur={() => setEditingField(null)} // Kết thúc chỉnh sửa
+              onFocus={() => setEditingField("email")}
+              onBlur={() => setEditingField(null)}
             />
             {editingField === "email" && (
               <MaterialIcons name="edit" size={20} color="#7AB2D3" />
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingBottom: 80, // Khoảng cách để tránh nút Save
+    paddingBottom: 80,
   },
   avatarContainer: {
     alignItems: "center",
@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderWidth: 0, // Không có viền mặc định
+    borderWidth: 0,
     borderRadius: 8,
     paddingHorizontal: 10,
     height: 40,
   },
   editingInputContainer: {
-    borderWidth: 1, // Thêm viền khi chỉnh sửa
+    borderWidth: 1,
     borderColor: "#7AB2D3",
   },
   input: {

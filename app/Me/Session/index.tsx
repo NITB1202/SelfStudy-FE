@@ -1,21 +1,90 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, Switch } from "react-native";
-import Slider from "@react-native-community/slider"; // Import từ thư viện riêng
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import Slider from "@react-native-community/slider";
 import { Ionicons } from "@expo/vector-icons";
+import Checkbox from "@/components/Checkbox";
+import ProgressCircle from "./time";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
+import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
+import { useRouter } from "expo-router";
+import ModalSetting from "./setiing";
 
 export default function Page() {
+  const router = useRouter();
   const [volume, setVolume] = useState(50);
   const [isLooping, setIsLooping] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(660); // 11 phút
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false); // State để điều khiển modal
+
+  const songs = ["Westlife - My Love", "Ed Sheeran - Perfect", "Adele - Hello"];
+
+  const handleNextSong = () => {
+    setCurrentSongIndex((prev) => (prev === songs.length - 1 ? 0 : prev + 1));
+  };
+
+  const handlePreviousSong = () => {
+    setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
+  };
+
+  const handleFinish = () => {
+    Alert.alert("Confirm Finish", "Are you sure to end time?", [
+      {
+        text: "No",
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () => {
+          setIsRunning(false);
+          setHasStarted(false);
+          setTimeRemaining(660);
+          router.push("/Me/Session/complete");
+        },
+      },
+    ]);
+  };
+
+  const handleStrictMode = () => {
+    Alert.alert("Strict Mode", "Strict mode is now active.");
+  };
+
+  const handleSettings = () => {
+    setModalVisible(true); // Mở modal Settings
+  };
+
+  const handleSave = (settings: any) => {
+    console.log("Saved settings:", settings);
+    setModalVisible(false); // Đóng modal sau khi lưu
+  };
 
   return (
     <View style={styles.container}>
       <Header />
       <View style={styles.content}>
-        {/* Volume Control */}
+        <View style={styles.timerContainer}>
+          <ProgressCircle
+            radius={100}
+            strokeWidth={8}
+            totalTime={660}
+            timeRemaining={timeRemaining}
+            isRunning={isRunning}
+            onTick={(remaining) => setTimeRemaining(remaining)}
+            onComplete={() => {
+              alert("Time is up!");
+              setIsRunning(false);
+              setHasStarted(false);
+              setTimeRemaining(660);
+            }}
+          />
+          <Text style={styles.stageText}>STAGE 1</Text>
+        </View>
+
         <View style={styles.volumeControl}>
-          <Ionicons name="volume-high" size={20} color="#7AB2D3" />
+          <Ionicons name="volume-high" size={24} color="#7AB2D3" />
           <Slider
             style={styles.slider}
             minimumValue={0}
@@ -26,21 +95,116 @@ export default function Page() {
             maximumTrackTintColor="#EAEAEA"
           />
         </View>
-        {/* Loop Control */}
+
+        <View style={styles.songControl}>
+          <Pressable onPress={handlePreviousSong}>
+            <Ionicons name="play-skip-back" size={24} color="#7AB2D3" />
+          </Pressable>
+          <Text style={styles.songText}>{songs[currentSongIndex]}</Text>
+          <Pressable onPress={handleNextSong}>
+            <Ionicons name="play-skip-forward" size={24} color="#7AB2D3" />
+          </Pressable>
+        </View>
+
         <View style={styles.loopControl}>
-          <Switch
-            value={isLooping}
-            onValueChange={setIsLooping}
-            trackColor={{ false: "#EAEAEA", true: "#7AB2D3" }}
-            thumbColor={isLooping ? "#FFFFFF" : "#FFFFFF"}
+          <Checkbox
+            isChecked={isLooping}
+            onToggle={(checked) => setIsLooping(checked)}
           />
           <Text style={styles.loopText}>On loop</Text>
         </View>
+        <View style={styles.button}>
+          <Pressable
+            style={styles.finishButton}
+            onPress={() => {
+              if (!hasStarted) {
+                setIsRunning(true);
+                setHasStarted(true);
+              } else {
+                handleFinish();
+              }
+            }}
+          >
+            <Text style={styles.finishText}>
+              {hasStarted ? "Finish" : "Start"}
+            </Text>
+          </Pressable>
+        </View>
+
+        {/* Additional Buttons */}
+        <View style={styles.additionalButtons}>
+          {/* Strict Mode Button */}
+          <Pressable style={styles.iconButton} onPress={handleStrictMode}>
+            <Svg height={80} width={80}>
+              <Defs>
+                <LinearGradient id="strictGradient" x1="0" y1="0" x2="1" y2="1">
+                  <Stop offset="0%" stopColor="#4A628A" />
+                  <Stop offset="100%" stopColor="#131A24" />
+                </LinearGradient>
+              </Defs>
+              <Rect
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                rx="15"
+                fill="url(#strictGradient)"
+              />
+            </Svg>
+            <Ionicons
+              name="remove-circle"
+              size={60}
+              color="#FFFFFF"
+              style={styles.icon}
+            />
+            <Text style={styles.iconButtonText}>Strict mode</Text>
+          </Pressable>
+
+          {/* Settings Button */}
+          <Pressable style={styles.iconButton} onPress={handleSettings}>
+            <Svg height={80} width={80}>
+              <Defs>
+                <LinearGradient
+                  id="settingsGradient"
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="1"
+                >
+                  <Stop offset="0%" stopColor="#628393" />
+                  <Stop offset="100%" stopColor="#1E282D" />
+                </LinearGradient>
+              </Defs>
+              <Rect
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                rx="15"
+                fill="url(#settingsGradient)"
+              />
+            </Svg>
+            <Ionicons
+              name="settings"
+              size={60}
+              color="#FFFFFF"
+              style={styles.icon}
+            />
+            <Text style={styles.iconButtonText1}>Settings</Text>
+          </Pressable>
+        </View>
       </View>
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomNavBar}>
+
+      <View style={styles.bottom}>
         <BottomNavBar />
       </View>
+
+      {/* Modal Setting */}
+      <ModalSetting
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSave}
+      />
     </View>
   );
 }
@@ -53,27 +217,99 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
+    backgroundColor: "#FFFFFF",
+    paddingTop: 50,
+  },
+  timerContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    position: "relative",
+  },
+  stageText: {
+    fontSize: 24,
+    color: "#4A628A",
+    marginTop: 10,
+    fontWeight: "bold",
   },
   volumeControl: {
     flexDirection: "row",
-    alignItems: "center",
     marginBottom: 20,
+    paddingHorizontal: 30,
   },
   slider: {
     flex: 1,
     marginLeft: 10,
   },
+  songControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    paddingHorizontal: 30,
+  },
+  songText: {
+    fontSize: 20,
+    color: "rgba(0, 0, 0, 0.5)",
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "400",
+  },
   loopControl: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 40,
+    paddingHorizontal: 30,
   },
   loopText: {
     fontSize: 16,
     color: "#2B3A4A",
     marginLeft: 10,
   },
-  bottomNavBar: {
+  finishButton: {
+    backgroundColor: "#7AB2D3",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#7AB2D3",
+    borderRadius: 10,
+    alignItems: "center",
+    marginHorizontal: 30,
+    marginBottom: 20,
+  },
+  finishText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  additionalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+  },
+  iconButton: {
+    alignItems: "center",
+    position: "relative",
+  },
+  icon: {
+    position: "absolute",
+    top: 10,
+    left: 11,
+  },
+  iconButtonText: {
+    fontSize: 16,
+    color: "#4A628A",
+    marginTop: 5,
+    fontWeight: "500",
+  },
+  iconButtonText1: {
+    fontSize: 16,
+    color: "#1E282D",
+    marginTop: 5,
+    fontWeight: "500",
+  },
+  bottom: {
     alignItems: "center",
   },
 });

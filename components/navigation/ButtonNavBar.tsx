@@ -9,9 +9,7 @@ interface BottomNavBarProps {
   onAddPress?: () => void;
 }
 
-export default function BottomNavBar({
-  onAddPress,
-}: BottomNavBarProps) {
+export default function BottomNavBar({ onAddPress }: BottomNavBarProps) {
   const [activeTab, setActiveTab] = useState("");
   const { onChangeBottomPath, setBottomPath } = useNavigationContext();
   const pathname = usePathname();
@@ -20,38 +18,33 @@ export default function BottomNavBar({
     const loadActiveTab = () => {
       let tab = "";
 
-      if(pathname.startsWith("/Me")){
-        tab = "Me"
+      if (pathname.startsWith("/Me")) {
+        tab = "Me";
       }
 
-      if(pathname.startsWith("/MissedDeadline")){
-        tab = "MissedDeadline"
+      if (pathname.startsWith("/MissedDeadline")) {
+        tab = "MissedDeadline";
       }
 
-      if(pathname.startsWith("/Notification")){
-        tab = "Notification"
+      if (pathname.startsWith("/Notification")) {
+        tab = "Notification";
       }
 
-      if(pathname.startsWith("/Team")){
-        tab = "Team"
+      if (pathname.startsWith("/Team")) {
+        tab = "Team";
       }
 
-      if(activeTab === tab) return;
+      if (activeTab === tab) return;
       setActiveTab(tab);
       setBottomPath(tab);
     };
     loadActiveTab();
-}, [pathname]);
+  }, [pathname]);
 
   return (
     <View style={styles.container}>
       {/* Left Navigation Items */}
-      <View
-        style={[
-          styles.leftNavItems,
-          !onAddPress && styles.noAddNavItems,
-        ]}
-      >
+      <View style={[styles.leftNavItems, !onAddPress && styles.noAddNavItems]}>
         <Pressable
           style={styles.navItem}
           onPress={() => {
@@ -118,12 +111,7 @@ export default function BottomNavBar({
       )}
 
       {/* Right Navigation Items */}
-      <View
-        style={[
-          styles.rightNavItems,
-          !onAddPress && styles.noAddNavItems,
-        ]}
-      >
+      <View style={[styles.rightNavItems, !onAddPress && styles.noAddNavItems]}>
         <Pressable
           style={styles.navItem}
           onPress={() => {

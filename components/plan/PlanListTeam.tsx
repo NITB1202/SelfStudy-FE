@@ -8,6 +8,7 @@ interface Plan {
   progress: number;
   planName: string;
   deadline: string;
+  isAdmin: boolean; // Thêm thuộc tính để xác định kế hoạch thuộc admin
 }
 
 interface PlanListProps {
@@ -20,38 +21,38 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
       id: 1,
       progress: 78.6,
       planName: "PLAN01",
-      deadline: "02/12/2024 11:20:00",
+      deadline: "2024-12-02 11:20:00",
+      isAdmin: true,
     },
     {
       id: 2,
       progress: 65.4,
       planName: "PLAN02",
-      deadline: "12/05/2024 14:30:00",
+      deadline: "2024-12-05 14:30:00",
+      isAdmin: false,
     },
     {
       id: 3,
       progress: 50.0,
       planName: "PLAN03",
-      deadline: "12/10/2024 09:00:00",
+      deadline: "2024-12-10 09:00:00",
+      isAdmin: true,
     },
     {
       id: 4,
       progress: 25.0,
       planName: "PLAN04",
-      deadline: "01/01/2025 10:00:00",
+      deadline: "2025-01-01 10:00:00",
+      isAdmin: false,
     },
     {
       id: 5,
       progress: 95.0,
       planName: "PLAN05",
-      deadline: "03/02/2025 12:00:00",
+      deadline: "2025-02-03 12:00:00",
+      isAdmin: true,
     },
   ];
-
-  const formatDeadline = (deadline: string) => {
-    const date = new Date(deadline);
-    return date.toLocaleString();
-  };
 
   return (
     <View style={styles.container}>
@@ -59,17 +60,27 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
         <MaterialCommunityIcons name="target" size={30} color="#7AB2D3" />
         <Text style={styles.headerText}>Plans</Text>
       </View>
-      {plans.map((item) => {
-        return (
-          <Pressable key={item.id} onPress={() => onPlanPress(item.planName)}>
-            <PlanItem
-              planName={item.planName}
-              progress={item.progress}
-              deadline={item.deadline}
-            ></PlanItem>
-          </Pressable>
-        );
-      })}
+      {plans.map((item) => (
+        <Pressable
+          key={item.id}
+          onPress={() => onPlanPress(item.planName)}
+          style={styles.planItemContainer}
+        >
+          <PlanItem
+            planName={item.planName}
+            progress={item.progress}
+            deadline={item.deadline}
+          />
+          {item.isAdmin && (
+            <MaterialCommunityIcons
+              name="account-outline"
+              size={20}
+              color="#7AB2D3"
+              style={styles.adminIcon}
+            />
+          )}
+        </Pressable>
+      ))}
     </View>
   );
 }
@@ -91,12 +102,15 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: 8,
   },
-  contentContainer: {
-    paddingBottom: 20,
+  planItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
-  planSeparator: {
-    height: 1,
-    backgroundColor: "#ddd",
-    marginVertical: 10,
+  adminIcon: {
+    marginLeft: 5,
   },
 });
