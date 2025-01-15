@@ -12,6 +12,10 @@ const planApi = {
     create(userId: string, name: string, description: string, startDate: string, endDate: string, notifyBefore: string){
         return axiosInstance.post("/plan",{userId, name, description, startDate, endDate, notifyBefore });
     },
+    getById(id: string){
+        const url = "/plan?id=" + id;
+        return axiosInstance.get(url);
+    }
 };
 
 export default planApi;

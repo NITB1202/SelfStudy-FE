@@ -10,3 +10,9 @@ export const formatDateToISOString = (date: Date): string => {
   
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
+
+export const formatDateTime = (input: string): string => {
+    const [datePart, timePart] = input.split(" ");
+    const [year, month, day] = datePart.split("-");
+    return `${timePart} ${day}/${month}/${year}`;
+};

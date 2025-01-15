@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -15,26 +15,80 @@ import { useLocalSearchParams } from "expo-router";
 import Checkbox from "@/components/Checkbox";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/components/CustomButton";
+import { formatDateToISOString } from "@/util/format";
+import planApi from "@/api/planApi";
+import taskApi from "@/api/taskApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function PlanScreen() {
-  const [tasks, setTasks] = useState([
-    { id: 1, name: "Task01", completed: false },
-  ]);
+  const [tasks, setTasks] = useState<{
+     id: number,
+     name: string,
+     status: string,
+  }[]>([]);
+
+  const [planInfo, setPlanInfo] = useState({
+    name: "",
+    description: "",
+    startDate: formatDateToISOString(new Date()),
+    endDate: formatDateToISOString(new Date()),
+    notifyBefore: "00:00:00",
+    status: "INCOMPLETE",
+    completeDate: null,
+  });
+  
   const [newTask, setNewTask] = useState("");
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [editingTaskName, setEditingTaskName] = useState("");
   const searchParams = useLocalSearchParams();
-  const planName = searchParams.planName as string;
+  const id = searchParams.id as string;
+  const [loading, setLoading] = useState(false);
+
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try{
+        setLoading(true);
+        const response: any = await planApi.getById(id);
+        const taskResponse: any = await taskApi.getAllForPlan(id);
+
+        const formarttedData = taskResponse.map((item: any) =>({
+          id: item.taskId,
+          name: item.name,
+          status: item.status
+        }));
+
+        setPlanInfo({
+          name: response.name,
+          description: response.description,
+          startDate: response.startDate,
+          endDate: response.endDate,
+          notifyBefore: response.notifyBefore,
+          status: response.status,
+          completeDate: response.completeDate,
+        });
+
+        setTasks(formarttedData);
+      }
+      catch(error){
+        console.log(error);
+      }
+      finally{
+        setLoading(false);
+      }
+    };
+    fetchData();
+  },[id])
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
         ...prevTasks,
-        { id: prevTasks.length + 1, name: newTask, completed: false },
+        { id: prevTasks.length + 1, name: newTask, status: "INCOMPLETE" },
       ]);
       setNewTask("");
     }
   };
+
   const toggleTaskCompletion = (id: number, isChecked: boolean) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -62,11 +116,28 @@ export default function PlanScreen() {
     setEditingTaskName("");
   };
 
+  const handleChange = (field: string, value: string) => {
+    if(setPlanInfo)
+      setPlanInfo((prev: any) => ({
+        ...prev,
+        [field]: value,
+      }));
+  };
+
   return (
     <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
-        <PlanInfo Name={planName} />
+        <PlanInfo 
+          name={planInfo.name}
+          description={planInfo.description}
+          startDate={planInfo.startDate}
+          endDate={planInfo.endDate}
+          notifyBefore={planInfo.notifyBefore}
+          status={planInfo.status}
+          completeDate={planInfo.completeDate}
+          handleChangeValue={handleChange}
+        />
         <View style={styles.divideLine}></View>
         <View style={styles.tasksSectionWrapper}>
           <Text style={styles.sectionTitle}>Tasks</Text>
@@ -98,7 +169,7 @@ export default function PlanScreen() {
                       <Text
                         style={[
                           styles.taskText,
-                          item.completed && styles.taskTextCompleted,
+                          item.status === "COMPLETE" && styles.taskTextCompleted,
                         ]}
                       >
                       {item.name}
@@ -143,6 +214,9 @@ export default function PlanScreen() {
           }}
         />
       </View>
+      {
+        loading && <LoadingScreen/>
+      }
     </SafeAreaView>
   );
 }

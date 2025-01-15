@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { formatDateTime } from "@/util/format";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Svg, {
@@ -90,7 +91,7 @@ export default function PlanItem({
         <Text style={styles.planName}>{planName}</Text>
         <View style={styles.deadlineContainer}>
           <Text style={styles.deadlineLabel}>Deadline:</Text>
-          <Text style={styles.deadline}>{deadline}</Text>
+          <Text style={styles.deadline}>{formatDateTime(deadline)}</Text>
         </View>
       </View>
     </View>
