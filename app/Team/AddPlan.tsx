@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   Text,
   ScrollView,
   TextInput,
