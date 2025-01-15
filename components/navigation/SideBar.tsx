@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigationContext } from "@/context/NavigationContext";
@@ -8,50 +8,97 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-export default function Sidebar({ initialTab, onClose }: SidebarProps) {
-  const [activeMenu, setActiveMenu] = useState(initialTab);
-  const { onChangeSidePath } = useNavigationContext();
+export default function Sidebar({ onClose }: SidebarProps) {
+  const { sideNavPath, onChangeSidePath, bottomNavPath } =
+    useNavigationContext();
 
-  const menuItems = [
-    {
-      id: "Plan",
-      label: "Plan",
-      icon: <MaterialCommunityIcons name="target" size={24} color="#1E282D" />,
-    },
-    {
-      id: "Document",
-      label: "Document",
-      icon: (
-        <MaterialCommunityIcons
-          name="file-document-outline"
-          size={24}
-          color="#1E282D"
-        />
-      ),
-    },
-    {
-      id: "Session",
-      label: "Session",
-      icon: (
-        <MaterialCommunityIcons
-          name="timer-outline"
-          size={24}
-          color="#1E282D"
-        />
-      ),
-    },
-    {
-      id: "Statistic",
-      label: "Statistic",
-      icon: (
-        <MaterialCommunityIcons
-          name="chart-box-outline"
-          size={24}
-          color="#1E282D"
-        />
-      ),
-    },
-  ];
+  // Define menu items based on bottomNavPath
+  const menuItems =
+    bottomNavPath === "Team"
+      ? [
+          {
+            id: "Teams",
+            label: "Teams",
+            icon: (
+              <MaterialCommunityIcons
+                name="account-group-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+          {
+            id: "Management",
+            label: "Management",
+            icon: (
+              <MaterialCommunityIcons
+                name="clipboard-list-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+          {
+            id: "Plan",
+            label: "Plan",
+            icon: (
+              <MaterialCommunityIcons name="target" size={24} color="#1E282D" />
+            ),
+          },
+          {
+            id: "Document",
+            label: "Document",
+            icon: (
+              <MaterialCommunityIcons
+                name="file-document-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            id: "Plan",
+            label: "Plan",
+            icon: (
+              <MaterialCommunityIcons name="target" size={24} color="#1E282D" />
+            ),
+          },
+          {
+            id: "Document",
+            label: "Document",
+            icon: (
+              <MaterialCommunityIcons
+                name="file-document-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+          {
+            id: "Session",
+            label: "Session",
+            icon: (
+              <MaterialCommunityIcons
+                name="timer-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+          {
+            id: "Statistic",
+            label: "Statistic",
+            icon: (
+              <MaterialCommunityIcons
+                name="chart-box-outline"
+                size={24}
+                color="#1E282D"
+              />
+            ),
+          },
+        ];
 
   return (
     <View style={styles.sidebar}>
@@ -71,11 +118,10 @@ export default function Sidebar({ initialTab, onClose }: SidebarProps) {
             key={item.id}
             style={[
               styles.menuItem,
-              activeMenu === item.id && styles.activeMenuItem,
+              sideNavPath === item.id && styles.activeMenuItem, // Sử dụng sideNavPath để xác định tab đang chọn
             ]}
             onPress={() => {
-              onChangeSidePath(activeMenu, item.id);
-              setActiveMenu(item.id);
+              onChangeSidePath(sideNavPath, item.id);
             }}
           >
             {item.icon}

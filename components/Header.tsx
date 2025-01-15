@@ -41,6 +41,9 @@ export default function Header({ showMenu = true }) {
         case "/Me/Statistic":
           tab = "Statistic";
           break;
+        case "/Team/Plan":
+          tab = "Plan";
+          break;
       }
 
       if (tab === activeTab) return;

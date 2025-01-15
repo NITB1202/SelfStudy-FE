@@ -89,11 +89,6 @@ export default function AddPlan() {
       <View style={styles.fieldContainerRow}>
         {/* Đặt icon và Text chung một hàng */}
         <View style={styles.labelContainer}>
-          <MaterialCommunityIcons
-            name="calendar-month"
-            size={24}
-            color="black"
-          />
           <Text style={styles.label}>Start Date</Text>
         </View>
 
@@ -168,11 +163,6 @@ export default function AddPlan() {
       <View style={styles.fieldContainerRow}>
         {/* Đặt icon và Text chung một hàng */}
         <View style={styles.labelContainer}>
-          <MaterialCommunityIcons
-            name="calendar-month"
-            size={24}
-            color="black"
-          />
           <Text style={styles.label}>End Date</Text>
         </View>
 
@@ -237,7 +227,6 @@ export default function AddPlan() {
       <View style={styles.fieldContainer}>
         {/* Đặt icon và Text chung một hàng */}
         <View style={styles.labelContainer}>
-          <MaterialCommunityIcons name="alarm" size={24} color="black" />
           <Text style={styles.label}>Remind Me Before</Text>
         </View>
 
