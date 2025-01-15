@@ -130,7 +130,6 @@ export default function Plan() {
   };
 
   const handlePlanPress = (planName: string) => {
-    console.log("Plan pressed with Name:", planName);
     router.push(`/Me/PlanDetail?planName=${encodeURIComponent(planName)}`);
   };
 
@@ -167,7 +166,7 @@ export default function Plan() {
               return(
                 <Pressable
                   key={item.id}
-                  onPress={() => {}}>
+                  onPress={() => handlePlanPress(item.name)}>
                   <PlanItem
                     planName={item.name}
                     progress={Number(item.progress)}

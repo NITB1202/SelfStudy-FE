@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   Text,
   TextInput,
   ScrollView,
@@ -12,13 +11,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackButton from "@/components/BackButton";
 import { router, useNavigation } from "expo-router";
 import AddPlan from "@/components/plan/AddPlan";
+import CustomButton from "@/components/CustomButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PlanScreen() {
   const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);
   const [newTask, setNewTask] = useState("");
-  const [isAddingTask, setIsAddingTask] = useState(false); // Trạng thái cho việc hiển thị TextInput khi nhấn dấu +
-  const navigation = useNavigation(); // Get navigation prop
-  // Thêm task mới vào danh sách
+  const [isAddingTask, setIsAddingTask] = useState(false); 
+  
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
@@ -29,6 +29,7 @@ export default function PlanScreen() {
       setIsAddingTask(false); // Đóng TextInput sau khi thêm task
     }
   };
+  
 
   // Xóa task theo id
   const handleDeleteTask = (id: number) => {
@@ -36,43 +37,35 @@ export default function PlanScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Back Button */}
+     <SafeAreaView style={styles.safeview}>
       <BackButton />
-
-      {/* Scrollable AddAPlan Component */}
-      <ScrollView style={styles.planSectionWrapper}>
+      <ScrollView style={styles.container}>
         <AddPlan />
-      </ScrollView>
-
-      {/* Tasks Section */}
-      <View style={styles.tasksSectionWrapper}>
-        <Text style={styles.sectionTitle}>Tasks</Text>
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.taskContainer}>
-              <MaterialCommunityIcons
-                name="checkbox-blank-outline"
-                size={24}
-                color="#7AB2D3"
-              />
-              <TextInput
-                style={styles.taskInput}
-                value={item.name}
-                editable={false}
-              />
-              <TouchableOpacity onPress={() => handleDeleteTask(item.id)}>
+        <View style={styles.divideLine}></View>
+        {/* Tasks Section */}
+        <View style={styles.tasksSectionWrapper}>
+          <Text style={styles.sectionTitle}>Tasks</Text>
+            {tasks.map((item) => (
+              <View key={item.id.toString()} style={styles.taskContainer}>
                 <MaterialCommunityIcons
-                  name="delete"
+                  name="checkbox-blank-outline"
                   size={24}
-                  color="#C0C0C0"
+                  color="#7AB2D3"
                 />
-              </TouchableOpacity>
-            </View>
-          )}
-          ListFooterComponent={
+                <TextInput
+                  style={styles.taskInput}
+                  value={item.name}
+                  editable={false}
+                />
+                <TouchableOpacity onPress={() => handleDeleteTask(item.id)}>
+                  <MaterialCommunityIcons
+                    name="delete"
+                    size={24}
+                    color="#C0C0C0"
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
             <View style={styles.addTaskContainer}>
               <TouchableOpacity onPress={handleAddTask}>
                 <MaterialCommunityIcons
@@ -88,48 +81,44 @@ export default function PlanScreen() {
                 onChangeText={setNewTask}
               />
             </View>
-          }
+          </View>
+      </ScrollView>
+ 
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          title="Save"
+          onPress={() => {
+          router.push("/Me/Plan");
+          }}
         />
       </View>
-
-      {/* Save Button */}
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={() => {
-          router.push("/Me/Plan");
-        }}
-      >
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
-    </View>
-  );
+     </SafeAreaView>
+   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-  },
   planSectionWrapper: {
     flex: 0,
-    maxHeight: "50%", // Chiều cao tối đa là 50% màn hình
+    maxHeight: "100%",
     marginBottom: 10,
-  },
-  tasksSectionWrapper: {
-    flex: 1, // Chiếm nửa dưới màn hình
-    marginTop: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "white",
+    marginTop: 20,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 20,
     color: "#7AB2D3",
-    marginBottom: 10,
+    marginBottom: 20,
+    fontFamily: "PlusJakartaSans_700Bold",
+  },
+  tasksSectionWrapper: {
+    flex: 1,
+    paddingHorizontal: 10,
   },
   taskContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
     padding: 10,
@@ -142,20 +131,17 @@ const styles = StyleSheet.create({
   taskInput: {
     flex: 1,
     marginLeft: 10,
-    fontSize: 12,
+    fontSize: 14,
     color: "#000",
   },
   addTaskContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
-    marginTop: 10,
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
-    paddingHorizontal: 10,
     width: "100%",
-    height: 44,
+    marginBottom: 20,
   },
   addTaskInputContainer: {
     flexDirection: "row",
@@ -166,7 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#000",
     flex: 1,
-    paddingVertical: 5,
     marginLeft: 10,
   },
   saveButton: {
@@ -177,10 +162,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     marginTop: 10,
+    marginBottom: 5,
   },
   saveButtonText: {
     fontSize: 16,
     color: "white",
     fontWeight: "bold",
+  },
+  divideLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "rgba(1,1,1,0.2)", 
+    margin: 20,
+  },
+  buttonContainer:{
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  safeview:{
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+    padding: 10
+  },
+  container: {
+    flex: 1,
   },
 });

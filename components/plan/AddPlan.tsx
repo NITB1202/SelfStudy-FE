@@ -10,7 +10,6 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function AddPlan() {
   const [name, setName] = useState("");
@@ -44,8 +43,6 @@ export default function AddPlan() {
     value: string
   ) => {
     const numericValue = parseInt(value, 10) || 0;
-
-    // Giới hạn giờ từ 0 đến 24, phút và giây từ 0 đến 60
     if (field === "hours") {
       setRemindBefore((prev) => ({
         ...prev,
@@ -61,7 +58,7 @@ export default function AddPlan() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add A Plan</Text>
+      <Text style={styles.title}>Add new plan</Text>
 
       {/* Name Field */}
       <View style={styles.fieldContainer}>
@@ -87,11 +84,7 @@ export default function AddPlan() {
 
       {/* Start Date */}
       <View style={styles.fieldContainerRow}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Start Date</Text>
-        </View>
-
+        <Text style={styles.label}>Start Date</Text>
         <View style={styles.rowContainer}>
           {/* Start Date Picker */}
           <TouchableOpacity
@@ -161,11 +154,7 @@ export default function AddPlan() {
 
       {/* End Date */}
       <View style={styles.fieldContainerRow}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>End Date</Text>
-        </View>
-
+        <Text style={styles.label}>End Date</Text>
         <View style={styles.rowContainer}>
           {/* End Date Picker */}
           <TouchableOpacity
@@ -225,11 +214,7 @@ export default function AddPlan() {
 
       {/* Remind Me Before Field */}
       <View style={styles.fieldContainer}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Remind Me Before</Text>
-        </View>
-
+        <Text style={styles.label}>Remind Me Before</Text>
         <View style={styles.remindContainer}>
           <TextInput
             style={styles.remindInput}
@@ -263,15 +248,15 @@ export default function AddPlan() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: "white",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
     color: "#7AB2D3",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "PlusJakartaSans_700Bold",
   },
   fieldContainer: {
     marginBottom: 20,
@@ -280,25 +265,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: "column",
   },
-  labelContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10, // Khoảng cách giữa icon + label và các input
-    gap: 10,
-  },
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   label: {
     fontSize: 11,
-    color: "rgba(0, 0, 0, 0.5)", // Màu đen với độ trong suốt 50%
+    color: "rgba(0, 0, 0, 0.5)",
     marginBottom: 5,
     fontFamily: "Roboto_400Regular",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
@@ -314,7 +293,7 @@ const styles = StyleSheet.create({
   remindInput: {
     width: "30%",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
