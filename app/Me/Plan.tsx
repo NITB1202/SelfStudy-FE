@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Calendar } from "react-native-calendars";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PlanItem from "@/components/plan/PlanItem";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface Plan {
   id: string;
@@ -36,6 +37,7 @@ export default function Plan() {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectDatePlans, setSelectDatePlans] = useState<Plan[]>([]);
   const [todayPlanNum, setTodayPlanNum] = useState(0);
+  const [ loading, setLoading] = useState(false);
 
   useEffect(()=>{
     const fetchData = async () =>{
@@ -45,6 +47,7 @@ export default function Plan() {
       const dateString = new Date().toISOString().split('T')[0];
 
       try{
+        setLoading(true);
         const dates: any = await planApi.getDateHasDeadlineUser(userId, month, year);
         const plans: any = await planApi.getUserPlansOnDate(userId, dateString);
         const data: Plan[] = plans.map((item: any) => ({
@@ -65,6 +68,9 @@ export default function Plan() {
       catch(error){
         console.log(error);
       }
+      finally{
+        setLoading(false);
+      }
     };
     fetchData();
   },[]);
@@ -73,6 +79,7 @@ export default function Plan() {
   useEffect(()=>{
     const fetchPlanData = async () =>{
       try{
+        setLoading(true);
         const plans: any = await planApi.getUserPlansOnDate(userId, selectedDate);
         const data: Plan[] = plans.map((item: any) => ({
           id: item.id,
@@ -90,6 +97,9 @@ export default function Plan() {
       }
       catch(error){
         console.log(error);
+      }
+      finally{
+        setLoading(false);
       }
     };
     fetchPlanData();
@@ -168,9 +178,12 @@ export default function Plan() {
               );
             })
           }
-    </View>
+        </View>
       </ScrollView>
       <BottomNavBar onAddPress={() => router.push("/Me/AddPlan")} />
+      {
+        loading && <LoadingScreen/>
+      }
     </SafeAreaView>
   );
 }
