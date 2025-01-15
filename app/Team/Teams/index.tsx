@@ -122,22 +122,24 @@ export default function Team() {
       </Pressable>
 
       {/* Team List */}
-      <FlatList
-        data={teams}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Pressable
-            style={styles.teamRow}
-            onPress={() => openTeamDetailModal(item)}
-          >
-            <Image source={{ uri: item.avatar }} style={styles.teamAvatar} />
-            <Text style={styles.teamName}>{item.name}</Text>
-            {item.isAdmin && (
-              <Ionicons name="settings-outline" size={20} color="#7AB2D3" />
-            )}
-          </Pressable>
-        )}
-      />
+      <View style={styles.header}>
+        <FlatList
+          data={teams}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Pressable
+              style={styles.teamRow}
+              onPress={() => openTeamDetailModal(item)}
+            >
+              <Image source={{ uri: item.avatar }} style={styles.teamAvatar} />
+              <Text style={styles.teamName}>{item.name}</Text>
+              {item.isAdmin && (
+                <Ionicons name="settings-outline" size={20} color="#7AB2D3" />
+              )}
+            </Pressable>
+          )}
+        />
+      </View>
 
       {/* Team Detail Modal */}
       {selectedTeam && (
