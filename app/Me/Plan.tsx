@@ -113,7 +113,7 @@ export default function Plan() {
   
       markedDates[date] = {
         marked: true,
-        dotColor: "red",
+        dotColor: Colors.red,
       };
     });
 

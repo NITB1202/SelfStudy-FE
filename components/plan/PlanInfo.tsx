@@ -11,6 +11,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import useCustomFonts from "@/hooks/useCustomFonts";
+import { Colors } from "@/constants/Colors";
 
 interface APlanProps {
   Name: string;
@@ -68,6 +69,10 @@ export default function APlan({ Name }: APlanProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{Name}</Text>
+      <Text style={styles.incompleteText}>INCOMPLETE</Text>
+      {/* <Text style={styles.completeText}>
+        <Text style={styles.highlightText}>COMPLETE AT: </Text>12:00:00 12/09/2024
+      </Text> */}
       {/* Description Field */}
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Description</Text>
@@ -252,7 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#7AB2D3",
     textAlign: "center",
-    marginBottom: 20,
     fontFamily: "PlusJakartaSans_700Bold",
   },
   fieldContainer: {
@@ -300,4 +304,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
   },
+  incompleteText:{
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.red,
+    marginTop: 5,
+    marginBottom: 20,
+    width: "100%",
+    textAlign: "center",
+  },
+  completeText:{
+    fontSize: 14,
+    width: "100%",
+    textAlign: "center",
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  highlightText:{
+    color: Colors.green,
+    fontWeight: "bold",
+  }
 });
