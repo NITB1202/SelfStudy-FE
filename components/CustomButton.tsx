@@ -58,7 +58,7 @@ export default function CustomButton({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 5, 
+    paddingVertical: 5,
     paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: "center",
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   text: {
-    fontFamily: "Poppins_700Bold", 
+    fontFamily: "Poppins_700Bold",
     fontSize: 20,
   },
   shadow: {

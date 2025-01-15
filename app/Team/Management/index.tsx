@@ -239,7 +239,7 @@ export default function Management() {
         </ScrollView>
       </View>
       <View style={styles.bottom}>
-        <BottomNavBar onAddPress={() => router.push("/Team/AddPlan")} />
+        <BottomNavBar onAddPress={() => router.push("/Team/Management/Add")} />
       </View>
     </View>
   );
