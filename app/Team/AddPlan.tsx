@@ -11,63 +11,40 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackButton from "@/components/BackButton";
-import { router } from "expo-router";
+import { router, useRouter } from "expo-router";
 import AddPlan from "@/components/plan/AddPlan";
+import SearchUser from "./User";
+
+interface Assignee {
+  id: string;
+  name: string;
+  avatar: string;
+}
 
 export default function PlanScreen() {
   const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);
   const [newTask, setNewTask] = useState("");
-  const [isAddingTask, setIsAddingTask] = useState(false); // Trạng thái cho việc hiển thị TextInput khi nhấn dấu +
-  const [assignees, setAssignees] = useState([
-    {
-      id: 1,
-      name: "John",
-      avatar:
-        "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/04/hinh-anh-de-thuong-41.jpg",
-    },
-  ]); // Danh sách Assignees hiện tại
-  const [modalVisible, setModalVisible] = useState(false); // Modal cho danh sách chọn Assignee
+  const [assignees, setAssignees] = useState<Assignee[]>([]);
+  const router = useRouter();
 
-  // Danh sách các Assignees có sẵn để chọn
-  const availableAssignees = [
-    {
-      id: 2,
-      name: "Alice",
-      avatar: "https://cdn-media.sforum.vn/storage/app/media/anh-dep-102.jpg",
-    },
-    {
-      id: 3,
-      name: "Bob",
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4Iqfw4D_ivGHG07zJGKa6INsxFnbaSSZo7wjHYa75MrRY5oiTRaNyEUUsly8YRnWdvZg&usqp=CAU",
-    },
-    {
-      id: 4,
-      name: "Charlie",
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRr3a1KXOZGASLEIz795oUqGKhIsMCEjM-bilF9HsiaUkOH22bVXFfKOBr5I-VohXA8ZI&usqp=CAU",
-    },
-  ];
-
-  // Thêm Assignee mới vào danh sách
-  const handleAddAssignee = (assignee: {
-    id: number;
-    name: string;
-    avatar: string;
-  }) => {
-    if (!assignees.some((a) => a.id === assignee.id)) {
-      setAssignees((prevAssignees) => [...prevAssignees, assignee]);
-    }
-    setModalVisible(false); // Đóng modal sau khi chọn
+  const navigateToUserSelection = () => {
+    // Truyền assignees qua params khi điều hướng
+    router.push({
+      pathname: "./User", // Trang SearchUser
+      params: { assignees: JSON.stringify(assignees) }, // Chuyển assignees thành chuỗi JSON
+    });
   };
 
-  // Xóa Assignee
-  const handleRemoveAssignee = (id: number) => {
+  const handleAddAssignee = (newAssignee: Assignee) => {
+    setAssignees((prevAssignees) => [...prevAssignees, newAssignee]);
+  };
+
+  const handleRemoveAssignee = (assigneeId: string) => {
     setAssignees((prevAssignees) =>
-      prevAssignees.filter((assignee) => assignee.id !== id)
+      prevAssignees.filter((assignee) => assignee.id !== assigneeId)
     );
   };
-  // Thêm task mới vào danh sách
+
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
@@ -75,11 +52,9 @@ export default function PlanScreen() {
         { id: prevTasks.length + 1, name: newTask },
       ]);
       setNewTask("");
-      setIsAddingTask(false);
     }
   };
 
-  // Xóa task theo id
   const handleDeleteTask = (id: number) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
@@ -88,9 +63,10 @@ export default function PlanScreen() {
     <ScrollView style={styles.planSectionWrapper}>
       {/* Back Button */}
       <BackButton />
-      {/* Scrollable AddAPlan Component */}
-
+      {/* Add Plan Section */}
       <AddPlan />
+
+      {/* Assignees Section */}
       <View style={styles.assigneesSection}>
         <Text style={styles.sectionTitle}>Assignee</Text>
         <View style={styles.assigneesContainer}>
@@ -105,7 +81,7 @@ export default function PlanScreen() {
               />
             </TouchableOpacity>
           ))}
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <TouchableOpacity onPress={navigateToUserSelection}>
             <MaterialCommunityIcons
               name="plus-circle-outline"
               size={30}
@@ -115,38 +91,6 @@ export default function PlanScreen() {
         </View>
       </View>
 
-      {/* Modal for Selecting Assignee */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Assignee</Text>
-            {availableAssignees.map((assignee) => (
-              <TouchableOpacity
-                key={assignee.id}
-                style={styles.modalItem}
-                onPress={() => handleAddAssignee(assignee)}
-              >
-                <Image
-                  source={{ uri: assignee.avatar }}
-                  style={styles.modalAvatar}
-                />
-                <Text style={styles.modalName}>{assignee.name}</Text>
-              </TouchableOpacity>
-            ))}
-            <TouchableOpacity
-              style={styles.closeModalButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeModalText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
       {/* Tasks Section */}
       <View style={styles.tasksSectionWrapper}>
         <Text style={styles.sectionTitle}>Tasks</Text>
@@ -202,7 +146,6 @@ export default function PlanScreen() {
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   planSectionWrapper: {
     flex: 0,
