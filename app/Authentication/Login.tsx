@@ -12,6 +12,7 @@ import { isValidEmail } from "@/util/validator";
 import { useAuth } from "@/context/AuthContext";
 import authApi from "@/api/authApi";
 import Error from "@/components/Message/Error"
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function LoginScreen() {
   const { fontsLoaded } = useCustomFonts();
@@ -25,6 +26,7 @@ export default function LoginScreen() {
     description: ""
   });
   const { login } = useAuth();
+  const [loading,setLoading] = useState(false);
 
   if (!fontsLoaded) {
     return null;
@@ -50,6 +52,7 @@ export default function LoginScreen() {
     }
 
     try{
+      setLoading(true);
       const response: any = await authApi.login(loginRequest.email, loginRequest.password);
       const accessToken = response.accessToken;
 
@@ -75,6 +78,9 @@ export default function LoginScreen() {
         title: "Error",
         description: errorDes
       });
+    }
+    finally{
+      setLoading(false);
     }
   }
 
@@ -144,6 +150,9 @@ export default function LoginScreen() {
           onClose={()=> setShowError(false)}
           onOkPress={()=> setShowError(false)}>
         </Error>
+      }
+      {
+        loading && <LoadingScreen/>
       }
     </SafeAreaView>
   );
