@@ -13,21 +13,34 @@ import { router, useNavigation } from "expo-router";
 import AddPlan from "@/components/plan/AddPlan";
 import CustomButton from "@/components/CustomButton";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { formatDateToISOString } from "@/util/format";
+import Error from "@/components/Message/Error";
+import { hasDuplicateStrings } from "@/util/validator";
+import planApi from "@/api/planApi";
+import { useAuth } from "@/context/AuthContext";
+import taskApi from "@/api/taskApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function PlanScreen() {
   const [planInfo, setPlanInfo] = useState({
     name: "",
     description: "",
-    startDate: "",
-    endDate: "",
-    notifyBefore: "",
+    startDate: formatDateToISOString(new Date()),
+    endDate: formatDateToISOString(new Date()),
+    notifyBefore: "00:00:00",
   });
-
   const [tasks, setTasks] = useState<{
     id: number,
     name: string
   }[]>([]);
   const [newTask, setNewTask] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: "",
+  });
+  const {userId} = useAuth();
+  const [loading, setLoading] = useState(false);
   
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
@@ -43,9 +56,58 @@ export default function PlanScreen() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  const handleSave = () => {
-    console.log(planInfo);
-    console.log(tasks);
+  const handleSave = async () => {
+    if(planInfo.name === ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Name is required."
+      });
+      return;
+    }
+
+    if(new Date(planInfo.startDate).getTime() >= new Date(planInfo.endDate).getTime()){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The start date must come after the end date."
+      });
+      return;
+    }
+
+    const taskNames= tasks.map(item => item.name);
+
+    if(hasDuplicateStrings(taskNames)){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Cannot create a task with the same name."
+      });
+      return;
+    }
+
+    try{
+      setLoading(true);
+      const planResponse: any = await planApi.create(userId, planInfo.name, planInfo.description,
+        planInfo.startDate, planInfo.endDate, planInfo.notifyBefore
+      );
+      const planId = planResponse.id;
+      taskNames.forEach(async item => {
+        await taskApi.create(planId, item)
+      });
+
+      router.push("/Me/Plan");
+    }
+    catch(error: any){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: error.message
+      });
+    }
+    finally{
+      setLoading(false);
+    }
   }
 
   return (
@@ -102,6 +164,19 @@ export default function PlanScreen() {
           onPress={handleSave}
         />
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          onClose={()=> setShowError(false)}
+          visible={showError}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
+      {
+        loading && <LoadingScreen/>
+      }
      </SafeAreaView>
    );
 }
