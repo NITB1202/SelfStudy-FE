@@ -36,23 +36,19 @@ export default function PlanScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.planSectionWrapper}>
       {/* Back Button */}
       <BackButton />
-
       {/* Scrollable AddAPlan Component */}
-      <ScrollView style={styles.planSectionWrapper}>
-        <AddPlan />
-      </ScrollView>
+      <AddPlan />
 
       {/* Tasks Section */}
       <View style={styles.tasksSectionWrapper}>
         <Text style={styles.sectionTitle}>Tasks</Text>
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.taskContainer}>
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* Task List */}
+          {tasks.map((item) => (
+            <View style={styles.taskContainer} key={item.id}>
               <MaterialCommunityIcons
                 name="checkbox-blank-outline"
                 size={24}
@@ -71,25 +67,25 @@ export default function PlanScreen() {
                 />
               </TouchableOpacity>
             </View>
-          )}
-          ListFooterComponent={
-            <View style={styles.addTaskContainer}>
-              <TouchableOpacity onPress={handleAddTask}>
-                <MaterialCommunityIcons
-                  name="plus-circle-outline"
-                  size={30}
-                  color="#7AB2D3"
-                />
-              </TouchableOpacity>
-              <TextInput
-                style={styles.addTaskInput}
-                placeholder="Add new task"
-                value={newTask}
-                onChangeText={setNewTask}
+          ))}
+
+          {/* Add New Task */}
+          <View style={styles.addTaskContainer}>
+            <TouchableOpacity onPress={handleAddTask}>
+              <MaterialCommunityIcons
+                name="plus-circle-outline"
+                size={30}
+                color="#7AB2D3"
               />
-            </View>
-          }
-        />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.addTaskInput}
+              placeholder="Add new task"
+              value={newTask}
+              onChangeText={setNewTask}
+            />
+          </View>
+        </ScrollView>
       </View>
 
       {/* Save Button */}
@@ -101,20 +97,18 @@ export default function PlanScreen() {
       >
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-  },
   planSectionWrapper: {
     flex: 0,
-    maxHeight: "50%", // Chiều cao tối đa là 50% màn hình
+    maxHeight: "100%", // Chiều cao tối đa là 50% màn hình
     marginBottom: 10,
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   tasksSectionWrapper: {
     flex: 1, // Chiếm nửa dưới màn hình
@@ -176,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    marginTop: 10,
+    marginTop: 20,
   },
   saveButtonText: {
     fontSize: 16,
