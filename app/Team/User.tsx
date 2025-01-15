@@ -105,7 +105,11 @@ export default function SearchUser({ onSelect }: SearchUserProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "white",
+  },
   searchInput: {
     height: 40,
   },

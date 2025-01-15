@@ -111,12 +111,20 @@ export default function PlanScreen() {
       prevAssignees.filter((assignee) => assignee.id !== id)
     );
   };
+  const navigateToUserSelection = () => {
+    // Truyền assignees qua params khi điều hướng
+    router.push({
+      pathname: "./User", // Trang SearchUser
+      params: { assignees: JSON.stringify(assignees) }, // Chuyển assignees thành chuỗi JSON
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
         <PlanInfo Name={planName} />
+
         <View style={styles.assigneesSection}>
           <Text style={styles.sectionTitle}>Assignee</Text>
           <View style={styles.assigneesContainer}>
@@ -131,7 +139,7 @@ export default function PlanScreen() {
                 />
               </TouchableOpacity>
             ))}
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <TouchableOpacity onPress={navigateToUserSelection}>
               <MaterialCommunityIcons
                 name="plus-circle-outline"
                 size={30}
@@ -141,38 +149,6 @@ export default function PlanScreen() {
           </View>
         </View>
 
-        {/* Modal for Selecting Assignee */}
-        <Modal
-          visible={modalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Select Assignee</Text>
-              {availableAssignees.map((assignee) => (
-                <TouchableOpacity
-                  key={assignee.id}
-                  style={styles.modalItem}
-                  onPress={() => handleAddAssignee(assignee)}
-                >
-                  <Image
-                    source={{ uri: assignee.avatar }}
-                    style={styles.modalAvatar}
-                  />
-                  <Text style={styles.modalName}>{assignee.name}</Text>
-                </TouchableOpacity>
-              ))}
-              <TouchableOpacity
-                style={styles.closeModalButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeModalText}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
         <View style={styles.divideLine}></View>
         <View style={styles.tasksSectionWrapper}>
           <Text style={styles.sectionTitle}>Tasks</Text>
