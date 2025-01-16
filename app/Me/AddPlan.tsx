@@ -56,6 +56,7 @@ export default function PlanScreen() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
+
   const handleSave = async () => {
     if(planInfo.name === ""){
       setShowError(true);
