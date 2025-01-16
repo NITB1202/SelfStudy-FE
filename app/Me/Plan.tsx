@@ -113,7 +113,7 @@ export default function Plan() {
   
       markedDates[date] = {
         marked: true,
-        dotColor: "red",
+        dotColor: Colors.red,
       };
     });
 
@@ -129,9 +129,8 @@ export default function Plan() {
     return markedDates;
   };
 
-  const handlePlanPress = (planName: string) => {
-    console.log("Plan pressed with Name:", planName);
-    router.push(`/Me/PlanDetail?planName=${encodeURIComponent(planName)}`);
+  const handlePlanPress = (id: string) => {
+    router.push(`/Me/PlanDetail?id=${encodeURIComponent(id)}`);
   };
 
   return (
@@ -167,10 +166,10 @@ export default function Plan() {
               return(
                 <Pressable
                   key={item.id}
-                  onPress={() => {}}>
+                  onPress={() => handlePlanPress(item.id)}>
                   <PlanItem
                     planName={item.name}
-                    progress={Number(item.progress)}
+                    progress={Number(item.progress) * 100}
                     deadline={item.endDate}
                     >
                   </PlanItem>

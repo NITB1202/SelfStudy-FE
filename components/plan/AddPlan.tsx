@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,42 +10,30 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { formatDateToISOString } from "@/util/format";
 
-export default function AddPlan() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+interface AddPlanProps{
+  setPlanInfo?: React.Dispatch<React.SetStateAction<any>>
+}
+
+export default function AddPlan({ setPlanInfo }: AddPlanProps) {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [remindBefore, setRemindBefore] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
-  const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate: Date | undefined,
-    setDate: React.Dispatch<React.SetStateAction<Date>>,
-    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    setShowPicker(false);
-    if (event.type === "set" && selectedDate) {
-      setDate(selectedDate);
-    }
-  };
 
   const handleRemindBeforeChange = (
     field: "hours" | "minutes" | "seconds",
     value: string
   ) => {
     const numericValue = parseInt(value, 10) || 0;
-
-    // Giới hạn giờ từ 0 đến 24, phút và giây từ 0 đến 60
     if (field === "hours") {
       setRemindBefore((prev) => ({
         ...prev,
@@ -59,9 +47,71 @@ export default function AddPlan() {
     }
   };
 
+  const handleChange = (field: string, value: string) => {
+    if(setPlanInfo)
+      setPlanInfo((prev: any) => ({
+        ...prev,
+        [field]: value,
+      }));
+  };
+
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedDate) {
+      if(field.startsWith("start"))
+        setStartDate(selectedDate);
+      else
+        setEndDate(selectedDate);
+    }
+  };
+
+  const handleTimeChange = (
+    event: DateTimePickerEvent,
+    selectedTime: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedTime) {
+      if(field.startsWith("start"))
+        setStartDate(selectedTime);
+      else
+        setEndDate(selectedTime);
+    }
+  };
+
+  useEffect(()=>{
+    const updateNotify = () =>{
+      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
+      String(remindBefore.minutes).padStart(2, '0') + ":" + 
+      String(remindBefore.seconds).padStart(2, '0');
+      handleChange("notifyBefore", time);
+    };
+    updateNotify();
+  },[remindBefore]);
+
+  useEffect(()=>{
+    const updateStartDate = () =>{
+      handleChange("startDate", formatDateToISOString(startDate));
+    };
+    updateStartDate();
+  },[startDate]);
+
+  useEffect(()=>{
+    const updateEndDate = () =>{
+      handleChange("endDate", formatDateToISOString(endDate));
+    };
+    updateEndDate();
+  },[endDate]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add A Plan</Text>
+      <Text style={styles.title}>Add new plan</Text>
 
       {/* Name Field */}
       <View style={styles.fieldContainer}>
@@ -69,8 +119,7 @@ export default function AddPlan() {
         <TextInput
           style={styles.input}
           placeholder="Enter plan name"
-          value={name}
-          onChangeText={setName}
+          onChangeText={(text)=> handleChange("name",text)}
         />
       </View>
 
@@ -80,18 +129,13 @@ export default function AddPlan() {
         <TextInput
           style={styles.input}
           placeholder="Enter plan description"
-          value={description}
-          onChangeText={setDescription}
+          onChangeText={(text)=> handleChange("description", text)}
         />
       </View>
 
       {/* Start Date */}
       <View style={styles.fieldContainerRow}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Start Date</Text>
-        </View>
-
+        <Text style={styles.label}>Start Date</Text>
         <View style={styles.rowContainer}>
           {/* Start Date Picker */}
           <TouchableOpacity
@@ -118,7 +162,7 @@ export default function AddPlan() {
                 handleDateChange(
                   event,
                   date,
-                  setStartDate,
+                  "startDate",
                   setShowStartDatePicker
                 )
               }
@@ -147,10 +191,10 @@ export default function AddPlan() {
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(
+                handleTimeChange(
                   event,
                   date,
-                  setStartDate,
+                  "startTime",
                   setShowStartTimePicker
                 )
               }
@@ -161,11 +205,7 @@ export default function AddPlan() {
 
       {/* End Date */}
       <View style={styles.fieldContainerRow}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>End Date</Text>
-        </View>
-
+        <Text style={styles.label}>End Date</Text>
         <View style={styles.rowContainer}>
           {/* End Date Picker */}
           <TouchableOpacity
@@ -189,7 +229,7 @@ export default function AddPlan() {
               mode="date"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndDatePicker)
+                handleDateChange(event, date, "endDate", setShowEndDatePicker)
               }
             />
           )}
@@ -216,7 +256,7 @@ export default function AddPlan() {
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndTimePicker)
+                handleTimeChange(event, date, "endTime", setShowEndTimePicker)
               }
             />
           )}
@@ -225,11 +265,7 @@ export default function AddPlan() {
 
       {/* Remind Me Before Field */}
       <View style={styles.fieldContainer}>
-        {/* Đặt icon và Text chung một hàng */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Remind Me Before</Text>
-        </View>
-
+        <Text style={styles.label}>Remind Me Before</Text>
         <View style={styles.remindContainer}>
           <TextInput
             style={styles.remindInput}
@@ -263,15 +299,15 @@ export default function AddPlan() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: "white",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
     color: "#7AB2D3",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "PlusJakartaSans_700Bold",
   },
   fieldContainer: {
     marginBottom: 20,
@@ -280,25 +316,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: "column",
   },
-  labelContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10, // Khoảng cách giữa icon + label và các input
-    gap: 10,
-  },
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   label: {
     fontSize: 11,
-    color: "rgba(0, 0, 0, 0.5)", // Màu đen với độ trong suốt 50%
+    color: "rgba(0, 0, 0, 0.5)",
     marginBottom: 5,
     fontFamily: "Roboto_400Regular",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
@@ -314,7 +344,7 @@ const styles = StyleSheet.create({
   remindInput: {
     width: "30%",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,42 +10,109 @@ import {
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import useCustomFonts from "@/hooks/useCustomFonts";
+import { Colors } from "@/constants/Colors";
+import { formatDateToISOString } from "@/util/format";
 
 interface APlanProps {
-  Name: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  notifyBefore: string;
+  status: string;
+  completeDate: string | null;
+  handleChangeValue: (field: string, value: string) => void;
 }
 
-export default function APlan({ Name }: APlanProps) {
-  const [name, setName] = useState("New Plan");
-  const [description, setDescription] = useState(
-    "My first plan to test the application"
-  );
+export default function APlan({ name, description, startDate, endDate, notifyBefore, status, completeDate, handleChangeValue}: APlanProps) {
   const [remindBefore, setRemindBefore] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDateForm, setStartDateForm] = useState(new Date(startDate.replace(" ", "T")));
+  const [endDateForm, setEndDateForm] = useState(new Date(endDate.replace(" ", "T")));
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-  const { fontsLoaded } = useCustomFonts();
+  useEffect(() => {
+    if (startDate) {
+      setStartDateForm(new Date(startDate.replace(" ", "T")));
+    }
+  }, [startDate]);
+
+  useEffect(() => {
+    if (endDate) {
+      setEndDateForm(new Date(endDate.replace(" ", "T")));
+    }
+  }, [endDate]);
+
+  useEffect(() => {
+    if (notifyBefore) {
+      const time = notifyBefore.split(":");
+      setRemindBefore({
+        hours: Number(time.at(0)),
+        minutes: Number(time.at(1)),
+        seconds: Number(time.at(2))
+      })
+    }
+  }, [notifyBefore]);
+
+  useEffect(()=>{
+    const updateNotify = () =>{
+      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
+      String(remindBefore.minutes).padStart(2, '0') + ":" + 
+      String(remindBefore.seconds).padStart(2, '0');
+      handleChangeValue("notifyBefore", time);
+    };
+    updateNotify();
+  },[remindBefore]);
+  
+  useEffect(()=>{
+    const updateStartDate = () =>{
+      handleChangeValue("startDate", formatDateToISOString(startDateForm));
+    };
+    updateStartDate();
+  },[startDateForm]);
+  
+  useEffect(()=>{
+    const updateEndDate = () =>{
+      handleChangeValue("endDate", formatDateToISOString(endDateForm));
+    };
+    updateEndDate();
+  },[endDateForm]);
 
   const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate: Date | undefined,
-    setDate: React.Dispatch<React.SetStateAction<Date>>,
-    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    setShowPicker(false);
-    if (event.type === "set" && selectedDate) {
-      setDate(selectedDate);
-    }
+      event: DateTimePickerEvent,
+      selectedDate: Date | undefined,
+      field: string,
+      setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
+      setShowPicker(false);
+      if (event.type === "set" && selectedDate) {
+        if(field.startsWith("start"))
+          setStartDateForm(selectedDate);
+        else
+          setEndDateForm(selectedDate);
+      }
   };
+
+  const handleTimeChange = (
+      event: DateTimePickerEvent,
+      selectedTime: Date | undefined,
+      field: string,
+      setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
+      setShowPicker(false);
+      if (event.type === "set" && selectedTime) {
+        if(field.startsWith("start"))
+          setStartDateForm(selectedTime);
+        else
+          setEndDateForm(selectedTime);
+      }
+    };
 
   const handleRemindBeforeChange = (
     field: "hours" | "minutes" | "seconds",
@@ -67,15 +134,28 @@ export default function APlan({ Name }: APlanProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{Name}</Text>
+      <TextInput 
+        style={styles.title}
+        onChangeText={(text)=> handleChangeValue("name", text)}>
+        {name}
+      </TextInput>
+      {
+        status === "COMPLETE" ? (
+          <Text style={styles.completeText}>
+            <Text style={styles.highlightText}>COMPLETE AT: </Text> {completeDate}
+          </Text>
+        ):
+        (
+          <Text style={styles.incompleteText}>INCOMPLETE</Text>
+        )
+      }
       {/* Description Field */}
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Description</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter plan description"
-          value={description}
-          onChangeText={setDescription}
+          defaultValue={description}
+          onChangeText={(text)=> handleChangeValue("description", text)}
         />
       </View>
 
@@ -90,7 +170,7 @@ export default function APlan({ Name }: APlanProps) {
           >
             <TextInput
               style={styles.input}
-              value={startDate.toLocaleDateString("en-US", {
+              defaultValue={startDateForm.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -101,14 +181,14 @@ export default function APlan({ Name }: APlanProps) {
 
           {showStartDatePicker && (
             <DateTimePicker
-              value={startDate}
+              value={startDateForm}
               mode="date"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
                 handleDateChange(
                   event,
                   date,
-                  setStartDate,
+                  "startDate",
                   setShowStartDatePicker
                 )
               }
@@ -122,7 +202,7 @@ export default function APlan({ Name }: APlanProps) {
           >
             <TextInput
               style={styles.input}
-              value={startDate.toLocaleTimeString("en-US", {
+              value={startDateForm.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
@@ -133,14 +213,14 @@ export default function APlan({ Name }: APlanProps) {
 
           {showStartTimePicker && (
             <DateTimePicker
-              value={startDate}
+              value={startDateForm}
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(
+                handleTimeChange(
                   event,
                   date,
-                  setStartDate,
+                  "startDate",
                   setShowStartTimePicker
                 )
               }
@@ -160,7 +240,7 @@ export default function APlan({ Name }: APlanProps) {
           >
             <TextInput
               style={styles.input}
-              value={endDate.toLocaleDateString("en-US", {
+              value={endDateForm.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -171,11 +251,11 @@ export default function APlan({ Name }: APlanProps) {
 
           {showEndDatePicker && (
             <DateTimePicker
-              value={endDate}
+              value={endDateForm}
               mode="date"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndDatePicker)
+                handleDateChange(event, date, "endDate", setShowEndDatePicker)
               }
             />
           )}
@@ -187,7 +267,7 @@ export default function APlan({ Name }: APlanProps) {
           >
             <TextInput
               style={styles.input}
-              value={endDate.toLocaleTimeString("en-US", {
+              value={endDateForm.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
@@ -198,11 +278,11 @@ export default function APlan({ Name }: APlanProps) {
 
           {showEndTimePicker && (
             <DateTimePicker
-              value={endDate}
+              value={endDateForm}
               mode="time"
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(event, date) =>
-                handleDateChange(event, date, setEndDate, setShowEndTimePicker)
+                handleTimeChange(event, date, "endDate", setShowEndTimePicker)
               }
             />
           )}
@@ -252,7 +332,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#7AB2D3",
     textAlign: "center",
-    marginBottom: 20,
     fontFamily: "PlusJakartaSans_700Bold",
   },
   fieldContainer: {
@@ -300,4 +379,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
   },
+  incompleteText:{
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.red,
+    marginTop: 5,
+    marginBottom: 20,
+    width: "100%",
+    textAlign: "center",
+  },
+  completeText:{
+    fontSize: 14,
+    width: "100%",
+    textAlign: "center",
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  highlightText:{
+    color: Colors.green,
+    fontWeight: "bold",
+  }
 });

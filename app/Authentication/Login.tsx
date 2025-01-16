@@ -71,6 +71,9 @@ export default function LoginScreen() {
         case 404:
           errorDes = "This email hasn't been registered yet."
           break;
+        case 500:
+          errorDes = "Error connecting to the server. Please try again."
+          break;
       }
 
       setShowError(true);
