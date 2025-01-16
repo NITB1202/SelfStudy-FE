@@ -8,6 +8,7 @@ import {
   Image,
   Pressable,
   Modal,
+  ScrollView,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
@@ -121,11 +122,10 @@ export default function Team() {
       </Pressable>
 
       <View style={styles.header}>
-        <FlatList
-          data={filteredTeams}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+        <ScrollView>
+          {filteredTeams.map((item) => (
             <Pressable
+              key={item.id}
               style={styles.teamRow}
               onPress={() => openTeamDetailModal(item)}
             >
@@ -139,8 +139,8 @@ export default function Team() {
                 />
               )}
             </Pressable>
-          )}
-        />
+          ))}
+        </ScrollView>
       </View>
 
       {/* Team Detail Modal */}
