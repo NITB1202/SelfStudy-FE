@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
   },
 
   searchContainer: {
-    flexDirection: "row", // Để biểu tượng và TextInput nằm ngang
-    alignItems: "center", // Căn giữa các phần tử
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 5,
     paddingVertical: 1,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   searchIcon: {
-    marginRight: 10, // Khoảng cách giữa biểu tượng và TextInput
+    marginRight: 10,
   },
   avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
 });

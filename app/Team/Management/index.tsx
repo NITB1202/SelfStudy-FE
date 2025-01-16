@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Image,
   ScrollView,
 } from "react-native";
@@ -14,6 +14,7 @@ import TeamInfo from "./Info";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import { router } from "expo-router";
+import LoginInput from "@/components/LoginInput";
 
 type Member = {
   id: number;
@@ -103,13 +104,11 @@ export default function Management() {
   const [selectedTab, setSelectedTab] = useState<"all" | "admin">("all");
   const userRole = currentTeam === "Team 1" ? "member" : "admin"; // Phân quyền
 
-  // Lọc thành viên dựa trên tab được chọn
   const filteredMembers =
     selectedTab === "all"
       ? teams[currentTeam].members
       : teams[currentTeam].members.filter((member) => member.role === "admin");
 
-  // Hàm xóa thành viên
   const handleRemoveMember = (memberId: number) => {
     setTeams((prevTeams) => ({
       ...prevTeams,
@@ -121,13 +120,13 @@ export default function Management() {
       },
     }));
   };
-  // Hàm cập nhật ảnh team
+
   const handleUpdateTeamImage = (newImageUri: string) => {
     setTeams((prevTeams) => ({
       ...prevTeams,
       [currentTeam]: {
         ...prevTeams[currentTeam],
-        teamImage: newImageUri, // Cập nhật ảnh team
+        teamImage: newImageUri,
       },
     }));
   };
@@ -135,47 +134,55 @@ export default function Management() {
   return (
     <View style={styles.container}>
       <Header />
-      {/* Dropdown chọn team */}
+      {/* chọn team */}
       <View style={styles.teamSelect}>
         <Text style={styles.label}>Current team</Text>
         <View style={styles.dropdownRow}>
-          <Select
-            options={Object.keys(teams)}
-            value={currentTeam}
-            onChange={(selectedTeam) =>
-              setCurrentTeam(selectedTeam as keyof typeof teams)
-            }
-          />
-          {/* Nút Search */}
-          <TouchableOpacity style={styles.searchButton}>
-            <LinearGradient
-              colors={["#B9E5E8", "#7AB2D3"]}
-              style={styles.gradientButton}
+          <View style={styles.dropdown}>
+            <LoginInput
+              placeholder="Search a team"
+              style={{ margin: 2, paddingHorizontal: 20 }}
+              editable={false}
+            />
+          </View>
+
+          {/* Search */}
+          <View style={styles.dropdown}>
+            <Pressable
+              style={styles.searchButton}
+              onPress={() => router.push("/Team/Teams")}
             >
-              <MaterialCommunityIcons
-                name="magnify"
-                size={24}
-                color="#FFFFFF"
-              />
-            </LinearGradient>
-          </TouchableOpacity>
+              <LinearGradient
+                colors={["#B9E5E8", "#7AB2D3"]}
+                style={styles.gradientButton}
+              >
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={24}
+                  color="#FFFFFF"
+                />
+              </LinearGradient>
+            </Pressable>
+          </View>
         </View>
       </View>
 
-      {/* Thông tin team */}
-      <TeamInfo
-        teamName={teams[currentTeam].name}
-        establishDate={teams[currentTeam].establishDate}
-        createdBy={teams[currentTeam].createdBy}
-        teamImage={teams[currentTeam].teamImage}
-        onUpdateTeamImage={handleUpdateTeamImage}
-        role={currentTeam === "Team 1" ? "member" : "admin"} // Đồng nhất kiểu dữ liệu
-      />
+      {/* team */}
+      <View style={styles.teamInfo}>
+        <TeamInfo
+          teamName={teams[currentTeam].name}
+          establishDate={teams[currentTeam].establishDate}
+          createdBy={teams[currentTeam].createdBy}
+          teamImage={teams[currentTeam].teamImage}
+          onUpdateTeamImage={handleUpdateTeamImage}
+          role={currentTeam === "Team 1" ? "member" : "admin"} // Đồng nhất kiểu dữ liệu
+        />
+      </View>
 
       {/* Tabs */}
       <View style={styles.content}>
         <View style={styles.tabContainer}>
-          <TouchableOpacity
+          <Pressable
             style={[styles.tab, selectedTab === "all" && styles.activeTab]}
             onPress={() => setSelectedTab("all")}
           >
@@ -187,8 +194,8 @@ export default function Management() {
             >
               ALL
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             style={[styles.tab, selectedTab === "admin" && styles.activeTab]}
             onPress={() => setSelectedTab("admin")}
           >
@@ -200,10 +207,9 @@ export default function Management() {
             >
               ADMIN
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
-        {/* Danh sách thành viên */}
         <ScrollView>
           {filteredMembers.map((item) => (
             <View key={item.id} style={styles.memberItem}>
@@ -212,27 +218,24 @@ export default function Management() {
                 style={styles.memberAvatar}
               />
               <Text style={styles.memberName}>{item.name}</Text>
-
-              {/* Hiển thị icon "dots-grid" nếu thành viên là admin */}
               {item.role === "admin" && (
-                <TouchableOpacity>
+                <Pressable>
                   <MaterialCommunityIcons
-                    name="dots-grid"
+                    name="view-grid-outline"
                     size={24}
                     color="#7AB2D3"
                   />
-                </TouchableOpacity>
+                </Pressable>
               )}
 
-              {/* Hiển thị icon dấu "-" nếu userRole là admin và thành viên không phải là admin */}
               {userRole === "admin" && item.role !== "admin" && (
-                <TouchableOpacity onPress={() => handleRemoveMember(item.id)}>
+                <Pressable onPress={() => handleRemoveMember(item.id)}>
                   <MaterialCommunityIcons
-                    name="minus-circle-outline"
+                    name="view-grid-outline"
                     size={24}
-                    color="#FF5A5F"
+                    color="#7AB2D3"
                   />
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
           ))}
@@ -254,6 +257,9 @@ const styles = StyleSheet.create({
   teamSelect: {
     marginBottom: 20,
     padding: 10,
+  },
+  teamInfo: {
+    paddingHorizontal: 50,
   },
   content: {
     padding: 20,
@@ -277,6 +283,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  dropdown: {
+    shadowColor: "#000",
+    elevation: 15,
+  },
+
   searchButton: {
     marginLeft: 10,
   },
@@ -306,12 +317,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   activeTab: {
-    backgroundColor: "#7AB2D3", // Màu nền khi Tab được chọn
+    backgroundColor: "#7AB2D3",
   },
   tabText: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#FFFFFF", // Màu chữ mặc định
+    color: "#FFFFFF",
   },
 
   activeTabText: {

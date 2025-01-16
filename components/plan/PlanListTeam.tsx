@@ -74,7 +74,7 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
           {item.isAdmin && (
             <MaterialCommunityIcons
               name="account-outline"
-              size={20}
+              size={25}
               color="#7AB2D3"
               style={styles.adminIcon}
             />
@@ -105,10 +105,8 @@ const styles = StyleSheet.create({
   planItemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   adminIcon: {
     marginLeft: 5,

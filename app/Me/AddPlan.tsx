@@ -20,6 +20,7 @@ import planApi from "@/api/planApi";
 import { useAuth } from "@/context/AuthContext";
 import taskApi from "@/api/taskApi";
 import LoadingScreen from "@/components/LoadingScreen";
+import Checkbox from "@/components/Checkbox";
 
 export default function PlanScreen() {
   const [planInfo, setPlanInfo] = useState({
@@ -29,106 +30,122 @@ export default function PlanScreen() {
     endDate: formatDateToISOString(new Date()),
     notifyBefore: "00:00:00",
   });
-  const [tasks, setTasks] = useState<{
-    id: number,
-    name: string
-  }[]>([]);
+  const [tasks, setTasks] = useState([
+    { id: 1, name: "Task01", completed: false },
+  ]);
   const [newTask, setNewTask] = useState("");
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState({
     title: "",
     description: "",
   });
-  const {userId} = useAuth();
+  const { userId } = useAuth();
   const [loading, setLoading] = useState(false);
-  
+
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
         ...prevTasks,
-        { id: prevTasks.length + 1, name: newTask },
+        { id: prevTasks.length + 1, name: newTask.trim(), completed: false },
       ]);
       setNewTask("");
     }
   };
-  
+
   const handleDeleteTask = (id: number) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
-
+  const toggleTaskCompletion = (id: number, isChecked: boolean) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: isChecked } : task
+      )
+    );
+  };
 
   const handleSave = async () => {
-    if(planInfo.name === ""){
+    if (planInfo.name === "") {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: "Name is required."
+        description: "Name is required.",
       });
       return;
     }
 
-    if(new Date(planInfo.startDate).getTime() >= new Date(planInfo.endDate).getTime()){
+    if (
+      new Date(planInfo.startDate).getTime() >=
+      new Date(planInfo.endDate).getTime()
+    ) {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: "The start date must come after the end date."
+        description: "The start date must come after the end date.",
       });
       return;
     }
 
-    const taskNames= tasks.map(item => item.name);
+    const taskNames = tasks.map((item) => item.name);
 
-    if(hasDuplicateStrings(taskNames)){
+    if (hasDuplicateStrings(taskNames)) {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: "Cannot create a task with the same name."
+        description: "Cannot create a task with the same name.",
       });
       return;
     }
 
-    try{
+    try {
       setLoading(true);
-      const planResponse: any = await planApi.create(userId, planInfo.name, planInfo.description,
-        planInfo.startDate, planInfo.endDate, planInfo.notifyBefore
+      const planResponse: any = await planApi.create(
+        userId,
+        planInfo.name,
+        planInfo.description,
+        planInfo.startDate,
+        planInfo.endDate,
+        planInfo.notifyBefore
       );
       const planId = planResponse.id;
-      taskNames.forEach(async item => {
-        await taskApi.create(planId, item)
+      taskNames.forEach(async (item) => {
+        await taskApi.create(planId, item);
       });
 
       router.push("/Me/Plan");
-    }
-    catch(error: any){
+    } catch (error: any) {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: error.message
+        description: error.message,
       });
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-     <SafeAreaView style={styles.safeview}>
+    <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
-        <AddPlan setPlanInfo={setPlanInfo}/>
+        <AddPlan setPlanInfo={setPlanInfo} />
         <View style={styles.divideLine}></View>
         {/* Tasks Section */}
         <View style={styles.tasksSectionWrapper}>
           <Text style={styles.sectionTitle}>Tasks</Text>
+          <ScrollView>
             {tasks.map((item) => (
               <View key={item.id.toString()} style={styles.taskContainer}>
-                <MaterialCommunityIcons
-                  name="checkbox-blank-outline"
-                  size={24}
-                  color="#7AB2D3"
+                <Checkbox
+                  isChecked={item.completed}
+                  onToggle={(isChecked) =>
+                    toggleTaskCompletion(item.id, isChecked)
+                  }
                 />
                 <TextInput
-                  style={styles.taskInput}
+                  style={[
+                    styles.taskInput,
+                    item.completed && styles.taskCompleted,
+                  ]}
                   value={item.name}
                   editable={false}
                 />
@@ -156,30 +173,25 @@ export default function PlanScreen() {
                 onChangeText={setNewTask}
               />
             </View>
-          </View>
+          </ScrollView>
+        </View>
       </ScrollView>
- 
+
       <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Save"
-          onPress={handleSave}
-        />
+        <CustomButton title="Save" onPress={handleSave} />
       </View>
-      {
-        showError &&
+      {showError && (
         <Error
           title={message.title}
           description={message.description}
-          onClose={()=> setShowError(false)}
+          onClose={() => setShowError(false)}
           visible={showError}
-          onOkPress={()=> setShowError(false)}>
-        </Error>
-      }
-      {
-        loading && <LoadingScreen/>
-      }
-     </SafeAreaView>
-   );
+          onOkPress={() => setShowError(false)}
+        ></Error>
+      )}
+      {loading && <LoadingScreen />}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -200,6 +212,10 @@ const styles = StyleSheet.create({
   tasksSectionWrapper: {
     flex: 1,
     paddingHorizontal: 10,
+  },
+  taskCompleted: {
+    textDecorationLine: "line-through",
+    color: "#808080",
   },
   taskContainer: {
     flexDirection: "row",
@@ -258,20 +274,20 @@ const styles = StyleSheet.create({
   divideLine: {
     flex: 1,
     height: 1,
-    backgroundColor: "rgba(1,1,1,0.2)", 
+    backgroundColor: "rgba(1,1,1,0.2)",
     margin: 20,
   },
-  buttonContainer:{
+  buttonContainer: {
     width: "100%",
     paddingHorizontal: 10,
   },
-  safeview:{
+  safeview: {
     flex: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-start",
     backgroundColor: "white",
-    padding: 10
+    padding: 10,
   },
   container: {
     flex: 1,

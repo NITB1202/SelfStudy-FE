@@ -14,42 +14,20 @@ import BackButton from "@/components/BackButton";
 import { router, useRouter } from "expo-router";
 import AddPlan from "@/components/plan/AddPlan";
 import SearchUser from "./User";
-
-interface Assignee {
-  id: string;
-  name: string;
-  avatar: string;
-}
+import Checkbox from "@/components/Checkbox";
 
 export default function PlanScreen() {
-  const [tasks, setTasks] = useState([{ id: 1, name: "Task01" }]);
+  const [tasks, setTasks] = useState([
+    { id: 1, name: "Task01", completed: false },
+  ]);
   const [newTask, setNewTask] = useState("");
-  const [assignees, setAssignees] = useState<Assignee[]>([]);
   const router = useRouter();
-
-  const navigateToUserSelection = () => {
-    // Truyền assignees qua params khi điều hướng
-    router.push({
-      pathname: "./User", // Trang SearchUser
-      params: { assignees: JSON.stringify(assignees) }, // Chuyển assignees thành chuỗi JSON
-    });
-  };
-
-  const handleAddAssignee = (newAssignee: Assignee) => {
-    setAssignees((prevAssignees) => [...prevAssignees, newAssignee]);
-  };
-
-  const handleRemoveAssignee = (assigneeId: string) => {
-    setAssignees((prevAssignees) =>
-      prevAssignees.filter((assignee) => assignee.id !== assigneeId)
-    );
-  };
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       setTasks((prevTasks) => [
         ...prevTasks,
-        { id: prevTasks.length + 1, name: newTask },
+        { id: prevTasks.length + 1, name: newTask.trim(), completed: false },
       ]);
       setNewTask("");
     }
@@ -59,37 +37,21 @@ export default function PlanScreen() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
+  const toggleTaskCompletion = (id: number, isChecked: boolean) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: isChecked } : task
+      )
+    );
+  };
+
   return (
     <ScrollView style={styles.planSectionWrapper}>
       {/* Back Button */}
       <BackButton />
+
       {/* Add Plan Section */}
       <AddPlan />
-
-      {/* Assignees Section */}
-      <View style={styles.assigneesSection}>
-        <Text style={styles.sectionTitle}>Assignee</Text>
-        <View style={styles.assigneesContainer}>
-          {assignees.map((assignee) => (
-            <TouchableOpacity
-              key={assignee.id}
-              onPress={() => handleRemoveAssignee(assignee.id)}
-            >
-              <Image
-                source={{ uri: assignee.avatar }}
-                style={styles.assigneeAvatar}
-              />
-            </TouchableOpacity>
-          ))}
-          <TouchableOpacity onPress={navigateToUserSelection}>
-            <MaterialCommunityIcons
-              name="plus-circle-outline"
-              size={30}
-              color="#7AB2D3"
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
 
       {/* Tasks Section */}
       <View style={styles.tasksSectionWrapper}>
@@ -97,13 +59,17 @@ export default function PlanScreen() {
         <ScrollView>
           {tasks.map((item) => (
             <View key={item.id.toString()} style={styles.taskContainer}>
-              <MaterialCommunityIcons
-                name="checkbox-blank-outline"
-                size={24}
-                color="#7AB2D3"
+              <Checkbox
+                isChecked={item.completed}
+                onToggle={(isChecked) =>
+                  toggleTaskCompletion(item.id, isChecked)
+                }
               />
               <TextInput
-                style={styles.taskInput}
+                style={[
+                  styles.taskInput,
+                  item.completed && styles.taskCompleted,
+                ]}
                 value={item.name}
                 editable={false}
               />
@@ -146,6 +112,7 @@ export default function PlanScreen() {
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   planSectionWrapper: {
     flex: 0,
@@ -219,12 +186,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#7AB2D3",
     borderRadius: 8,
   },
+  taskCompleted: {
+    textDecorationLine: "line-through",
+    color: "#808080",
+  },
   closeModalText: {
     color: "white",
     fontWeight: "bold",
   },
   tasksSectionWrapper: {
-    flex: 1, // Chiếm nửa dưới màn hình
+    flex: 1,
     marginTop: 10,
     paddingHorizontal: 10,
   },
