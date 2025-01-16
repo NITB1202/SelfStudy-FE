@@ -7,7 +7,7 @@ import defaultIcon from "../../assets/images/plan/invitation.png";
 
 interface InviteProps {
   name: string;
-  expiredTime: string;
+  createAt: string;
   people?: string;
   team?: string;
   isRead: boolean;
@@ -18,7 +18,7 @@ interface InviteProps {
 
 const Invite: React.FC<InviteProps> = ({
   name,
-  expiredTime,
+  createAt,
   people,
   team,
   isRead,
@@ -61,7 +61,7 @@ const Invite: React.FC<InviteProps> = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.expiredTime}>{expiredTime}</Text>
+          <Text style={styles.expiredTime}>{createAt}</Text>
           <Text style={styles.description}>
             {people || "Someone"} has invited you to the team{" "}
             <Text>{`"${team || "Unknown"}"`}</Text>.
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     color: "grey",
+    marginRight: 5,
   },
   contentRow: {
     flexDirection: "row",
