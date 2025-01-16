@@ -11,7 +11,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { Colors } from "@/constants/Colors";
-import { formatDateToISOString } from "@/util/format";
+import { formatDateTime, formatDateToISOString } from "@/util/format";
 
 interface APlanProps {
   name: string;
@@ -142,7 +142,7 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
       {
         status === "COMPLETE" ? (
           <Text style={styles.completeText}>
-            <Text style={styles.highlightText}>COMPLETE AT: </Text> {completeDate}
+            <Text style={styles.highlightText}>COMPLETE AT: </Text> {formatDateTime(completeDate? completeDate: "")}
           </Text>
         ):
         (

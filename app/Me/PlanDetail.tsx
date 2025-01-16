@@ -174,14 +174,38 @@ export default function PlanScreen() {
       setLoading(true);
       await planApi.update(id, planInfo.name, planInfo.description, 
       planInfo.startDate, planInfo.endDate, planInfo.notifyBefore);
-      tasks.forEach(async element => {
-        await taskApi.update(element.id, element.name, element.status);
+
+      const taskUpdateResults = await Promise.allSettled(
+        tasks.map((task) => taskApi.update(task.id, task.name, task.status))
+      );
+      taskUpdateResults.forEach((result, index) => {
+        if (result.status === "rejected") {
+          console.error(`Failed to update task ${tasks[index].id}:`, result.reason);
+        } else {
+          console.log(`Task ${tasks[index].id} updated successfully`);
+        }
       });
-      deletedTaskIds.forEach(async element => {
-        await taskApi.delete(element);
+
+      const taskDeleteResults = await Promise.allSettled(
+        deletedTaskIds.map((taskId) => taskApi.delete(taskId))
+      );
+      taskDeleteResults.forEach((result, index) => {
+        if (result.status === "rejected") {
+          console.error(`Failed to delete task with ID ${deletedTaskIds[index]}:`, result.reason);
+        } else {
+          console.log(`Task with ID ${deletedTaskIds[index]} deleted successfully`);
+        }
       });
-      addedTasks.forEach(async element => {
-        await taskApi.create(id, element);
+
+      const taskCreateResults = await Promise.allSettled(
+        addedTasks.map((newTask) => taskApi.create(id, newTask))
+      );
+      taskCreateResults.forEach((result, index) => {
+        if (result.status === "rejected") {
+          console.error(`Failed to create task:`, result.reason);
+        } else {
+          console.log(`Task created successfully:`, addedTasks[index]);
+        }
       });
       router.push("/Me/Plan");
     }
