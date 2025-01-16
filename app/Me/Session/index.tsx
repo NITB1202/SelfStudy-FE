@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
 import Slider from "@react-native-community/slider";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "@/components/Checkbox";
 import ProgressCircle from "./time";
 import Header from "@/components/Header";
-import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
 import { useRouter } from "expo-router";
 import ModalSetting from "./setiing";
 import CustomButton from "@/components/CustomButton";
+import { Audio } from 'expo-av';
 
 export default function Page() {
   const router = useRouter();
@@ -25,15 +25,42 @@ export default function Page() {
   const [breakTime, setBreakTime] = useState(600);
   const [currentStage, setCurrentStage] = useState(1);
   const [state, setState] = useState("FOCUS");
+  const [soundLink, setSoundLink] = useState("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+  const [sound, setSound] = useState<any>(null);
 
-  const songs = ["Westlife - My Love", "Ed Sheeran - Perfect", "Adele - Hello"];
+  const playSound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: soundLink },
+        { shouldPlay: true }
+      );
+      setSound(sound);
+    } catch (error) {
+      console.error('Error loading or playing sound:', error);
+    }
+  };
+
+  const stopSound = async () => {
+    if (sound) {
+      await sound.stopAsync();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
+
 
   const handleNextSong = () => {
-    setCurrentSongIndex((prev) => (prev === songs.length - 1 ? 0 : prev + 1));
+    // setCurrentSongIndex((prev) => (prev === songs.length - 1 ? 0 : prev + 1));
   };
 
   const handlePreviousSong = () => {
-    setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
+    // setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
   };
 
   const handleFinish = () => {
@@ -48,6 +75,7 @@ export default function Page() {
           setIsRunning(false);
           setHasStarted(false);
           setTimeRemaining(0);
+          stopSound();
           router.push("/Me/Session/complete");
         },
       },
@@ -68,9 +96,10 @@ export default function Page() {
     breakTime: number;
     musicLink: string;
   }) => {
-    setDuration(duration);
-    setFocusTime(focusTime);
-    setBreakTime(breakTime);
+    setDuration(settings.duration);
+    setFocusTime(settings.focusTime);
+    setBreakTime(settings.breakTime);
+    setSoundLink(settings.musicLink);
     setModalVisible(false);
   };
 
@@ -115,7 +144,7 @@ export default function Page() {
           <Pressable onPress={handlePreviousSong}>
             <Ionicons name="play-skip-back" size={24} color="#7AB2D3" />
           </Pressable>
-          <Text style={styles.songText}>{songs[currentSongIndex]}</Text>
+          <Text style={styles.songText}>Rain</Text>
           <Pressable onPress={handleNextSong}>
             <Ionicons name="play-skip-forward" size={24} color="#7AB2D3" />
           </Pressable>
@@ -123,7 +152,7 @@ export default function Page() {
 
         <View style={styles.loopControl}>
           <Checkbox
-            isChecked={isLooping}
+            isChecked={isLooping} 
             onToggle={(checked) => setIsLooping(checked)}
           />
           <Text style={styles.loopText}>On loop</Text>
@@ -136,6 +165,7 @@ export default function Page() {
                 setIsRunning(true);
                 setHasStarted(true);
                 setTimeRemaining(focusTime);
+                playSound();
               } else {
                 handleFinish();
               }

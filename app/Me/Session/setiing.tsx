@@ -35,7 +35,7 @@ export default function ModalSetting({
   const [duration, setDuration] = useState(new Date("2025-01-16T01:00:00"));
   const [focusTime, setFocusTime] = useState(new Date("2025-01-16T20:00:00"));
   const [breakTime, setBreakTime] = useState(new Date("2025-01-16T10:00:00"));
-  const [musicLink, setMusicLink] = useState("");
+  const [musicLink, setMusicLink] = useState("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
   const [showPicker, setShowPicker] = useState(false);
   const [currentField, setCurrentField] = useState("");
   const [showError, setShowError] = useState(false);
