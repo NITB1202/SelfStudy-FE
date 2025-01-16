@@ -169,7 +169,7 @@ export default function Plan() {
                   onPress={() => handlePlanPress(item.id)}>
                   <PlanItem
                     planName={item.name}
-                    progress={Number(item.progress)}
+                    progress={Number(item.progress) * 100}
                     deadline={item.endDate}
                     >
                   </PlanItem>

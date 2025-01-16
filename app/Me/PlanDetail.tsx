@@ -20,6 +20,8 @@ import planApi from "@/api/planApi";
 import taskApi from "@/api/taskApi";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Colors } from "@/constants/Colors";
+import Error from "@/components/Message/Error";
+import { hasDuplicateStrings } from "@/util/validator";
 
 export default function PlanScreen() {
   const [tasks, setTasks] = useState<{
@@ -45,10 +47,17 @@ export default function PlanScreen() {
   const id = searchParams.id as string;
   const [loading, setLoading] = useState(false);
   const [addedTasks, setAddedTask] = useState<string[]>([]);
+  const [deletedTaskIds, setDeletedTaskIds] = useState<string[]>([]);
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    description: "",
+  });
 
   useEffect(()=>{
     const fetchData = async () =>{
       try{
+        if(id === null) return;
         setLoading(true);
         const response: any = await planApi.getById(id);
         const taskResponse: any = await taskApi.getAllForPlan(id);
@@ -101,6 +110,7 @@ export default function PlanScreen() {
 
   const handleDeleteTask = (id: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setDeletedTaskIds((prev)=> [...prev, id]);
   };
 
   const startEditingTask = (id: string, name: string) => {
@@ -130,9 +140,63 @@ export default function PlanScreen() {
       }));
   };
 
-  const handleSave = () =>{
-    console.log(tasks);
-    console.log(addedTasks);
+  const handleSave = async () =>{
+    if(planInfo.name === ""){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Name is required."
+      });
+      return;
+    }
+
+    if(new Date(planInfo.startDate).getTime() >= new Date(planInfo.endDate).getTime()){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "The start date must come after the end date."
+      });
+      return;
+    }
+
+    const taskNames = tasks.map(item => item.name);
+
+    if(hasDuplicateStrings([...taskNames, ...addedTasks])){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description: "Cannot have tasks with the same name."
+      });
+      return;
+    }
+
+    try{
+      setLoading(true);
+      await planApi.update(id, planInfo.name, planInfo.description, 
+      planInfo.startDate, planInfo.endDate, planInfo.notifyBefore);
+      tasks.forEach(async element => {
+        await taskApi.update(element.id, element.name, element.status);
+      });
+      deletedTaskIds.forEach(async element => {
+        await taskApi.delete(element);
+      });
+      addedTasks.forEach(async element => {
+        await taskApi.create(id, element);
+      });
+      router.push("/Me/Plan");
+    }
+    catch(error: any){
+      setShowError(true);
+      setMessage({
+        title: "Error",
+        description:  error. status === 500? 
+        "Error connecting to the server. Please try again." :
+        "Can't update a task in an expired plan"
+      });
+    }
+    finally{
+      setLoading(false);
+    }
   }
 
   return (
@@ -159,6 +223,7 @@ export default function PlanScreen() {
                   <View
                     style={styles.taskContainer}>
                     <Checkbox
+                      isChecked = {item.status === "COMPLETED"}
                       onToggle={(isChecked) =>
                       toggleTaskCompletion(item.id, isChecked)
                     }
@@ -245,6 +310,16 @@ export default function PlanScreen() {
           onPress={handleSave}
         />
       </View>
+      {
+        showError &&
+        <Error
+          title={message.title}
+          description={message.description}
+          onClose={()=> setShowError(false)}
+          visible={showError}
+          onOkPress={()=> setShowError(false)}>
+        </Error>
+      }
       {
         loading && <LoadingScreen/>
       }

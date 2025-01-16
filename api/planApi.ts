@@ -15,6 +15,9 @@ const planApi = {
     getById(id: string){
         const url = "/plan?id=" + id;
         return axiosInstance.get(url);
+    },
+    update(planId: string, name: string, description: string, startDate: string, endDate: string, notifyBefore: string){
+        return axiosInstance.patch("/plan",{planId, name, description, startDate, endDate, notifyBefore });
     }
 };
 
