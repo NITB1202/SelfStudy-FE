@@ -24,14 +24,27 @@ interface APlanProps {
   handleChangeValue: (field: string, value: string) => void;
 }
 
-export default function APlan({ name, description, startDate, endDate, notifyBefore, status, completeDate, handleChangeValue}: APlanProps) {
+export default function APlan({
+  name,
+  description,
+  startDate,
+  endDate,
+  notifyBefore,
+  status,
+  completeDate,
+  handleChangeValue,
+}: APlanProps) {
   const [remindBefore, setRemindBefore] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [startDateForm, setStartDateForm] = useState(new Date(startDate.replace(" ", "T")));
-  const [endDateForm, setEndDateForm] = useState(new Date(endDate.replace(" ", "T")));
+  const [startDateForm, setStartDateForm] = useState(
+    new Date(startDate.replace(" ", "T"))
+  );
+  const [endDateForm, setEndDateForm] = useState(
+    new Date(endDate.replace(" ", "T"))
+  );
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
@@ -55,64 +68,63 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
       setRemindBefore({
         hours: Number(time.at(0)),
         minutes: Number(time.at(1)),
-        seconds: Number(time.at(2))
-      })
+        seconds: Number(time.at(2)),
+      });
     }
   }, [notifyBefore]);
 
-  useEffect(()=>{
-    const updateNotify = () =>{
-      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
-      String(remindBefore.minutes).padStart(2, '0') + ":" + 
-      String(remindBefore.seconds).padStart(2, '0');
+  useEffect(() => {
+    const updateNotify = () => {
+      const time =
+        String(remindBefore.hours).padStart(2, "0") +
+        ":" +
+        String(remindBefore.minutes).padStart(2, "0") +
+        ":" +
+        String(remindBefore.seconds).padStart(2, "0");
       handleChangeValue("notifyBefore", time);
     };
     updateNotify();
-  },[remindBefore]);
-  
-  useEffect(()=>{
-    const updateStartDate = () =>{
+  }, [remindBefore]);
+
+  useEffect(() => {
+    const updateStartDate = () => {
       handleChangeValue("startDate", formatDateToISOString(startDateForm));
     };
     updateStartDate();
-  },[startDateForm]);
-  
-  useEffect(()=>{
-    const updateEndDate = () =>{
+  }, [startDateForm]);
+
+  useEffect(() => {
+    const updateEndDate = () => {
       handleChangeValue("endDate", formatDateToISOString(endDateForm));
     };
     updateEndDate();
-  },[endDateForm]);
+  }, [endDateForm]);
 
   const handleDateChange = (
-      event: DateTimePickerEvent,
-      selectedDate: Date | undefined,
-      field: string,
-      setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
-    ) => {
-      setShowPicker(false);
-      if (event.type === "set" && selectedDate) {
-        if(field.startsWith("start"))
-          setStartDateForm(selectedDate);
-        else
-          setEndDateForm(selectedDate);
-      }
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedDate) {
+      if (field.startsWith("start")) setStartDateForm(selectedDate);
+      else setEndDateForm(selectedDate);
+    }
   };
 
   const handleTimeChange = (
-      event: DateTimePickerEvent,
-      selectedTime: Date | undefined,
-      field: string,
-      setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
-    ) => {
-      setShowPicker(false);
-      if (event.type === "set" && selectedTime) {
-        if(field.startsWith("start"))
-          setStartDateForm(selectedTime);
-        else
-          setEndDateForm(selectedTime);
-      }
-    };
+    event: DateTimePickerEvent,
+    selectedTime: Date | undefined,
+    field: string,
+    setShowPicker: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setShowPicker(false);
+    if (event.type === "set" && selectedTime) {
+      if (field.startsWith("start")) setStartDateForm(selectedTime);
+      else setEndDateForm(selectedTime);
+    }
+  };
 
   const handleRemindBeforeChange = (
     field: "hours" | "minutes" | "seconds",
@@ -134,28 +146,27 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
 
   return (
     <View style={styles.container}>
-      <TextInput 
+      <TextInput
         style={styles.title}
-        onChangeText={(text)=> handleChangeValue("name", text)}>
+        onChangeText={(text) => handleChangeValue("name", text)}
+      >
         {name}
       </TextInput>
-      {
-        status === "COMPLETE" ? (
-          <Text style={styles.completeText}>
-            <Text style={styles.highlightText}>COMPLETE AT: </Text> {formatDateTime(completeDate? completeDate: "")}
-          </Text>
-        ):
-        (
-          <Text style={styles.incompleteText}>INCOMPLETE</Text>
-        )
-      }
+      {status === "COMPLETE" ? (
+        <Text style={styles.completeText}>
+          <Text style={styles.highlightText}>COMPLETE AT: </Text>{" "}
+          {formatDateTime(completeDate ? completeDate : "")}
+        </Text>
+      ) : (
+        <Text style={styles.incompleteText}>INCOMPLETE</Text>
+      )}
       {/* Description Field */}
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Description</Text>
         <TextInput
           style={styles.input}
           defaultValue={description}
-          onChangeText={(text)=> handleChangeValue("description", text)}
+          onChangeText={(text) => handleChangeValue("description", text)}
         />
       </View>
 
@@ -163,7 +174,6 @@ export default function APlan({ name, description, startDate, endDate, notifyBef
       <View style={styles.fieldContainerRow}>
         <Text style={styles.label}>Start Date</Text>
         <View style={styles.rowContainer}>
-
           <TouchableOpacity
             style={styles.halfInput}
             onPress={() => setShowStartDatePicker(true)}
@@ -379,7 +389,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
   },
-  incompleteText:{
+  incompleteText: {
     fontSize: 14,
     fontWeight: "bold",
     color: Colors.red,
@@ -388,15 +398,15 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
   },
-  completeText:{
+  completeText: {
     fontSize: 14,
     width: "100%",
     textAlign: "center",
     marginTop: 5,
     marginBottom: 20,
   },
-  highlightText:{
+  highlightText: {
     color: Colors.green,
     fontWeight: "bold",
-  }
+  },
 });
