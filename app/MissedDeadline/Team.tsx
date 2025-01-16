@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Select from "@/components/Select";
 import PlanItemNoti from "@/components/plan/PlanItemNoti";
 import Checkbox from "@/components/Checkbox";
+import LoginInput from "@/components/LoginInput";
+import { router } from "expo-router";
 
 const teamsData = {
   Team1: {
@@ -43,7 +45,6 @@ const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
   const currentTeam = teamsData[selectedTeam];
   const isAdmin = currentTeam.role === "admin";
 
-  // Gọi callback khi team thay đổi
   useEffect(() => {
     onRoleChange(currentTeam.role); // Gửi role lên màn hình cha
   }, [selectedTeam]);
@@ -77,22 +78,24 @@ const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
         {/* Team Selector */}
         <View style={styles.selectorContainer}>
           <View style={styles.selectWrapper}>
-            <Select
-              options={Object.keys(teamsData) as (keyof typeof teamsData)[]}
-              value={selectedTeam}
-              onChange={(value) =>
-                setSelectedTeam(value as keyof typeof teamsData)
-              }
+            <LoginInput
+              placeholder="Search a team"
+              style={{
+                margin: 2,
+                paddingHorizontal: 20,
+                backgroundColor: "white",
+              }}
+              editable={false}
             />
           </View>
-          {/* Search Button with Gradient */}
+          {/* Search Button */}
           <LinearGradient
             colors={["#B9E5E8", "#7AB2D3"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.searchButton}
           >
-            <Pressable>
+            <Pressable onPress={() => router.push("/Team/Teams")}>
               <MaterialIcons name="search" size={24} color="white" />
             </Pressable>
           </LinearGradient>
@@ -139,7 +142,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "60%",
   },
-  selectWrapper: { position: "relative", zIndex: 1, flex: 1 },
+  selectWrapper: {
+    position: "relative",
+    zIndex: 1,
+    flex: 1,
+    shadowColor: "#000",
+    elevation: 15,
+  },
   searchButton: {
     width: 40,
     height: 40,

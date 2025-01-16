@@ -8,7 +8,7 @@ interface Plan {
   progress: number;
   planName: string;
   deadline: string;
-  isAdmin: boolean; // Thêm thuộc tính để xác định kế hoạch thuộc admin
+  isAdmin: boolean;
 }
 
 interface PlanListProps {
@@ -74,9 +74,8 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
           {item.isAdmin && (
             <MaterialCommunityIcons
               name="account-outline"
-              size={20}
+              size={30}
               color="#7AB2D3"
-              style={styles.adminIcon}
             />
           )}
         </Pressable>
@@ -89,7 +88,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    alignItems: "flex-start",
+    display: "flex",
+    justifyContent: "center",
   },
   header: {
     flexDirection: "row",
@@ -105,12 +105,7 @@ const styles = StyleSheet.create({
   planItemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-  adminIcon: {
-    marginLeft: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 30,
   },
 });

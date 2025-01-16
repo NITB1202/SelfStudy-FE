@@ -9,7 +9,7 @@ import {
   Pressable,
   Modal,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import Header from "@/components/Header";
 import { router } from "expo-router";
@@ -82,32 +82,31 @@ export default function Team() {
     setSelectedTeam(team);
     setTeamDetailModalVisible(true);
   };
+  const [searchQuery, setSearchQuery] = useState(""); // Quản lý giá trị tìm kiếm
+  const [filteredTeams, setFilteredTeams] = useState(teams); // Danh sách đội sau khi lọc
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <Header />
-      <View style={styles.header}>
-        <Text style={styles.title}>My team</Text>
-        <Pressable>
-          <Image
-            source={{ uri: "https://via.placeholder.com/40" }}
-            style={styles.userAvatar}
-          />
-        </Pressable>
-      </View>
-
       {/* Search Bar */}
       <View style={styles.searchBar}>
-        <Ionicons name="search-outline" size={20} color="#aaa" />
+        <Ionicons name="search-outline" size={20} color="#0000004D" />
         <TextInput
           style={styles.searchInput}
           placeholder="Search teams"
           placeholderTextColor="#aaa"
+          value={searchQuery}
+          onChangeText={(text) => {
+            setSearchQuery(text);
+            const filtered = teams.filter((team) =>
+              team.name.toLowerCase().includes(text.toLowerCase())
+            );
+            setFilteredTeams(filtered);
+          }}
         />
       </View>
 
-      {/* Join a Team */}
       <Pressable
         style={styles.joinButton}
         onPress={() => setModalVisible(true)}
@@ -121,10 +120,9 @@ export default function Team() {
         <Text style={styles.joinButtonText}>Join a team</Text>
       </Pressable>
 
-      {/* Team List */}
       <View style={styles.header}>
         <FlatList
-          data={teams}
+          data={filteredTeams}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
@@ -134,7 +132,11 @@ export default function Team() {
               <Image source={{ uri: item.avatar }} style={styles.teamAvatar} />
               <Text style={styles.teamName}>{item.name}</Text>
               {item.isAdmin && (
-                <Ionicons name="settings-outline" size={20} color="#7AB2D3" />
+                <MaterialCommunityIcons
+                  name="view-grid-outline"
+                  size={25}
+                  color="#7AB2D3"
+                />
               )}
             </Pressable>
           )}
@@ -222,11 +224,10 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F9F9F9",
+    backgroundColor: "#EDEDED",
     borderRadius: 10,
     padding: 10,
-    marginBottom: 15,
-    marginHorizontal: 10,
+    margin: 20,
   },
   searchInput: {
     flex: 1,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   teamRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 24,
     borderBottomWidth: 1,
     borderBottomColor: "#E0E0E0",
   },
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 10,
+    marginRight: 20,
   },
   teamName: {
     flex: 1,

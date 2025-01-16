@@ -28,10 +28,9 @@ export default function PlanScreen() {
   const router = useRouter();
 
   const navigateToUserSelection = () => {
-    // Truyền assignees qua params khi điều hướng
     router.push({
-      pathname: "./User", // Trang SearchUser
-      params: { assignees: JSON.stringify(assignees) }, // Chuyển assignees thành chuỗi JSON
+      pathname: "./User",
+      params: { assignees: JSON.stringify(assignees) },
     });
   };
 

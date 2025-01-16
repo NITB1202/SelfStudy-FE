@@ -4,16 +4,23 @@ import { Colors } from "@/constants/Colors";
 interface LoginInputPros {
   placeholder: string;
   style?: ViewStyle;
-  onChangeText?: (text:string) => void;
+  onChangeText?: (text: string) => void;
+  editable?: boolean; // Thêm thuộc tính để kiểm soát chỉnh sửa
 }
 
-export default function LoginInput({ placeholder, style, onChangeText}: LoginInputPros) {
+export default function LoginInput({
+  placeholder,
+  style,
+  onChangeText,
+  editable = true, // Mặc định là cho phép chỉnh sửa
+}: LoginInputPros) {
   return (
     <View style={[styles.container, style]}>
-      <TextInput 
+      <TextInput
         placeholder={placeholder}
-        onChangeText={onChangeText}>
-      </TextInput>
+        onChangeText={onChangeText}
+        editable={editable} // Sử dụng thuộc tính editable
+      />
     </View>
   );
 }

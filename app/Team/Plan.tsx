@@ -54,15 +54,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
   },
   scrollViewContainer: {
     flexGrow: 1,
     display: "flex",
-    justifyContent: "center", // Đặt nội dung giữa theo chiều dọc
-    alignItems: "center", // Đặt nội dung giữa theo chiều ngang
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
-    gap: 20, // Khoảng cách giữa các phần tử
+    gap: 20,
   },
   title: {
     fontFamily: "Roboto_400Regular",
@@ -82,11 +81,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     borderColor: "rgba(1,1,1,0.1)",
     borderWidth: 1,
-    marginBottom: 20, // Tạo khoảng cách giữa lịch và danh sách kế hoạch
+    marginBottom: 20,
   },
   planListContainer: {
     width: "100%",
-    flexGrow: 0, // Không cho phép kéo giãn
+    flexGrow: 0,
     justifyContent: "center",
     alignItems: "center",
   },
