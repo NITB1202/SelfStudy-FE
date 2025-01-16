@@ -40,6 +40,9 @@ export default function DocumentItem({
           <Pressable style={styles.menuItem} onPress={onDelete}>
             <Text style={styles.menuText}>Delete</Text>
           </Pressable>
+          <Pressable style={styles.menuItem}>
+            <Text style={styles.menuText}>Download</Text>
+          </Pressable>
         </View>
       )}
     </View>
@@ -83,9 +86,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   menuItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    padding: 10,
   },
   menuText: {
     fontSize: 14,

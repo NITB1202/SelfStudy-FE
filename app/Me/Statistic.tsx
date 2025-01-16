@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Circle, Svg } from "react-native-svg";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
@@ -15,101 +15,100 @@ export default function Statistic() {
     <View style={styles.container}>
       {/* Title */}
       <Header />
-      <View style={styles.content}>
-        <Text style={styles.title}>Weekly report</Text>
+      <ScrollView>
+        <View style={styles.content}>
+          <Text style={styles.title}>Weekly report</Text>
 
-        {/* Top Stats */}
-        <View style={styles.topStatsContainer}>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{plansFinished}</Text>
-            <Text style={styles.statLabel}>Finished plans</Text>
+          {/* Top Stats */}
+          <View style={styles.topStatsContainer}>
+            <View style={styles.statBox}>
+              <Text style={styles.statNumber}>{plansFinished}</Text>
+              <Text style={styles.statLabel}>Finished plans</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statNumber}>{hoursSpent}</Text>
+              <Text style={styles.statLabel}>Hour spent on study session</Text>
+            </View>
           </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{hoursSpent}</Text>
-            <Text style={styles.statLabel}>Hour spent on study session</Text>
-          </View>
-        </View>
 
-        {/* Completion Chart */}
-        <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>Plans finish in total</Text>
-          <View style={styles.circularChart}>
-            <Svg height="180" width="180" viewBox="0 0 36 36">
-              <Circle
-                cx="18"
-                cy="18"
-                r="15.915"
-                fill="none"
-                stroke="#EAEAEA"
-                strokeWidth="2.5"
-              />
-              <Circle
-                cx="18"
-                cy="18"
-                r="15.915"
-                fill="none"
-                stroke="#7AB2D3"
-                strokeWidth="2.5"
-                strokeDasharray={`${totalCompletion} ${100 - totalCompletion}`}
-                strokeDashoffset="25"
-                transform="rotate(-90 18 18)"
-              />
-            </Svg>
-            <Text style={styles.percentageText}>{totalCompletion}%</Text>
-          </View>
-        </View>
-
-        {/* Pie Chart */}
-        <View style={styles.pieContainer}>
-          <Text style={styles.chartTitle}>Study session complete</Text>
-          <View style={styles.pieContainer1}>
-            <Svg height="180" width="180" viewBox="0 -8 35 50">
-              {/* Background Circle */}
-              <Circle
-                cx="18"
-                cy="18"
-                r="15.915"
-                fill="none"
-                stroke="#4A628A"
-                strokeWidth="15"
-              />
-              {/* Complete Segment */}
-              <Circle
-                cx="18"
-                cy="18"
-                r="15.915"
-                fill="none"
-                stroke="#7AB2D3"
-                strokeWidth="15"
-                strokeDasharray={`${completeSessions} ${
-                  100 - completeSessions
-                }`}
-                strokeDashoffset="25"
-                transform="rotate(-90 18 18)"
-              />
-            </Svg>
-
-            {/* Legend */}
-            <View style={styles.legendContainer}>
-              <View style={styles.legendItem}>
-                <View
-                  style={[styles.legendBox, { backgroundColor: "#7AB2D3" }]}
+          {/* Completion Chart */}
+          <View style={styles.chartContainer}>
+            <Text style={styles.chartTitle}>Plans finish in total</Text>
+            <View style={styles.circularChart}>
+              <Svg height="180" width="180" viewBox="0 0 36 36">
+                <Circle
+                  cx="18"
+                  cy="18"
+                  r="15.915"
+                  fill="none"
+                  stroke="#EAEAEA"
+                  strokeWidth="2.5"
                 />
-                <Text style={styles.legendText}>Complete</Text>
-              </View>
-              <View style={styles.legendItem}>
-                <View
-                  style={[styles.legendBox, { backgroundColor: "#4A628A" }]}
+                <Circle
+                  cx="18"
+                  cy="18"
+                  r="15.915"
+                  fill="none"
+                  stroke="#7AB2D3"
+                  strokeWidth="2.5"
+                  strokeDasharray={`${totalCompletion} ${100 - totalCompletion}`}
+                  strokeDashoffset="25"
+                  transform="rotate(-90 18 18)"
                 />
-                <Text style={styles.legendText}>Incomplete</Text>
+              </Svg>
+              <Text style={styles.percentageText}>{totalCompletion}%</Text>
+            </View>
+          </View>
+
+          {/* Pie Chart */}
+          <View style={styles.pieContainer}>
+            <Text style={styles.chartTitle}>Study session complete</Text>
+            <View style={styles.pieContainer1}>
+              <Svg height="180" width="180" viewBox="0 -8 35 50">
+                {/* Background Circle */}
+                <Circle
+                  cx="18"
+                  cy="18"
+                  r="15.915"
+                  fill="none"
+                  stroke="#4A628A"
+                  strokeWidth="15"
+                />
+                {/* Complete Segment */}
+                <Circle
+                  cx="18"
+                  cy="18"
+                  r="15.915"
+                  fill="none"
+                  stroke="#7AB2D3"
+                  strokeWidth="15"
+                  strokeDasharray={`${completeSessions} ${
+                    100 - completeSessions
+                  }`}
+                  strokeDashoffset="25"
+                  transform="rotate(-90 18 18)"
+                />
+              </Svg>
+
+              {/* Legend */}
+              <View style={styles.legendContainer}>
+                <View style={styles.legendItem}>
+                  <View
+                    style={[styles.legendBox, { backgroundColor: "#7AB2D3" }]}
+                  />
+                  <Text style={styles.legendText}>Complete</Text>
+                </View>
+                <View style={styles.legendItem}>
+                  <View
+                    style={[styles.legendBox, { backgroundColor: "#4A628A" }]}
+                  />
+                  <Text style={styles.legendText}>Incomplete</Text>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
-      <View style={styles.bottom}>
-        <BottomNavBar />
-      </View>
+      </ScrollView>
     </View>
   );
 }

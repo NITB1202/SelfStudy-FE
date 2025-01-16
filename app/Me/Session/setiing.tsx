@@ -26,8 +26,8 @@ export default function ModalSetting({
   onClose,
   onSave,
 }: ModalSettingProps) {
-  const [duration, setDuration] = useState("00:50:00");
-  const [focusTime, setFocusTime] = useState("30:00");
+  const [duration, setDuration] = useState("01:00:00");
+  const [focusTime, setFocusTime] = useState("20:00");
   const [breakTime, setBreakTime] = useState("10:00");
   const [musicLink, setMusicLink] = useState("");
 

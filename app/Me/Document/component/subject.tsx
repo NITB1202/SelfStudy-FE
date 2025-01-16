@@ -179,8 +179,6 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
   },
   menuText: {
     fontSize: 14,
