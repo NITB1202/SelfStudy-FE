@@ -12,8 +12,8 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { formatDateToISOString } from "@/util/format";
 
-interface AddPlanProps{
-  setPlanInfo?: React.Dispatch<React.SetStateAction<any>>
+interface AddPlanProps {
+  setPlanInfo?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export default function AddPlan({ setPlanInfo }: AddPlanProps) {
@@ -48,7 +48,7 @@ export default function AddPlan({ setPlanInfo }: AddPlanProps) {
   };
 
   const handleChange = (field: string, value: string) => {
-    if(setPlanInfo)
+    if (setPlanInfo)
       setPlanInfo((prev: any) => ({
         ...prev,
         [field]: value,
@@ -63,10 +63,8 @@ export default function AddPlan({ setPlanInfo }: AddPlanProps) {
   ) => {
     setShowPicker(false);
     if (event.type === "set" && selectedDate) {
-      if(field.startsWith("start"))
-        setStartDate(selectedDate);
-      else
-        setEndDate(selectedDate);
+      if (field.startsWith("start")) setStartDate(selectedDate);
+      else setEndDate(selectedDate);
     }
   };
 
@@ -78,36 +76,37 @@ export default function AddPlan({ setPlanInfo }: AddPlanProps) {
   ) => {
     setShowPicker(false);
     if (event.type === "set" && selectedTime) {
-      if(field.startsWith("start"))
-        setStartDate(selectedTime);
-      else
-        setEndDate(selectedTime);
+      if (field.startsWith("start")) setStartDate(selectedTime);
+      else setEndDate(selectedTime);
     }
   };
 
-  useEffect(()=>{
-    const updateNotify = () =>{
-      const time = String(remindBefore.hours).padStart(2, '0') + ":" +  
-      String(remindBefore.minutes).padStart(2, '0') + ":" + 
-      String(remindBefore.seconds).padStart(2, '0');
+  useEffect(() => {
+    const updateNotify = () => {
+      const time =
+        String(remindBefore.hours).padStart(2, "0") +
+        ":" +
+        String(remindBefore.minutes).padStart(2, "0") +
+        ":" +
+        String(remindBefore.seconds).padStart(2, "0");
       handleChange("notifyBefore", time);
     };
     updateNotify();
-  },[remindBefore]);
+  }, [remindBefore]);
 
-  useEffect(()=>{
-    const updateStartDate = () =>{
+  useEffect(() => {
+    const updateStartDate = () => {
       handleChange("startDate", formatDateToISOString(startDate));
     };
     updateStartDate();
-  },[startDate]);
+  }, [startDate]);
 
-  useEffect(()=>{
-    const updateEndDate = () =>{
+  useEffect(() => {
+    const updateEndDate = () => {
       handleChange("endDate", formatDateToISOString(endDate));
     };
     updateEndDate();
-  },[endDate]);
+  }, [endDate]);
 
   return (
     <View style={styles.container}>
@@ -119,7 +118,7 @@ export default function AddPlan({ setPlanInfo }: AddPlanProps) {
         <TextInput
           style={styles.input}
           placeholder="Enter plan name"
-          onChangeText={(text)=> handleChange("name",text)}
+          onChangeText={(text) => handleChange("name", text)}
         />
       </View>
 
@@ -129,7 +128,7 @@ export default function AddPlan({ setPlanInfo }: AddPlanProps) {
         <TextInput
           style={styles.input}
           placeholder="Enter plan description"
-          onChangeText={(text)=> handleChange("description", text)}
+          onChangeText={(text) => handleChange("description", text)}
         />
       </View>
 
