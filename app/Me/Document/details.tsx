@@ -12,6 +12,7 @@ import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import DocumentItem from "./component/doc";
 import AddDocModal from "./addDoc";
+import BackButton from "@/components/BackButton";
 
 interface DetailsProps {
   route: {
@@ -34,18 +35,18 @@ export default function Details({ route, onBack }: DetailsProps) {
       {
         id: 1,
         name: "TaiLieuOnThi.xlsx",
-        img: "https://w7.pngwing.com/pngs/619/922/png-transparent-microsoft-excel-illustration-microsoft-excel-microsoft-office-macos-excel-rectangle-logo-microsoft-thumbnail.png",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCGMxczycQSX_rO727PC1YJOB4vzdkzrgoqQ&s",
       },
       {
         id: 2,
         name: "TaiLieuOnThiHDH.xlsx",
-        img: "https://w7.pngwing.com/pngs/619/922/png-transparent-microsoft-excel-illustration-microsoft-excel-microsoft-office-macos-excel-rectangle-logo-microsoft-thumbnail.png",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCGMxczycQSX_rO727PC1YJOB4vzdkzrgoqQ&s",
       },
     ],
     2: [
       {
         id: 3,
-        name: "PhysicsNotes.docx",
+        name: "PhysicsNotes.png",
         img: "https://dulichviet.com.vn/images/bandidau/danh-sach-nhung-buc-anh-viet-nam-lot-top-anh-dep-the-gioi.jpg",
       },
     ],
@@ -91,14 +92,10 @@ export default function Details({ route, onBack }: DetailsProps) {
 
   return (
     <View style={styles.container}>
-      <Header showMenu={false} />
-      <View style={styles.headerContainer}>
-        <Pressable style={styles.backButton} onPress={onBack}>
-          <Feather name="arrow-left-circle" size={35} color="#7AB2D3" />
-        </Pressable>
-        <Text style={styles.headerTitle}>{name}</Text>
-      </View>
-
+      <Pressable onPress={onBack}>
+        <Feather name="arrow-left-circle" size={35} color="#7AB2D3" />
+      </Pressable>
+      <Text style={styles.headerTitle}>{name}</Text>
       <ScrollView contentContainerStyle={styles.documentList}>
         {documents.length === 0 ? (
           <Text style={styles.emptyText}>
@@ -115,9 +112,6 @@ export default function Details({ route, onBack }: DetailsProps) {
           ))
         )}
       </ScrollView>
-      <View style={styles.bottom}>
-        <BottomNavBar onAddPress={() => setIsAddModalVisible(true)} />
-      </View>
 
       {/* Add Document Modal */}
       <AddDocModal
@@ -134,6 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     paddingTop: 20,
+    paddingHorizontal: 10,
   },
   bottom: {
     alignItems: "center",
@@ -155,10 +150,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#7AB2D3",
     textAlign: "center",
-    flex: 1,
   },
   documentList: {
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   emptyText: {
     textAlign: "center",

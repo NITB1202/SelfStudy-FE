@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -26,7 +26,21 @@ const Invite: React.FC<InviteProps> = ({
   onAccept,
   onDecline,
 }) => {
+
+  const [visible, setVisible] = useState(true);
+
+  const handleDecline = () => {
+    onDecline();
+    setVisible(false);
+  }
+
+  const handleAccept = () =>{
+    onAccept();
+    setVisible(false);
+  }
+
   return (
+    visible &&
     <Pressable onPress={onToggleRead} style={styles.container}>
       {/* Status Row */}
       <View style={styles.statusRow}>
@@ -69,10 +83,10 @@ const Invite: React.FC<InviteProps> = ({
 
           {/* Action Buttons */}
           <View style={styles.actions}>
-            <Pressable style={styles.acceptButton} onPress={onAccept}>
+            <Pressable style={styles.acceptButton} onPress={handleAccept}>
               <Text style={styles.acceptText}>Accept</Text>
             </Pressable>
-            <Pressable style={styles.declineButton} onPress={onDecline}>
+            <Pressable style={styles.declineButton} onPress={handleDecline}>
               <Text style={styles.declineText}>Decline</Text>
             </Pressable>
           </View>
