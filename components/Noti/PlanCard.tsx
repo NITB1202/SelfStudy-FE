@@ -6,7 +6,7 @@ import defaultIcon from "../../assets/images/plan/expired.png";
 
 interface PlanCardProps {
   name: string;
-  expiredTime: string;
+  createAt: string;
   recoveryTime?: string;
   isRead: boolean;
   onToggleRead: () => void;
@@ -14,7 +14,7 @@ interface PlanCardProps {
 
 const PlanCard: React.FC<PlanCardProps> = ({
   name,
-  expiredTime,
+  createAt,
   recoveryTime,
   isRead,
   onToggleRead,
@@ -51,7 +51,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.expiredTime}>{expiredTime}</Text>
+          <Text style={styles.expiredTime}>{createAt}</Text>
           <Text style={styles.description}>
             The plan has expired. You can recover it before{" "}
             <Text>{recoveryTime}</Text>
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     color: "grey",
+    marginRight: 5,
   },
   contentRow: {
     flexDirection: "row",

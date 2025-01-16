@@ -25,7 +25,7 @@ export default function Document() {
       id: 2,
       name: "Physics",
       image:
-        "https://vapa.vn/wp-content/uploads/2022/12/anh-3d-thien-nhien.jpeg",
+        "https://media.istockphoto.com/id/936903524/vector/blackboard-inscribed-with-scientific-formulas-and-calculations-in-physics-and-mathematics-can.jpg?s=612x612&w=0&k=20&c=sRLsJbHUVOYvZ_M16hti4fF9NM0RysfjAPUQrCJ8o4U=",
     },
     // Add other subjects...
   ]);

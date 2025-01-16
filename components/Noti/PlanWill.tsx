@@ -5,16 +5,16 @@ import defaultIcon from "../../assets/images/plan/notification.png";
 
 interface PlanWillProps {
   name: string;
-  remindTime?: string;
-  expiredTime: string;
+  expiredTime?: string;
+  createAt: string;
   isRead: boolean;
   onToggleRead: () => void;
 }
 
 const PlanWill: React.FC<PlanWillProps> = ({
   name,
-  remindTime,
   expiredTime,
+  createAt,
   isRead,
   onToggleRead,
 }) => {
@@ -50,7 +50,7 @@ const PlanWill: React.FC<PlanWillProps> = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
-          {remindTime && <Text style={styles.remindTime}>{remindTime}</Text>}
+          {createAt && <Text style={styles.remindTime}>{createAt}</Text>}
           <Text style={styles.expiredTime}>
             Your plan will expire at {expiredTime}
           </Text>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     color: "grey",
+    marginRight: 5,
   },
   contentRow: {
     flexDirection: "row",

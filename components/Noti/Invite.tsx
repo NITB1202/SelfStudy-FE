@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -7,7 +7,7 @@ import defaultIcon from "../../assets/images/plan/invitation.png";
 
 interface InviteProps {
   name: string;
-  expiredTime: string;
+  createAt: string;
   people?: string;
   team?: string;
   isRead: boolean;
@@ -18,7 +18,7 @@ interface InviteProps {
 
 const Invite: React.FC<InviteProps> = ({
   name,
-  expiredTime,
+  createAt,
   people,
   team,
   isRead,
@@ -26,7 +26,21 @@ const Invite: React.FC<InviteProps> = ({
   onAccept,
   onDecline,
 }) => {
+
+  const [visible, setVisible] = useState(true);
+
+  const handleDecline = () => {
+    onDecline();
+    setVisible(false);
+  }
+
+  const handleAccept = () =>{
+    onAccept();
+    setVisible(false);
+  }
+
   return (
+    visible &&
     <Pressable onPress={onToggleRead} style={styles.container}>
       {/* Status Row */}
       <View style={styles.statusRow}>
@@ -61,7 +75,7 @@ const Invite: React.FC<InviteProps> = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.expiredTime}>{expiredTime}</Text>
+          <Text style={styles.expiredTime}>{createAt}</Text>
           <Text style={styles.description}>
             {people || "Someone"} has invited you to the team{" "}
             <Text>{`"${team || "Unknown"}"`}</Text>.
@@ -69,10 +83,10 @@ const Invite: React.FC<InviteProps> = ({
 
           {/* Action Buttons */}
           <View style={styles.actions}>
-            <Pressable style={styles.acceptButton} onPress={onAccept}>
+            <Pressable style={styles.acceptButton} onPress={handleAccept}>
               <Text style={styles.acceptText}>Accept</Text>
             </Pressable>
-            <Pressable style={styles.declineButton} onPress={onDecline}>
+            <Pressable style={styles.declineButton} onPress={handleDecline}>
               <Text style={styles.declineText}>Decline</Text>
             </Pressable>
           </View>
@@ -116,6 +130,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     color: "grey",
+    marginRight: 5,
   },
   contentRow: {
     flexDirection: "row",
