@@ -165,10 +165,9 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 40,
-    borderColor: "#EAEAEA",
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: "#EDEDED",
   },
   timeContainer: {
     flexDirection: "row",
@@ -181,8 +180,6 @@ const styles = StyleSheet.create({
     width: "45%",
   },
   timeInputContainer: {
-    borderWidth: 1,
-    borderColor: "#B0D7EB",
     borderRadius: 10,
     padding: 10,
     width: "100%",
@@ -222,11 +219,9 @@ const styles = StyleSheet.create({
   musicInputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#EAEAEA",
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: "#EDEDED",
     width: "90%",
     gap: 20,
   },
