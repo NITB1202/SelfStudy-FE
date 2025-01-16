@@ -43,7 +43,9 @@ export default function Plan() {
           <PlanList onPlanPress={handlePlanPress} />
         </View>
       </ScrollView>
-      <BottomNavBar onAddPress={() => router.push("/Team/AddPlan")} />
+      <View style={styles.bottom}>
+        <BottomNavBar onAddPress={() => router.push("/Team/AddPlan")} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -92,5 +94,8 @@ const styles = StyleSheet.create({
   highlightText: {
     color: Colors.primary,
     fontWeight: "900",
+  },
+  bottom: {
+    alignItems: "center",
   },
 });
