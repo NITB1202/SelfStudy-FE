@@ -13,13 +13,18 @@ import CustomButton from "@/components/CustomButton";
 
 export default function Page() {
   const router = useRouter();
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(70);
   const [isLooping, setIsLooping] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(660); // 11 phút
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false); // State để điều khiển modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [duration, setDuration] = useState(3600);
+  const [focusTime, setFocusTime] = useState(1200);
+  const [breakTime, setBreakTime] = useState(600);
+  const [currentStage, setCurrentStage] = useState(1);
+  const [state, setState] = useState("FOCUS");
 
   const songs = ["Westlife - My Love", "Ed Sheeran - Perfect", "Adele - Hello"];
 
@@ -42,7 +47,7 @@ export default function Page() {
         onPress: () => {
           setIsRunning(false);
           setHasStarted(false);
-          setTimeRemaining(660);
+          setTimeRemaining(0);
           router.push("/Me/Session/complete");
         },
       },
@@ -54,12 +59,19 @@ export default function Page() {
   };
 
   const handleSettings = () => {
-    setModalVisible(true); // Mở modal Settings
+    setModalVisible(true);
   };
 
-  const handleSave = (settings: any) => {
-    console.log("Saved settings:", settings);
-    setModalVisible(false); // Đóng modal sau khi lưu
+  const handleSave = (settings: {
+    duration: number;
+    focusTime: number;
+    breakTime: number;
+    musicLink: string;
+  }) => {
+    setDuration(duration);
+    setFocusTime(focusTime);
+    setBreakTime(breakTime);
+    setModalVisible(false);
   };
 
   return (
@@ -70,7 +82,7 @@ export default function Page() {
           <ProgressCircle
             radius={100}
             strokeWidth={8}
-            totalTime={660}
+            totalTime={state === "FOCUS"? focusTime: breakTime}
             timeRemaining={timeRemaining}
             isRunning={isRunning}
             onTick={(remaining) => setTimeRemaining(remaining)}
@@ -78,10 +90,12 @@ export default function Page() {
               alert("Time is up!");
               setIsRunning(false);
               setHasStarted(false);
-              setTimeRemaining(660);
+              setTimeRemaining(state === "FOCUS"? focusTime: breakTime);
             }}
           />
-          <Text style={styles.stageText}>STAGE 1</Text>
+          <Text style={styles.stageText}>STAGE {currentStage} 
+            { hasStarted && <Text> - FOCUS</Text>}
+          </Text>
         </View>
 
         <View style={styles.volumeControl}>
@@ -121,6 +135,7 @@ export default function Page() {
               if (!hasStarted) {
                 setIsRunning(true);
                 setHasStarted(true);
+                setTimeRemaining(focusTime);
               } else {
                 handleFinish();
               }
