@@ -92,7 +92,9 @@ export default function Details({ route, onBack }: DetailsProps) {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={onBack}>
+      <Pressable 
+        style = {{ marginLeft: 10, marginTop: 10}}
+        onPress={onBack}>
         <Feather name="arrow-left-circle" size={35} color="#7AB2D3" />
       </Pressable>
       <Text style={styles.headerTitle}>{name}</Text>
@@ -112,6 +114,9 @@ export default function Details({ route, onBack }: DetailsProps) {
           ))
         )}
       </ScrollView>
+      <View style={{ alignItems: "center"}}>
+        <BottomNavBar onAddPress={()=> setIsAddModalVisible(true)}/>
+      </View>
 
       {/* Add Document Modal */}
       <AddDocModal
@@ -128,7 +133,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     paddingTop: 20,
-    paddingHorizontal: 10,
   },
   bottom: {
     alignItems: "center",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
 import Slider from "@react-native-community/slider";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "@/components/Checkbox";
@@ -9,6 +9,7 @@ import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
 import { useRouter } from "expo-router";
 import ModalSetting from "./setiing";
+import CustomButton from "@/components/CustomButton";
 
 export default function Page() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header />
       <View style={styles.content}>
         <View style={styles.timerContainer}>
@@ -113,9 +114,9 @@ export default function Page() {
           />
           <Text style={styles.loopText}>On loop</Text>
         </View>
-        <View style={styles.button}>
-          <Pressable
-            style={styles.finishButton}
+       <View style={styles.buttonContainer}>
+        <CustomButton
+            title={hasStarted ? "Finish" : "Start"}
             onPress={() => {
               if (!hasStarted) {
                 setIsRunning(true);
@@ -125,11 +126,9 @@ export default function Page() {
               }
             }}
           >
-            <Text style={styles.finishText}>
-              {hasStarted ? "Finish" : "Start"}
-            </Text>
-          </Pressable>
-        </View>
+          </CustomButton>
+       </View>
+       
 
         {/* Additional Buttons */}
         <View style={styles.additionalButtons}>
@@ -195,17 +194,13 @@ export default function Page() {
         </View>
       </View>
 
-      <View style={styles.bottom}>
-        <BottomNavBar />
-      </View>
-
       {/* Modal Setting */}
       <ModalSetting
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={handleSave}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -312,4 +307,9 @@ const styles = StyleSheet.create({
   bottom: {
     alignItems: "center",
   },
+  buttonContainer:{
+    width: "100%",
+    paddingHorizontal: 30,
+    marginBottom: 10,
+  }
 });
