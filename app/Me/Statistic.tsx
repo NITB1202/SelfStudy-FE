@@ -1,15 +1,131 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Circle, Svg } from "react-native-svg";
 import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
+import statisticApi from "@/api/statisticApi";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Statistic() {
-  const plansFinished = 14;
-  const hoursSpent = 3;
-  const totalCompletion = 78.6; // Percentage
-  const completeSessions = 30; // Percentage
-  const incompleteSessions = 25;
+  const [hoursSpent, setHoursSpent] = useState("0:0");
+  const [loading, setLoading] = useState(true);
+  const [finishedPlans, setFinishedPlans] = useState(0);
+  const [totalCompletion, setCompletionRate] = useState(0);
+  const [completeSessions, setCompleteSessions] = useState(0);
+  const { userId } = useAuth();
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        console.log("userId from useAuth:", userId); // Kiểm tra giá trị userId
+
+        if (!userId) {
+          console.warn("userId is undefined or null");
+          return;
+        }
+
+        const response = await statisticApi.getHoursSpent(userId);
+        console.log("API Responses:", response);
+
+        if (Array.isArray(response) && response.length >= 2) {
+          const [hour, minute] = response;
+          console.log(hour);
+          setHoursSpent(`${hour}:${minute}`);
+        } else {
+          console.warn("Unexpected API response format:", response);
+          setHoursSpent("0:0");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStatistics();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchFinishedPlans = async () => {
+      try {
+        console.log("userId from useAuth:", userId);
+
+        if (!userId) {
+          console.warn("userId is undefined or null");
+          return;
+        }
+
+        const response = await statisticApi.getFinish(userId);
+        console.log("API Response:", response);
+
+        if (typeof response === "number") {
+          setFinishedPlans(response);
+        } else {
+          console.warn("Unexpected API response format:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching finished plans:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFinishedPlans();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchCompletionRate = async () => {
+      try {
+        console.log("userId from useAuth:", userId);
+
+        if (!userId) {
+          console.warn("userId is undefined or null");
+          return;
+        }
+
+        const response = await statisticApi.getFinishRate(userId);
+        console.log("complete rate:", response);
+
+        if (typeof response === "number") {
+          setCompletionRate(response);
+        } else {
+          console.warn("Unexpected API response format:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching completion rate:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompletionRate();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchCompleteSessions = async () => {
+      try {
+        console.log("userId from useAuth:", userId);
+
+        if (!userId) {
+          console.warn("userId is undefined or null");
+          return;
+        }
+
+        const response = await statisticApi.getFinishSession(userId);
+        console.log("API Response:", response);
+        if (typeof response === "number" && !isNaN(response)) {
+          setCompleteSessions(response);
+        } else {
+          console.warn("Invalid API response format, setting to 0:", response);
+          setCompleteSessions(0);
+        }
+      } catch (error) {
+        console.error("Error fetching complete sessions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompleteSessions();
+  }, [userId]);
 
   return (
     <View style={styles.container}>
@@ -22,11 +138,13 @@ export default function Statistic() {
           {/* Top Stats */}
           <View style={styles.topStatsContainer}>
             <View style={styles.statBox}>
-              <Text style={styles.statNumber}>{plansFinished}</Text>
+              <Text style={styles.statNumber}>{finishedPlans}</Text>
               <Text style={styles.statLabel}>Finished plans</Text>
             </View>
             <View style={styles.statBox}>
-              <Text style={styles.statNumber}>{hoursSpent}</Text>
+              <Text style={styles.statNumber}>
+                {loading ? "Loading..." : hoursSpent}
+              </Text>
               <Text style={styles.statLabel}>Hour spent on study session</Text>
             </View>
           </View>
@@ -51,7 +169,9 @@ export default function Statistic() {
                   fill="none"
                   stroke="#7AB2D3"
                   strokeWidth="2.5"
-                  strokeDasharray={`${totalCompletion} ${100 - totalCompletion}`}
+                  strokeDasharray={`${totalCompletion} ${
+                    100 - totalCompletion
+                  }`}
                   strokeDashoffset="25"
                   transform="rotate(-90 18 18)"
                 />
@@ -112,7 +232,6 @@ export default function Statistic() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

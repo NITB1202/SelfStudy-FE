@@ -1,4 +1,11 @@
-import { Text, StyleSheet, View, Image, Linking, Pressable } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Linking,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useCustomFonts from "@/hooks/useCustomFonts";
 import LoginInput from "@/components/LoginInput";
@@ -11,7 +18,7 @@ import { useState } from "react";
 import { isValidEmail } from "@/util/validator";
 import { useAuth } from "@/context/AuthContext";
 import authApi from "@/api/authApi";
-import Error from "@/components/Message/Error"
+import Error from "@/components/Message/Error";
 import LoadingScreen from "@/components/LoadingScreen";
 
 export default function LoginScreen() {
@@ -19,41 +26,47 @@ export default function LoginScreen() {
   const [loginRequest, setLoginRequest] = useState({
     email: "",
     password: "",
-  })
-  const [showError,setShowError] = useState(false);
+  });
+  const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState({
     title: "",
-    description: ""
+    description: "",
   });
   const { login } = useAuth();
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
 
-  const handleLogin = async ()=>{
-    if(loginRequest.email == "" || loginRequest.password == ""){
+  const handleLogin = async () => {
+    if (loginRequest.email == "" || loginRequest.password == "") {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: "The email or password is empty."
+        description: "The email or password is empty.",
       });
+
       return;
     }
-    
-    if(!isValidEmail(loginRequest.email)){
+    console.log(loginRequest.password);
+
+    if (!isValidEmail(loginRequest.email)) {
       setShowError(true);
       setMessage({
         title: "Error",
-        description: "Invalid email format."
+        description: "Invalid email format.",
       });
       return;
     }
 
-    try{
+    try {
       setLoading(true);
-      const response: any = await authApi.login(loginRequest.email, loginRequest.password);
+      const response: any = await authApi.login(
+        loginRequest.email,
+        loginRequest.password
+      );
+
       const accessToken = response.accessToken;
 
       await login(accessToken);
@@ -61,35 +74,35 @@ export default function LoginScreen() {
       // const decodedToken = decodeToken(accessToken);
       // if(decodedToken.role === "USER")
       router.push("/Me/Plan");
-    }
-    catch(error: any){
+    } catch (error: any) {
       let errorDes = "";
-      switch(error.status){
+      switch (error.status) {
         case 400:
           errorDes = "Incorrect password.";
           break;
         case 404:
-          errorDes = "This email hasn't been registered yet."
+          errorDes = "This email hasn't been registered yet.";
           break;
         case 500:
-          errorDes = "Error connecting to the server. Please try again."
+          errorDes = "Error connecting to the server. Please try again.";
           break;
       }
 
       setShowError(true);
       setMessage({
         title: "Error",
-        description: errorDes
+        description: errorDes,
       });
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleGoogleLogin = () => {
-    Linking.openURL("http://selfstudy.up.railway.app/oauth2/authorization/google");
-  }
+    Linking.openURL(
+      "http://selfstudy.up.railway.app/oauth2/authorization/google"
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,21 +114,22 @@ export default function LoginScreen() {
         <LoginInput
           placeholder="Enter your email"
           style={styles.inputEmail}
-          onChangeText={(text)=> {
+          onChangeText={(text) => {
             setLoginRequest((prev) => ({
               ...prev,
               email: text,
             }));
           }}
         />
-        <PasswordInput 
+        <PasswordInput
           placeholder="Enter your password"
-          onChangeText={(text)=>{
+          onChangeText={(text) => {
             setLoginRequest((prev) => ({
               ...prev,
               password: text,
             }));
-          }}/>
+          }}
+        />
         <Link style={styles.link} href="/Authentication/ForgotPassword">
           Forgot password?
         </Link>
@@ -129,12 +143,8 @@ export default function LoginScreen() {
           <Text style={styles.option}>Or</Text>
           <View style={styles.divideLine}></View>
         </View>
-        <Pressable
-          style={styles.googleButton}
-          onPress={handleGoogleLogin}>
-          <Image
-            source={require("../../assets/images/google-icon.png")}
-          />
+        <Pressable style={styles.googleButton} onPress={handleGoogleLogin}>
+          <Image source={require("../../assets/images/google-icon.png")} />
           <Text style={styles.googleText}>Login with Google</Text>
         </Pressable>
         <Text style={styles.footerText}>
@@ -144,18 +154,17 @@ export default function LoginScreen() {
           </Link>
         </Text>
       </View>
-      {
-        showError &&
+      {showError && (
         <Error
           title={message.title}
           description={message.description}
           visible={showError}
-          onClose={()=> setShowError(false)}
-          onOkPress={()=> setShowError(false)}>
-        </Error>
-      }
+          onClose={() => setShowError(false)}
+          onOkPress={() => setShowError(false)}
+        ></Error>
+      )}
       {
-        loading && <LoadingScreen/>
+        // loading && <LoadingScreen/>
       }
     </SafeAreaView>
   );
@@ -270,6 +279,6 @@ const styles = StyleSheet.create({
   signUpLink: {
     color: "#7AB2D3",
     fontFamily: "Roboto_700Bold",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 });
