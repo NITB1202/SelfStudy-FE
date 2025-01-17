@@ -62,7 +62,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.cardContainer}>
+    <Pressable onPress={onPress} style={styles.cardContainer}>
       <Pressable
         style={styles.menuIcon}
         onPress={() => setIsMenuVisible(!isMenuVisible)}
@@ -105,7 +105,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
           </TouchableOpacity>
         </View>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -179,8 +179,6 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
   },
   menuText: {
     fontSize: 14,

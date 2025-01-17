@@ -15,6 +15,8 @@ import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import Header from "@/components/Header";
 import { router } from "expo-router";
 import TeamDetailModal from "./Detail";
+import BackButton from "@/components/BackButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Team = {
   id: string;
@@ -38,17 +40,17 @@ export default function Team() {
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-St7P8HoC0Vs1YfbHi_4x6sxMaIg28f5UQ&s",
       isAdmin: true,
-      establishDate: "27/10/2025",
+      establishDate: "24/10/2024",
       members: [
         {
           id: "1",
           avatar:
-            "https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20201205/images/nhung-buc-anh-dep-nhat-nam-2020-theo-do-agora-binh-chon.jpg",
+            "https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww",
         },
         {
           id: "2",
           avatar:
-            "https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20201205/images/nhung-buc-anh-dep-nhat-nam-2020-theo-do-agora-binh-chon.jpg",
+            "https://plus.unsplash.com/premium_photo-1689551670902-19b441a6afde?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
         },
         {
           id: "3",
@@ -58,23 +60,47 @@ export default function Team() {
       ],
       createdBy: {
         id: "4",
-        name: "LuvU124",
+        name: "123",
         avatar:
-          "https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20201205/images/nhung-buc-anh-dep-nhat-nam-2020-theo-do-agora-binh-chon.jpg",
+          "https://res.cloudinary.com/drvyagz4w/image/upload/v1736875036/e50f7e05-bb8a-4c71-a107-feea8ff60ed7.png",
       },
     },
     {
       id: "2",
       name: "Team 2",
       avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-St7P8HoC0Vs1YfbHi_4x6sxMaIg28f5UQ&s",
+        "https://tnktravel.com.vn/wp-content/uploads/2023/05/Team-Work-l%C3%A0-g%C3%AC--1024x536.jpeg",
       isAdmin: false,
+      establishDate: "22/12/2024",
+      members: [
+        {
+          id: "1",
+          avatar:
+            "https://res.cloudinary.com/drvyagz4w/image/upload/v1736875036/e50f7e05-bb8a-4c71-a107-feea8ff60ed7.png",
+        },
+        {
+          id: "2",
+          avatar:
+            "https://plus.unsplash.com/premium_photo-1689551670902-19b441a6afde?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+        },
+        {
+          id: "3",
+          avatar:
+            "https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20201205/images/nhung-buc-anh-dep-nhat-nam-2020-theo-do-agora-binh-chon.jpg",
+        },
+      ],
+      createdBy: {
+        id: "4",
+        name: "Mike",
+        avatar:
+          "https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww",
+      },
     },
     {
       id: "3",
       name: "Team 3",
       avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-St7P8HoC0Vs1YfbHi_4x6sxMaIg28f5UQ&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNNriLBTwLS853i_fILTzh8liXUcnqdN7ELQ&s",
       isAdmin: false,
     },
   ];
@@ -87,10 +113,9 @@ export default function Team() {
   const [filteredTeams, setFilteredTeams] = useState(teams); // Danh sách đội sau khi lọc
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <Header />
+    <SafeAreaView style={styles.container}>
       {/* Search Bar */}
+      <BackButton/>
       <View style={styles.searchBar}>
         <Ionicons name="search-outline" size={20} color="#0000004D" />
         <TextInput
@@ -108,19 +133,6 @@ export default function Team() {
         />
       </View>
 
-      <Pressable
-        style={styles.joinButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Ionicons
-          name="add-circle-outline"
-          size={20}
-          color="#fff"
-          style={styles.joinIcon}
-        />
-        <Text style={styles.joinButtonText}>Join a team</Text>
-      </Pressable>
-
       <View style={styles.header}>
         <ScrollView>
           {filteredTeams.map((item) => (
@@ -132,11 +144,13 @@ export default function Team() {
               <Image source={{ uri: item.avatar }} style={styles.teamAvatar} />
               <Text style={styles.teamName}>{item.name}</Text>
               {item.isAdmin && (
-                <MaterialCommunityIcons
-                  name="view-grid-outline"
-                  size={25}
-                  color="#7AB2D3"
-                />
+                <Pressable onPress={()=> console.log("You are admin of this team")}>
+                  <MaterialCommunityIcons
+                    name="view-grid-outline"
+                    size={25}
+                    color="#7AB2D3"
+                  />
+                </Pressable>
               )}
             </Pressable>
           ))}
@@ -194,7 +208,7 @@ export default function Team() {
       <View style={styles.bottom}>
         <BottomNavBar onAddPress={() => router.push("/Team/Management/Add")} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -202,7 +216,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 20,
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
   header: {
     flexDirection: "row",
@@ -227,7 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDEDED",
     borderRadius: 10,
     padding: 10,
-    margin: 20,
+    marginTop: 20,
+    marginHorizontal: 10,
   },
   searchInput: {
     flex: 1,

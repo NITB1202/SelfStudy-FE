@@ -38,20 +38,6 @@ export default function PlanList({ onPlanPress }: PlanListProps) {
       deadline: "2024-12-10 09:00:00",
       isAdmin: true,
     },
-    {
-      id: 4,
-      progress: 25.0,
-      planName: "PLAN04",
-      deadline: "2025-01-01 10:00:00",
-      isAdmin: false,
-    },
-    {
-      id: 5,
-      progress: 95.0,
-      planName: "PLAN05",
-      deadline: "2025-02-03 12:00:00",
-      isAdmin: true,
-    },
   ];
 
   return (

@@ -17,17 +17,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
     bottomNavPath === "Team"
       ? [
           {
-            id: "Teams",
-            label: "Teams",
-            icon: (
-              <MaterialCommunityIcons
-                name="account-group-outline"
-                size={24}
-                color="#1E282D"
-              />
-            ),
-          },
-          {
             id: "Management",
             label: "Management",
             icon: (

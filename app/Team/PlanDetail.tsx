@@ -123,7 +123,7 @@ export default function PlanScreen() {
     <SafeAreaView style={styles.safeview}>
       <BackButton />
       <ScrollView style={styles.container}>
-        <PlanInfo Name={planName} />
+        {/* <PlanInfo ={planName} /> */}
 
         <View style={styles.assigneesSection}>
           <Text style={styles.sectionTitle}>Assignee</Text>

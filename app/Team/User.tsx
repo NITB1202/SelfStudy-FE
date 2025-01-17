@@ -11,6 +11,8 @@ import {
 import { useRouter } from "expo-router"; // Để điều hướng
 import BackButton from "@/components/BackButton";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Assignee {
   id: string;
@@ -71,18 +73,13 @@ export default function SearchUser({ onSelect }: SearchUserProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <BackButton />
       <View style={styles.searchContainer}>
-        <MaterialIcons
-          name="search"
-          size={24}
-          color="grey"
-          style={styles.searchIcon}
-        />
+        <Ionicons name="search-outline" size={20} color="#0000004D" />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search for assignees"
+          placeholder="Search for user"
           value={searchText}
           onChangeText={setSearchText}
         />
@@ -100,18 +97,19 @@ export default function SearchUser({ onSelect }: SearchUserProps) {
           </Pressable>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView  >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "white",
   },
   searchInput: {
     height: 40,
+    marginLeft: 5,
   },
   row: {
     flexDirection: "row",
@@ -119,18 +117,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
     borderBottomWidth: 0.4,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)",
+    borderBottomColor: "#E0E0E0",
     shadowColor: "#000",
+    paddingBottom: 10,
   },
 
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 5,
+    backgroundColor: "#EDEDED",
+    borderRadius: 10,
     paddingVertical: 1,
     marginBottom: 40,
     marginVertical: 20,
+    paddingHorizontal: 10
   },
   searchIcon: {
     marginRight: 10,

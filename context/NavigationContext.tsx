@@ -48,7 +48,10 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           ? `/${newValue}`
           : `/${newValue}/${sideNavPath}`;
   
-      router.push(path as Href);
+      if(path === "/Me/Management")
+        router.push("/Me/Plan");
+      else
+        router.push(path as Href);
     };
   
     const value = {

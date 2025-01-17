@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Svg, { Circle, Text as SvgText } from "react-native-svg";
+import Svg, { Circle, Defs, LinearGradient, Stop, Text as SvgText } from "react-native-svg";
 import Checkbox from "@/components/Checkbox";
+import { Colors } from "@/constants/Colors";
 
 interface PlanItemProps {
   progress: number;
@@ -40,6 +41,13 @@ export default function PlanItemNoti({
         height={(radius + strokeWidth) * 2}
         width={(radius + strokeWidth) * 2}
       >
+        <Defs>
+          <LinearGradient id="gradientId" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0%" stopColor={Colors.primary} />
+            <Stop offset="100%" stopColor={Colors.secondary} />
+          </LinearGradient>
+        </Defs>
+
         <Circle
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
@@ -52,7 +60,7 @@ export default function PlanItemNoti({
           cx={radius + strokeWidth}
           cy={radius + strokeWidth}
           r={radius}
-          stroke="#7AB2D3"
+          stroke="url(#gradientId)"
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={`${circumference} ${circumference}`}
@@ -77,10 +85,11 @@ export default function PlanItemNoti({
 
       {/* Plan Info */}
       <View style={styles.infoContainer}>
-        <Text style={styles.planName}>{planName}</Text>
         <View style={styles.deadlineContainer}>
-          <Text style={styles.deadlineLabel}>Deadline</Text>
-          <Text style={styles.deadline}>{deadline}</Text>
+          <Text style={styles.planName}>{planName}</Text>
+          <Text style={styles.deadlineLabel}>Deadline: 
+            <Text style={styles.deadline}> {deadline}</Text>
+          </Text>
         </View>
       </View>
     </View>
@@ -118,10 +127,11 @@ const styles = StyleSheet.create({
   },
   deadlineContainer: {
     flexDirection: "column",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
+    gap: 5
   },
   deadlineLabel: {
-    fontSize: 12,
+    fontSize: 14,
     color: "gray",
   },
   deadline: {

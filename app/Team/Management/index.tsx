@@ -15,6 +15,8 @@ import Header from "@/components/Header";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
 import { router } from "expo-router";
 import LoginInput from "@/components/LoginInput";
+import CustomButton from "@/components/CustomButton";
+import { Colors } from "@/constants/Colors";
 
 type Member = {
   id: number;
@@ -39,27 +41,34 @@ export default function Management() {
   const [teams, setTeams] = useState({
     "Team 1": {
       name: "TEAM 1",
-      establishDate: "17/02/2024",
+      establishDate: "24/10/2024",
       createdBy: {
-        name: "Luvu123",
+        name: "123",
         avatar:
-          "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/04/hinh-anh-de-thuong-41.jpg",
+          "https://res.cloudinary.com/drvyagz4w/image/upload/v1736875036/e50f7e05-bb8a-4c71-a107-feea8ff60ed7.png",
       },
       teamImage:
-        "https://www.ruaanhgiare.vn/wp-content/uploads/2023/06/anh-ngau.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-St7P8HoC0Vs1YfbHi_4x6sxMaIg28f5UQ&s",
       members: [
         {
           id: 1,
-          name: "Liam123",
+          name: "Mike",
           avatar:
-            "https://www.ruaanhgiare.vn/wp-content/uploads/2023/06/anh-ngau.jpg",
+            "https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww",
           role: "admin",
         },
         {
           id: 2,
-          name: "h12",
+          name: "Herley",
           avatar:
-            "https://www.ruaanhgiare.vn/wp-content/uploads/2023/06/anh-ngau.jpg",
+            "https://plus.unsplash.com/premium_photo-1689551670902-19b441a6afde?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+          role: "member",
+        },
+        {
+          id: 3,
+          name: "Loius123",
+          avatar:
+            "https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20201205/images/nhung-buc-anh-dep-nhat-nam-2020-theo-do-agora-binh-chon.jpg",
           role: "member",
         },
       ],
@@ -134,13 +143,14 @@ export default function Management() {
   return (
     <View style={styles.container}>
       <Header />
+      <ScrollView>
       {/* chọn team */}
       <View style={styles.teamSelect}>
         <Text style={styles.label}>Current team</Text>
         <View style={styles.dropdownRow}>
           <View style={styles.dropdown}>
             <LoginInput
-              placeholder="Search a team"
+              placeholder="TEAM 1"
               style={{ margin: 2, paddingHorizontal: 20 }}
               editable={false}
             />
@@ -241,8 +251,16 @@ export default function Management() {
           ))}
         </ScrollView>
       </View>
-      <View style={styles.bottom}>
-        <BottomNavBar onAddPress={() => router.push("/Team/Management/Add")} />
+      <View style={{paddingHorizontal:20}}>
+        <CustomButton
+          title="Leave team"
+          style={{backgroundColor: Colors.red}}
+          onPress={()=>{}}>
+        </CustomButton>
+      </View>
+      </ScrollView>
+      <View style={{alignItems: "center"}}>
+        <BottomNavBar onAddPress={() => router.push("/Team/User")} />
       </View>
     </View>
   );
@@ -273,11 +291,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
+    marginBottom: 30,
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#333",
-    marginBottom: 8,
   },
   dropdownRow: {
     flexDirection: "row",
@@ -305,11 +323,12 @@ const styles = StyleSheet.create({
 
   tabContainer: {
     flexDirection: "row",
-    gap: 5,
+    gap: 10,
     backgroundColor: "#1E282D",
     alignSelf: "flex-start",
     padding: 5,
     borderRadius: 5,
+    marginBottom: 20,
   },
   tab: {
     paddingVertical: 5,
@@ -340,6 +359,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.1)",
   },
   memberAvatar: {
     width: 40,
