@@ -18,7 +18,11 @@ const planApi = {
     },
     update(planId: string, name: string, description: string, startDate: string, endDate: string, notifyBefore: string){
         return axiosInstance.patch("/plan",{planId, name, description, startDate, endDate, notifyBefore });
-    }
+    },
+    getDateHasDeadlineTeam(teamId: string, month: number, year: number){
+        const url = "/plan/month/team?teamId=" + teamId + "&month=" + month + "&year=" + year;
+        return axiosInstance.get(url);
+    },
 };
 
 export default planApi;

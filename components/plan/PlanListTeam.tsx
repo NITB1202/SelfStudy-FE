@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "flex-start",
+    paddingLeft:10,
   },
   header: {
     flexDirection: "row",
@@ -92,7 +93,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 5,
-    paddingHorizontal: 20,
   },
   adminIcon: {
     marginLeft: 5,
