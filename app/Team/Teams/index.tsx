@@ -36,7 +36,7 @@ export default function Team() {
   const teams = [
     {
       id: "1",
-      name: "Team 1",
+      name: "TEAM 1",
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-St7P8HoC0Vs1YfbHi_4x6sxMaIg28f5UQ&s",
       isAdmin: true,
@@ -67,7 +67,7 @@ export default function Team() {
     },
     {
       id: "2",
-      name: "Team 2",
+      name: "TEAM 2",
       avatar:
         "https://tnktravel.com.vn/wp-content/uploads/2023/05/Team-Work-l%C3%A0-g%C3%AC--1024x536.jpeg",
       isAdmin: false,
@@ -98,7 +98,7 @@ export default function Team() {
     },
     {
       id: "3",
-      name: "Team 3",
+      name: "TEAM 3",
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNNriLBTwLS853i_fILTzh8liXUcnqdN7ELQ&s",
       isAdmin: false,
