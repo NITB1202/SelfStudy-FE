@@ -22,6 +22,11 @@ export default function PlanScreen() {
   ]);
   const [newTask, setNewTask] = useState("");
   const router = useRouter();
+  const [assignees, setAssignees] = useState<{
+    id: number,
+    name: string,
+    avatar: string,
+  }[]>([]);
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
@@ -45,6 +50,19 @@ export default function PlanScreen() {
     );
   };
 
+   // Xóa Assignee
+    const handleRemoveAssignee = (id: number) => {
+      setAssignees((prevAssignees) =>
+        prevAssignees.filter((assignee) => assignee.id !== id)
+      );
+    };
+    const navigateToUserSelection = () => {
+      router.push({
+        pathname: "./User", // Trang SearchUser
+        params: { assignees: JSON.stringify(assignees) }, // Chuyển assignees thành chuỗi JSON
+      });
+    };
+
   return (
     <ScrollView style={styles.planSectionWrapper}>
       {/* Back Button */}
@@ -52,6 +70,30 @@ export default function PlanScreen() {
 
       {/* Add Plan Section */}
       <AddPlan />
+
+      <View style={styles.assigneesSection}>
+        <Text style={styles.sectionTitle}>Assignee</Text>
+        <View style={styles.assigneesContainer}>
+        {assignees.map((assignee) => (
+          <TouchableOpacity
+            key={assignee.id}
+            onPress={() => handleRemoveAssignee(assignee.id)}
+          >
+          <Image
+            source={{ uri: assignee.avatar }}
+            style={styles.assigneeAvatar}
+          />
+          </TouchableOpacity>
+        ))}
+        <TouchableOpacity onPress={navigateToUserSelection}>
+          <MaterialCommunityIcons
+            name="plus-circle-outline"
+            size={30}
+            color="#7AB2D3"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
 
       {/* Tasks Section */}
       <View style={styles.tasksSectionWrapper}>
