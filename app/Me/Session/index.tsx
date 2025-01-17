@@ -144,12 +144,12 @@ export default function Page() {
           <Pressable onPress={handlePreviousSong}>
             <Ionicons name="play-skip-back" size={24} color="#7AB2D3" />
           </Pressable>
-          <Text style={styles.songText}>Rain</Text>
+          <Text style={styles.songText}>Space</Text>
           <Pressable onPress={handleNextSong}>
             <Ionicons name="play-skip-forward" size={24} color="#7AB2D3" />
           </Pressable>
         </View>
-
+            
         <View style={styles.loopControl}>
           <Checkbox
             isChecked={isLooping} 

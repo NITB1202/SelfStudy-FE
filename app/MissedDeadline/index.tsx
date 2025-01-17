@@ -5,6 +5,7 @@ import PrivatePage from "./Private";
 import TeamPage from "./Team";
 import { LinearGradient } from "expo-linear-gradient";
 import BottomNavBar from "@/components/navigation/ButtonNavBar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MissedDeadline: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<"private" | "team">("private");
@@ -18,7 +19,7 @@ const MissedDeadline: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Icon Section */}
       <View style={styles.iconContainer}>
         {currentRole === "admin" ? (
@@ -95,17 +96,17 @@ const MissedDeadline: React.FC = () => {
       </View>
 
       {/* Bottom Navigation */}
-      <View>
+      <View style={{alignItems: "center"}}>
         <BottomNavBar/>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     gap: 20,

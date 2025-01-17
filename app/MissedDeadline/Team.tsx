@@ -80,11 +80,6 @@ const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
           <View style={styles.selectWrapper}>
             <LoginInput
               placeholder="Search a team"
-              style={{
-                margin: 2,
-                paddingHorizontal: 20,
-                backgroundColor: "white",
-              }}
               editable={false}
             />
           </View>
@@ -128,12 +123,12 @@ const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: "#f5f5f5" },
+  wrapper: { flex: 1, backgroundColor: "white" },
   container: { flexGrow: 1 },
   title: {
     fontSize: 11,
     fontWeight: "400",
-    marginBottom: 10,
+    marginBottom: 5,
     color: "rgba(0, 0, 0, 0.5)",
   },
   selectorContainer: {
@@ -147,7 +142,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     flex: 1,
     shadowColor: "#000",
-    elevation: 15,
   },
   searchButton: {
     width: 40,

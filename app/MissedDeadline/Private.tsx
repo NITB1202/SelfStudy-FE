@@ -61,7 +61,7 @@ const PrivatePage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white"
   },
   checkAllContainer: {
     flexDirection: "row",
