@@ -79,7 +79,7 @@ const TeamPage: React.FC<TeamPageProps> = ({ onRoleChange }) => {
         <View style={styles.selectorContainer}>
           <View style={styles.selectWrapper}>
             <LoginInput
-              placeholder="Search a team"
+              placeholder="TEAM 1"
               editable={false}
             />
           </View>
