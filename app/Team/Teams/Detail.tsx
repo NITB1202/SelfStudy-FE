@@ -78,13 +78,11 @@ export default function TeamDetailModal({
           {/* Nút Leave Team */}
           <View style={styles.leaveButtonContainer}>
             <CustomButton
-              title="Leave team"
+              title="Select"
               onPress={() => {
                 console.log("Leaving team...");
                 onClose();
               }}
-              color="secondary"
-              style={{ backgroundColor: "#FF6B6B" }}
             />
           </View>
         </View>
