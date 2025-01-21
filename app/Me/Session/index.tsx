@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  ScrollView,
+} from "react-native";
 import Slider from "@react-native-community/slider";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "@/components/Checkbox";
@@ -9,7 +16,7 @@ import { Svg, Rect, Defs, LinearGradient, Stop } from "react-native-svg";
 import { useRouter } from "expo-router";
 import ModalSetting from "./setiing";
 import CustomButton from "@/components/CustomButton";
-import { Audio } from 'expo-av';
+import { Audio } from "expo-av";
 
 export default function Page() {
   const router = useRouter();
@@ -25,7 +32,9 @@ export default function Page() {
   const [breakTime, setBreakTime] = useState(600);
   const [currentStage, setCurrentStage] = useState(1);
   const [state, setState] = useState("FOCUS");
-  const [soundLink, setSoundLink] = useState("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+  const [soundLink, setSoundLink] = useState(
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+  );
   const [sound, setSound] = useState<any>(null);
 
   const playSound = async () => {
@@ -36,7 +45,7 @@ export default function Page() {
       );
       setSound(sound);
     } catch (error) {
-      console.error('Error loading or playing sound:', error);
+      console.error("Error loading or playing sound:", error);
     }
   };
 
@@ -54,7 +63,26 @@ export default function Page() {
     };
   }, [sound]);
 
+  const [isPaused, setIsPaused] = useState(false); // Trạng thái Pause
 
+  const handleStartPause = () => {
+    if (!hasStarted) {
+      // Bắt đầu từ đầu
+      setIsRunning(true);
+      setHasStarted(true);
+      setIsPaused(false);
+      setTimeRemaining(focusTime);
+      playSound();
+    } else if (!isPaused) {
+      // Chuyển sang trạng thái Pause
+      setIsRunning(false);
+      setIsPaused(true);
+    } else {
+      // Tiếp tục từ trạng thái Pause
+      setIsRunning(true);
+      setIsPaused(false);
+    }
+  };
   const handleNextSong = () => {
     // setCurrentSongIndex((prev) => (prev === songs.length - 1 ? 0 : prev + 1));
   };
@@ -111,7 +139,7 @@ export default function Page() {
           <ProgressCircle
             radius={100}
             strokeWidth={8}
-            totalTime={state === "FOCUS"? focusTime: breakTime}
+            totalTime={state === "FOCUS" ? focusTime : breakTime}
             timeRemaining={timeRemaining}
             isRunning={isRunning}
             onTick={(remaining) => setTimeRemaining(remaining)}
@@ -119,11 +147,13 @@ export default function Page() {
               alert("Time is up!");
               setIsRunning(false);
               setHasStarted(false);
-              setTimeRemaining(state === "FOCUS"? focusTime: breakTime);
+              setTimeRemaining(state === "FOCUS" ? focusTime : breakTime);
             }}
           />
-          <Text style={styles.stageText}>STAGE {currentStage} 
-            { hasStarted && <Text> - FOCUS</Text>}
+          <Text style={styles.stageText}>
+            STAGE {currentStage}
+            {hasStarted && !isPaused && <Text> - FOCUS</Text>}
+            {hasStarted && isPaused && <Text> - PAUSED</Text>}
           </Text>
         </View>
 
@@ -149,16 +179,20 @@ export default function Page() {
             <Ionicons name="play-skip-forward" size={24} color="#7AB2D3" />
           </Pressable>
         </View>
-            
+
         <View style={styles.loopControl}>
           <Checkbox
-            isChecked={isLooping} 
+            isChecked={isLooping}
             onToggle={(checked) => setIsLooping(checked)}
           />
           <Text style={styles.loopText}>On loop</Text>
         </View>
-       <View style={styles.buttonContainer}>
-        <CustomButton
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title={!hasStarted ? "Start" : isPaused ? "Continue" : "Pause"}
+            onPress={handleStartPause}
+          />
+          {/* <CustomButton
             title={hasStarted ? "Finish" : "Start"}
             onPress={() => {
               if (!hasStarted) {
@@ -171,9 +205,8 @@ export default function Page() {
               }
             }}
           >
-          </CustomButton>
-       </View>
-       
+          </CustomButton> */}
+        </View>
 
         {/* Additional Buttons */}
         <View style={styles.additionalButtons}>
@@ -352,9 +385,9 @@ const styles = StyleSheet.create({
   bottom: {
     alignItems: "center",
   },
-  buttonContainer:{
+  buttonContainer: {
     width: "100%",
     paddingHorizontal: 30,
     marginBottom: 10,
-  }
+  },
 });
