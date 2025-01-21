@@ -17,7 +17,7 @@ export default function Statistic() {
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-        console.log("userId from useAuth:", userId); // Kiểm tra giá trị userId
+        console.log("userId from useAuth:", userId);
 
         if (!userId) {
           console.warn("userId is undefined or null");
@@ -54,7 +54,7 @@ export default function Statistic() {
         }
 
         const response = await statisticApi.getFinish(userId);
-        console.log("API Response:", response);
+        console.log("Plan:", response);
 
         if (typeof response === "number") {
           setFinishedPlans(response);
