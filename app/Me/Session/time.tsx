@@ -13,11 +13,11 @@ interface ProgressCircleProps {
   radius?: number;
   strokeWidth?: number;
   totalTime: number;
-  timeRemaining: number; // Thời gian còn lại (truyền từ bên ngoài)
+  timeRemaining: number;
   gradientColors?: [string, string];
   isRunning?: boolean;
   onComplete?: () => void;
-  onTick?: (remaining: number) => void; // Callback để cập nhật thời gian
+  onTick?: (remaining: number) => void;
 }
 
 const ProgressCircle: React.FC<ProgressCircleProps> = ({

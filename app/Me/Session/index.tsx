@@ -63,22 +63,19 @@ export default function Page() {
     };
   }, [sound]);
 
-  const [isPaused, setIsPaused] = useState(false); // Trạng thái Pause
+  const [isPaused, setIsPaused] = useState(false);
 
   const handleStartPause = () => {
     if (!hasStarted) {
-      // Bắt đầu từ đầu
       setIsRunning(true);
       setHasStarted(true);
       setIsPaused(false);
       setTimeRemaining(focusTime);
       playSound();
     } else if (!isPaused) {
-      // Chuyển sang trạng thái Pause
       setIsRunning(false);
       setIsPaused(true);
     } else {
-      // Tiếp tục từ trạng thái Pause
       setIsRunning(true);
       setIsPaused(false);
     }
